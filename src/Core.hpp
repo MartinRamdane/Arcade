@@ -11,6 +11,8 @@
 #include <iostream>
 #include <string>
 #include <vector>
+#include <filesystem>
+#include "DLLoader.hpp"
 
 class Core {
     public:
@@ -20,8 +22,8 @@ class Core {
 
     protected:
     private:
-        std::vector<std::string> _games;
-        std::vector<std::string> _graphs;
+        std::vector<std::string> games;
+        std::vector<std::string> graphs;
 };
 
 #endif /* !CLASS_CORE */

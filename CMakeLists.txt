@@ -2,9 +2,11 @@ cmake_minimum_required(VERSION 3.16)
 
 project(arcade VERSION 1.0)
 
-set(CMAKE_CXX_STANDARD 11)
+set(CMAKE_CXX_STANDARD 17)
 set(CMAKE_CXX_STANDARD_REQUIRED True)
-set(SRC_FILES main.cpp)
+set(CMAKE_CXX_FLAGS "-Wall -Wextra -Werror -fno-gnu-unique")
+set(SRC_FILES main.cpp
+              core.cpp)
 add_subdirectory(src)
 add_library(foo SHARED src/foo.cpp)
 add_library(bar SHARED src/bar.cpp)

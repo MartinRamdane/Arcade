@@ -31,11 +31,13 @@ const std::string &foo::getName() const
 }
 
 extern "C" IDisplayModule* create() {
-    printf("new foo\n");
     return new foo();
 }
 
 extern "C" void destroy(IDisplayModule* obj) {
-    printf("destroy foo\n");
     delete obj;
+}
+
+extern "C" std::string getType() {
+    return "Game";
 }

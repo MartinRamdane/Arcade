@@ -1,7 +1,10 @@
 #include "IDisplayModule.hpp"
 #include "DLLoader.hpp"
+#include "Core.hpp"
 
 int main(int ac, char **av) {
+    Core core;
+    core.init();
     if (ac != 2) {
         std::cerr << "Usage: ./arcade ./lib/lib.so" << std::endl;
         return 84;
@@ -10,7 +13,6 @@ int main(int ac, char **av) {
     IDisplayModule *instance = loader->getInstance();
     instance->init();
     instance->stop();
-    std::cout << (instance->getName()) << std::endl;
     delete loader;
     return 0;
 }

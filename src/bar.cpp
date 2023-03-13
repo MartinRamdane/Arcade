@@ -31,11 +31,13 @@ const std::string &bar::getName() const
 }
 
 extern "C" IDisplayModule* create() {
-    printf("new bar\n");
     return new bar();
 }
 
 extern "C" void destroy(IDisplayModule* obj) {
-    printf("destroy bar\n");
     delete obj;
+}
+
+extern "C" std::string getType() {
+    return "Graphic";
 }
