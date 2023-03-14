@@ -70,12 +70,15 @@ bool LibMenu::isFinished() {
 
 void LibMenu::handleKeys(std::vector<std::string> list, std::string key, std::string &toFill) {
     if (key == "ESCAPE" && step > 1) {
-        infos[graphs[select]].color = "white";
-        infos[graphs[select]].background_color = "";
+        infos[gameChoice].color = "white";
+        infos[gameChoice].background_color = "";
         infos[games[0]].color = "black";
         infos[games[0]].background_color = "white";
+        infos[graphs[select]].color = "white";
+        infos[graphs[select]].background_color = "";
         select = 0;
         step--;
+        return;
     }
     if (key == "UP" && select > 0) {
         infos[list[select]].color = "white";
