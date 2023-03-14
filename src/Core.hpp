@@ -22,6 +22,9 @@ class Core {
         Core(std::string lib);
         ~Core();
         void init();
+        void getLibs();
+        LibMenu *startMenu();
+        void mainloop();
 
     protected:
     private:
@@ -30,6 +33,7 @@ class Core {
         IGameModule *_game;
         std::vector<std::string> games;
         std::vector<std::string> graphs;
+        std::string _username;
 };
 
 #endif /* !CLASS_CORE */

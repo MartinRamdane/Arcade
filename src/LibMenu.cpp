@@ -69,6 +69,14 @@ bool LibMenu::isFinished() {
 }
 
 void LibMenu::handleKeys(std::vector<std::string> list, std::string key, std::string &toFill) {
+    if (key == "ESCAPE" && step > 1) {
+        infos[graphs[select]].color = "white";
+        infos[graphs[select]].background_color = "";
+        infos[games[0]].color = "black";
+        infos[games[0]].background_color = "white";
+        select = 0;
+        step--;
+    }
     if (key == "UP" && select > 0) {
         infos[list[select]].color = "white";
         infos[list[select]].background_color = "";
@@ -100,6 +108,15 @@ void LibMenu::handleKeys(std::vector<std::string> list, std::string key, std::st
 }
 
 void LibMenu::inputUser(std::string key) {
+    if (key == "ESCAPE") {
+        infos[graphChoice].color = "white";
+        infos[graphChoice].background_color = "";
+        infos[graphs[0]].color = "black";
+        infos[graphs[0]].background_color = "white";
+        select = 0;
+        step--;
+        return;
+    }
     if (key == "ENTER" && infos["Username"].text.size() > 0) {
         username = infos["Username"].text;
         return;

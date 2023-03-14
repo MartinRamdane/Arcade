@@ -2,7 +2,7 @@
 ** EPITECH PROJECT, 2023
 ** Core.cpp
 ** File description:
-** Core
+** Korr
 */
 
 #include "Core.hpp"
@@ -16,6 +16,18 @@ Core::~Core()
 }
 
 void Core::init() {
+    getLibs();
+    LibMenu *menu = startMenu();
+    DLLoader<IGameModule> *game = new DLLoader<IGameModule>(menu->getGameChoice());
+    _game = game->getInstance();
+    _game->startGame();
+    DLLoader<IDisplayModule> *graph2 = new DLLoader<IDisplayModule>(menu->getGraphChoice());
+    _display = graph2->getInstance();
+    _display->init();
+    _username = menu->getUsername();
+}
+
+void Core::getLibs() {
     std::string path = "./lib/";
     for (const auto &entry:std::filesystem::directory_iterator(path)) {
         std::string file = entry.path();
@@ -41,11 +53,9 @@ void Core::init() {
             }
         }
     }
-    for (auto game :games)
-        std::cout << "game: " << game << std::endl;
-    for (auto graph :graphs)
-        std::cout << "graph: " << graph << std::endl;
+}
 
+LibMenu *Core::startMenu() {
     DLLoader<IDisplayModule> *graph = new DLLoader<IDisplayModule>(_lib);
     _display = graph->getInstance();
     LibMenu *menu = new LibMenu(games, graphs);
@@ -56,7 +66,13 @@ void Core::init() {
         _display->update(menu->getInfos());
         _display->draw();
     }
-    std::cout << "game: " << menu->getGameChoice() << std::endl;
-    std::cout << "graph: " << menu->getGraphChoice() << std::endl;
-    std::cout << "username: " << menu->getUsername() << std::endl;
+    return menu;
+}
+
+void Core::mainloop() {
+    while (_game->isGameOver() == false) {
+        _display->update(_game->getInfos());
+        _display->draw();
+        _game->update(_display->getEvent());
+    }
 }

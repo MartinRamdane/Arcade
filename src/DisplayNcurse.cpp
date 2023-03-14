@@ -54,6 +54,8 @@ std::string DisplayNcurse::getEvent() {
             return std::string("LEFT");
         case KEY_RIGHT:
             return std::string("RIGHT");
+        case 27:
+            return std::string("ESCAPE");
         case 127:
             return std::string("BACKSPACE");
         case 10:
