@@ -13,6 +13,8 @@ LibMenu::LibMenu(std::vector<std::string> games, std::vector<std::string> graphs
     this->graphs = graphs;
     graphChoice = "";
     gameChoice = "";
+    step = 1;
+    ySave = 0;
 }
 
 LibMenu::~LibMenu()
@@ -49,19 +51,15 @@ void LibMenu::init() {
     infos["GraphList"] = createEntity("", "Graph list:", "white", "", 0, y, false);
     y += 2;
     for (auto &graph : graphs) {
-        if (i == 0)
-            infos[graph] = createEntity("", graph, "black", "white", x, y, false);
-        else
-            infos[graph] = createEntity("", graph, "white", "", x, y, false);
+        infos[graph] = createEntity("", graph, "white", "", x, y, false);
         y += 1;
         i++;
     }
     y += 1;
-    infos["Username"] = createEntity("", "Set username", "white", "", 0, y, false);
-    y += 2;
-    // put user input here
-    it = infos.begin();
-    it++;
+    infos["Username:"] = createEntity("", "Username:", "white", "", 0, y, false);
+    y += 1;
+    infos["Username"] = createEntity("", "", "white", "", x, y, false);
+    ySave = y;
 }
 
 bool LibMenu::isFinished() {
@@ -70,11 +68,68 @@ bool LibMenu::isFinished() {
     return false;
 }
 
+void LibMenu::handleKeys(std::vector<std::string> list, std::string key, std::string &toFill) {
+    if (key == "UP" && select > 0) {
+        infos[list[select]].color = "white";
+        infos[list[select]].background_color = "";
+        select--;
+        infos[list[select]].color = "black";
+        infos[list[select]].background_color = "white";
+    }
+    if (key == "DOWN" && select < (int)list.size() - 1) {
+        infos[list[select]].color = "white";
+        infos[list[select]].background_color = "";
+        select++;
+        infos[list[select]].color = "black";
+        infos[list[select]].background_color = "white";
+    }
+    if (key == " ") {
+        toFill = infos[list[select]].text;
+        infos[list[select]].color = "black";
+        infos[list[select]].background_color = "yellow";
+        if (step == 1) {
+            infos[graphs[0]].color = "black";
+            infos[graphs[0]].background_color = "white";
+        }
+        if (step == 2) {
+            infos["InputIndicator"] = createEntity("", "|", "white", "", 3, ySave, false);
+        }
+        step++;
+        select = 0;
+    }
+}
+
+void LibMenu::inputUser(std::string key) {
+    if (key == "ENTER" && infos["Username"].text.size() > 0) {
+        username = infos["Username"].text;
+        return;
+    }
+    if (key == "BACKSPACE" && infos["Username"].text.size() > 0) {
+        infos["Username"].text.pop_back();
+        infos["InputIndicator"].x -= 1;
+    }
+    if (((key >= "a" && key <= "z") || (key >= "A" && key <= "Z") || (key >= "0" && key <= "9") || key == "_" || key == "-") && (key != "BACKSPACE")) {
+        infos["Username"].text += key;
+        infos["InputIndicator"].x += 1;
+    }
+}
+
 void LibMenu::update(std::string key) {
-    if (key == "UP") {
-        if (it == infos.begin())
-            it = infos.end();
-        it--;
+    if (step == 1) {
+        handleKeys(games, key, gameChoice);
+    }
+    else if (step == 2) {
+        handleKeys(graphs, key, graphChoice);
+    }
+    else if (step == 3) {
+        inputUser(key);
+        static bool blink = false;
+        blink = !blink;
+        if (blink) {
+            infos["InputIndicator"].color = "black";
+        } else {
+            infos["InputIndicator"].color = "white";
+        }
     }
 }
 

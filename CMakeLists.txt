@@ -12,7 +12,13 @@ add_subdirectory(src)
 set(CMAKE_SHARED_LIBRARY_PREFIX "arcade_")
 set(CMAKE_SHARED_LIBRARY_SUFFIX ".so")
 add_library(ncurses SHARED src/DisplayNcurse.cpp)
+add_library(foo SHARED src/foo.cpp)
+add_library(bar SHARED src/bar.cpp)
+add_library(foogame SHARED src/foogame.cpp)
 set_target_properties(ncurses PROPERTIES LIBRARY_OUTPUT_DIRECTORY ../lib/)
+set_target_properties(foo PROPERTIES LIBRARY_OUTPUT_DIRECTORY ../lib/)
+set_target_properties(bar PROPERTIES LIBRARY_OUTPUT_DIRECTORY ../lib/)
+set_target_properties(foogame PROPERTIES LIBRARY_OUTPUT_DIRECTORY ../lib/)
 target_link_libraries(${PROJECT_NAME} PRIVATE dl)
 set_target_properties(${PROJECT_NAME} PROPERTIES
     RUNTIME_OUTPUT_DIRECTORY ${CMAKE_BINARY_DIR}/../

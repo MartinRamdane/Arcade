@@ -12,6 +12,7 @@
 #include <iostream>
 #include <map>
 #include <vector>
+#include <map>
 
 class LibMenu {
     public:
@@ -22,6 +23,11 @@ class LibMenu {
         void update(std::string key);
         IGameModule::Entity createEntity(std::string file, std::string text, std::string color, std::string background_color, float x, float y, bool isSprite);
         std::map<std::string, IGameModule::Entity> getInfos();
+        void handleKeys(std::vector<std::string> list, std::string key, std::string &toFill);
+        void inputUser(std::string key);
+        std::string getGameChoice() { return gameChoice; };
+        std::string getGraphChoice() { return graphChoice; };
+        std::string getUsername() { return username; };
 
     protected:
     private:
@@ -31,8 +37,9 @@ class LibMenu {
         std::string graphChoice;
         std::string gameChoice;
         std::string username;
-        std::map<std::string, IGameModule::Entity>::iterator it;
+        int ySave = 0; 
         int step;
+        int select;
 };
 
 #endif /* !LIB_MENU */

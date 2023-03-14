@@ -20,6 +20,7 @@ void DisplayNcurse::init() {
     curs_set(0);
     cbreak();
     noecho();
+    start_color();
     keypad(stdscr, TRUE);
     nodelay(stdscr, TRUE);
 }
@@ -31,24 +32,55 @@ void DisplayNcurse::update(std::map<std::string, IGameModule::Entity> entities) 
 void DisplayNcurse::draw() {
     halfdelay(2);
     clear();
+    int i = 2;
     for (auto &entity : entities) {
+        init_pair(i, colors[entity.second.color], colors[entity.second.background_color]);
+        attron(COLOR_PAIR(i));
         mvprintw(entity.second.y, entity.second.x, entity.second.text.c_str());
+        attroff(COLOR_PAIR(i));
+        i++;
     }
     refresh();
 }
 
 std::string DisplayNcurse::getEvent() {
-    return std::to_string(getch());
+    int input = getch();
+    switch (input) {
+        case KEY_UP:
+            return std::string("UP");
+        case KEY_DOWN:
+            return std::string("DOWN");
+        case KEY_LEFT:
+            return std::string("LEFT");
+        case KEY_RIGHT:
+            return std::string("RIGHT");
+        case 127:
+            return std::string("BACKSPACE");
+        case 10:
+            return std::string("ENTER");
+    }
+    std::string s(1, input);
+    return s;
 }
 
 const std::string &DisplayNcurse::getName() const {
     return displayName;
 }
 
-
 void DisplayNcurse::stop() {
     endwin();
 }
+
+std::map<std::string, int> DisplayNcurse::colors = {
+    {"red", COLOR_RED},
+    {"green", COLOR_GREEN},
+    {"yellow", COLOR_YELLOW},
+    {"blue", COLOR_BLUE},
+    {"magenta", COLOR_MAGENTA},
+    {"cyan", COLOR_CYAN},
+    {"white", COLOR_WHITE},
+    {"black", COLOR_BLACK}
+};
 
 extern "C" IDisplayModule* create() {
     return new DisplayNcurse();

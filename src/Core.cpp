@@ -56,4 +56,7 @@ void Core::init() {
         _display->update(menu->getInfos());
         _display->draw();
     }
+    std::cout << "game: " << menu->getGameChoice() << std::endl;
+    std::cout << "graph: " << menu->getGraphChoice() << std::endl;
+    std::cout << "username: " << menu->getUsername() << std::endl;
 }
