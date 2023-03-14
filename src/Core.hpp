@@ -13,15 +13,21 @@
 #include <vector>
 #include <filesystem>
 #include "DLLoader.hpp"
+#include "IDisplayModule.hpp"
+#include "IGameModule.hpp"
+#include "LibMenu.hpp"
 
 class Core {
     public:
-        Core();
+        Core(std::string lib);
         ~Core();
         void init();
 
     protected:
     private:
+        std::string _lib;
+        IDisplayModule *_display;
+        IGameModule *_game;
         std::vector<std::string> games;
         std::vector<std::string> graphs;
 };

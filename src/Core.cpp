@@ -7,7 +7,7 @@
 
 #include "Core.hpp"
 
-Core::Core()
+Core::Core(std::string lib) : _lib(lib)
 {
 }
 
@@ -45,4 +45,15 @@ void Core::init() {
         std::cout << "game: " << game << std::endl;
     for (auto graph :graphs)
         std::cout << "graph: " << graph << std::endl;
+
+    DLLoader<IDisplayModule> *graph = new DLLoader<IDisplayModule>(_lib);
+    _display = graph->getInstance();
+    LibMenu *menu = new LibMenu(games, graphs);
+    menu->init();
+    _display->init();
+    while (menu->isFinished() == false) {
+        menu->update(_display->getEvent());
+        _display->update(menu->getInfos());
+        _display->draw();
+    }
 }
