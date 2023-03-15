@@ -7,8 +7,9 @@
 
 #include "Core.hpp"
 
-Core::Core(std::string lib) : _lib(lib)
+Core::Core(std::string lib)
 {
+    _lib = "./" + lib;
 }
 
 Core::~Core()
@@ -22,6 +23,7 @@ void Core::init() {
     _game = game->getInstance();
     _game->startGame();
     DLLoader<IDisplayModule> *graph2 = new DLLoader<IDisplayModule>(menu->getGraphChoice());
+    it = std::find(graphs.begin(), graphs.end(), menu->getGraphChoice());
     _display = graph2->getInstance();
     _display->init();
     _username = menu->getUsername();
@@ -57,22 +59,42 @@ void Core::getLibs() {
 
 LibMenu *Core::startMenu() {
     DLLoader<IDisplayModule> *graph = new DLLoader<IDisplayModule>(_lib);
+    it = std::find(graphs.begin(), graphs.end(), _lib);
     _display = graph->getInstance();
     LibMenu *menu = new LibMenu(games, graphs);
     menu->init();
     _display->init();
     while (menu->isFinished() == false) {
-        menu->update(_display->getEvent());
+        std::string event = _display->getEvent();
+        // if (event != "")
+        //     std::cout << event << std::endl;
+        if (event == "\t")
+            switchLib();
+        menu->update(event);
         _display->update(menu->getInfos());
         _display->draw();
     }
     return menu;
 }
 
+void Core::switchLib() {
+    // printf("la\n");
+    _display->stop();
+    it++;
+    if (it == graphs.end())
+        it = graphs.begin();
+    DLLoader<IDisplayModule> *newDisplay = new DLLoader<IDisplayModule>(*it);
+    _display = newDisplay->getInstance();
+    _display->init();
+}
+
 void Core::mainloop() {
     while (_game->isGameOver() == false) {
         _display->update(_game->getInfos());
         _display->draw();
-        _game->update(_display->getEvent());
+        std::string event = _display->getEvent();
+        if (event == "\t")
+            switchLib();
+        _game->update(event);
     }
 }

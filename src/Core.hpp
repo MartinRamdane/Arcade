@@ -25,6 +25,7 @@ class Core {
         void getLibs();
         LibMenu *startMenu();
         void mainloop();
+        void switchLib();
 
     protected:
     private:
@@ -33,6 +34,7 @@ class Core {
         IGameModule *_game;
         std::vector<std::string> games;
         std::vector<std::string> graphs;
+        std::vector<std::string>::iterator it;
         std::string _username;
 };
 
