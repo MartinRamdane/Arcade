@@ -103,7 +103,7 @@ void LibMenu::handleKeys(std::vector<std::string> list, std::string key, std::st
             infos[graphs[0]].background_color = "white";
         }
         if (step == 2) {
-            infos["InputIndicator"] = createEntity("", "|", "white", "", 3, ySave, false);
+            infos["InputIndicator"] = createEntity("", "|", "white", "", xSave, ySave, false);
         }
         step++;
         select = 0;
@@ -117,6 +117,7 @@ void LibMenu::inputUser(std::string key) {
         infos[graphs[0]].color = "black";
         infos[graphs[0]].background_color = "white";
         select = 0;
+        xSave = infos["InputIndicator"].x;
         step--;
         return;
     }
