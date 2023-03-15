@@ -37,7 +37,7 @@ void LibMenu::init() {
     int x = 3;
     int y = 2;
     int i = 0;
-    infos["GameList"] = createEntity("", "Games list:", "white", "", 0, 0, false);
+    infos["GameList"] = createEntity("", "Games list:", "white", "", 1, 0, false);
     for (auto &game : games) {
         if (i == 0)
             infos[game] = createEntity("", game, "black", "white", x, y, false);
@@ -48,7 +48,7 @@ void LibMenu::init() {
     }
     i = 0;
     y += 1;
-    infos["GraphList"] = createEntity("", "Graph list:", "white", "", 0, y, false);
+    infos["GraphList"] = createEntity("", "Graph list:", "white", "", 1, y, false);
     y += 2;
     for (auto &graph : graphs) {
         infos[graph] = createEntity("", graph, "white", "", x, y, false);
@@ -56,7 +56,7 @@ void LibMenu::init() {
         i++;
     }
     y += 1;
-    infos["Username:"] = createEntity("", "Username:", "white", "", 0, y, false);
+    infos["Username:"] = createEntity("", "Username:", "white", "", 1, y, false);
     y += 1;
     infos["Username"] = createEntity("", "", "white", "", x, y, false);
     ySave = y;
@@ -103,7 +103,7 @@ void LibMenu::handleKeys(std::vector<std::string> list, std::string key, std::st
             infos[graphs[0]].background_color = "white";
         }
         if (step == 2) {
-            infos["InputIndicator"] = createEntity("", "|", "white", "", 3, ySave, false);
+            infos["InputIndicator"] = createEntity("", "|", "white", "", xSave, ySave, false);
         }
         step++;
         select = 0;
@@ -117,6 +117,7 @@ void LibMenu::inputUser(std::string key) {
         infos[graphs[0]].color = "black";
         infos[graphs[0]].background_color = "white";
         select = 0;
+        xSave = infos["InputIndicator"].x;
         step--;
         return;
     }

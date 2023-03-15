@@ -38,6 +38,7 @@ class LibMenu {
         std::string gameChoice;
         std::string username;
         int ySave = 0;
+        int xSave = 3;
         int step;
         int select;
 };
