@@ -9,5 +9,6 @@ int main(int ac, char **av) {
     }
     Core core(av[1]);
     core.init();
+    core.mainloop();
     return 0;
 }

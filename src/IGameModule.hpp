@@ -32,11 +32,12 @@ class IGameModule {
         };
 
         virtual ~IGameModule () = default ;
-        virtual void startGame() = 0;
+        virtual void startGame(std::string username) = 0;
         virtual bool isGameOver() = 0;
         virtual void update(std::string key) = 0;
-        virtual std::map<std::string, Entity> getInfos() = 0;
-        virtual GAME_STATUS getGameStatus() = 0;
+        virtual std::map<std::string, IGameModule::Entity> getInfos() = 0;
+        virtual IGameModule::Entity createEntity(std::string file, std::string text, std::string color, std::string background_color, float x, float y, bool isSprite) = 0;
+        virtual IGameModule::GAME_STATUS getGameStatus() = 0;
 
     protected:
     private:

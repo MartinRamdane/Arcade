@@ -20,11 +20,11 @@ void Core::init() {
     LibMenu *menu = startMenu();
     DLLoader<IGameModule> *game = new DLLoader<IGameModule>(menu->getGameChoice());
     _game = game->getInstance();
-    _game->startGame();
+    _username = menu->getUsername();
+    _game->startGame(_username);
     DLLoader<IDisplayModule> *graph2 = new DLLoader<IDisplayModule>(menu->getGraphChoice());
     _display = graph2->getInstance();
     _display->init();
-    _username = menu->getUsername();
 }
 
 void Core::getLibs() {

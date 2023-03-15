@@ -16,6 +16,7 @@ DisplayNcurse::~DisplayNcurse()
 }
 
 void DisplayNcurse::init() {
+    setlocale(LC_ALL, "");
     initscr();
     curs_set(0);
     cbreak();
