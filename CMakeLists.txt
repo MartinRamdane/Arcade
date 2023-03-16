@@ -18,11 +18,14 @@ set(CMAKE_SHARED_LIBRARY_SUFFIX ".so")
 add_library(ncurses SHARED src/DisplayNcurse.cpp)
 add_library(foo SHARED src/foo.cpp)
 add_library(foogame SHARED src/foogame.cpp)
+add_library(snake SHARED src/GameSnake.cpp
+                        src/AGameModule.cpp)
 add_library(sfml SHARED src/DisplaySfml.cpp)
 set_target_properties(ncurses PROPERTIES LIBRARY_OUTPUT_DIRECTORY ../lib/)
 set_target_properties(foo PROPERTIES LIBRARY_OUTPUT_DIRECTORY ../lib/)
 set_target_properties(foogame PROPERTIES LIBRARY_OUTPUT_DIRECTORY ../lib/)
 set_target_properties(sfml PROPERTIES LIBRARY_OUTPUT_DIRECTORY ../lib/)
+set_target_properties(snake PROPERTIES LIBRARY_OUTPUT_DIRECTORY ../lib/)
 target_link_libraries(${PROJECT_NAME} PRIVATE dl)
 set_target_properties(${PROJECT_NAME} PROPERTIES
     RUNTIME_OUTPUT_DIRECTORY ${CMAKE_BINARY_DIR}/../
