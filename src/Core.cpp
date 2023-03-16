@@ -19,13 +19,13 @@ Core::~Core()
 void Core::init() {
     getLibs();
     LibMenu *menu = startMenu();
-    DLLoader<IGameModule> *game = new DLLoader<IGameModule>(menu->getGameChoice());
-    _game = game->getInstance();
+    _gameLoader = new DLLoader<IGameModule>(menu->getGameChoice());
+    _game = _gameLoader->getInstance();
     _username = menu->getUsername();
     _game->startGame(_username);
-    DLLoader<IDisplayModule> *graph2 = new DLLoader<IDisplayModule>(menu->getGraphChoice());
+    _graphLoader = new DLLoader<IDisplayModule>(menu->getGraphChoice());
     it = std::find(graphs.begin(), graphs.end(), menu->getGraphChoice());
-    _display = graph2->getInstance();
+    _display = _graphLoader->getInstance();
     _display->init();
 }
 
@@ -58,16 +58,14 @@ void Core::getLibs() {
 }
 
 LibMenu *Core::startMenu() {
-    DLLoader<IDisplayModule> *graph = new DLLoader<IDisplayModule>(_lib);
+    _graphLoader = new DLLoader<IDisplayModule>(_lib);
     it = std::find(graphs.begin(), graphs.end(), _lib);
-    _display = graph->getInstance();
+    _display = _graphLoader->getInstance();
     LibMenu *menu = new LibMenu(games, graphs);
     menu->init();
     _display->init();
     while (menu->isFinished() == false) {
         std::string event = _display->getEvent();
-        // if (event != "")
-        //     std::cout << event << std::endl;
         if (event == "\t")
             switchLib();
         menu->update(event);
@@ -78,13 +76,13 @@ LibMenu *Core::startMenu() {
 }
 
 void Core::switchLib() {
-    // printf("la\n");
     _display->stop();
+    delete _graphLoader;
     it++;
     if (it == graphs.end())
         it = graphs.begin();
-    DLLoader<IDisplayModule> *newDisplay = new DLLoader<IDisplayModule>(*it);
-    _display = newDisplay->getInstance();
+    _graphLoader = new DLLoader<IDisplayModule>(*it);
+    _display = _graphLoader->getInstance();
     _display->init();
 }
 

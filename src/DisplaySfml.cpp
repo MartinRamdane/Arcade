@@ -13,10 +13,11 @@ DisplaySfml::DisplaySfml()
 
 DisplaySfml::~DisplaySfml()
 {
+    window.close();
 }
 
 void DisplaySfml::init() {
-    sf::VideoMode video({500, 450});
+    sf::VideoMode video({1000, 900});
     window.create(video, "Arcade-SFML");
     window.setFramerateLimit(60);
     if (!font.loadFromFile("arial.ttf"))
@@ -24,6 +25,7 @@ void DisplaySfml::init() {
 }
 
 void DisplaySfml::stop() {
+    printf("Closing window\n");
     window.close();
 }
 
@@ -32,9 +34,9 @@ void DisplaySfml::update(std::map<std::string, IGameModule::Entity> entities) {
         if (entity.second.text != "" || texts[entity.first].getString() != "") {
             texts[entity.first].setFont(font);
             texts[entity.first].setString(entity.second.text);
-            texts[entity.first].setCharacterSize(20);
+            texts[entity.first].setCharacterSize(40);
             texts[entity.first].setFillColor(colors[entity.second.color]);
-            texts[entity.first].setPosition({entity.second.x * 10, entity.second.y * 25});
+            texts[entity.first].setPosition({entity.second.x * 20, entity.second.y * 50});
             backgroundColors[entity.first] = sf::RectangleShape(sf::Vector2f(texts[entity.second.text].getLocalBounds().width, texts[entity.second.text].getLocalBounds().height));
             backgroundColors[entity.first].setSize(sf::Vector2f(1.2f * backgroundColors[entity.second.text].getSize().x, 1.3f * backgroundColors[entity.second.text].getSize().y));
             backgroundColors[entity.first].setPosition(texts[entity.second.text].getPosition());

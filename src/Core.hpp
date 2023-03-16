@@ -36,6 +36,8 @@ class Core {
         std::vector<std::string> graphs;
         std::vector<std::string>::iterator it;
         std::string _username;
+        DLLoader<IGameModule> *_gameLoader;
+        DLLoader<IDisplayModule> *_graphLoader;
 };
 
 #endif /* !CLASS_CORE */
