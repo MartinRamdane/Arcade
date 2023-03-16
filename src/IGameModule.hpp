@@ -21,14 +21,26 @@ class IGameModule {
             FINISHED
         };
 
+        enum ENTITY_TYPE {
+            SPRITE,
+            TEXT,
+            SPRITE_TEXT,
+            BACKGROUND,
+            TEXTURE,
+            NONE
+        };
+
         struct Entity {
             std::string file;
             std::string text;
             std::string color;
             std::string background_color;
+            std::string spriteColor;
             float x;
             float y;
-            bool isSprite;
+            float xSprite;
+            float ySprite;
+            ENTITY_TYPE type;
         };
 
         virtual ~IGameModule () = default ;
@@ -36,7 +48,7 @@ class IGameModule {
         virtual bool isGameOver() = 0;
         virtual void update(std::string key) = 0;
         virtual std::map<std::string, IGameModule::Entity> getInfos() = 0;
-        virtual IGameModule::Entity createEntity(std::string file, std::string text, std::string color, std::string background_color, float x, float y, bool isSprite) = 0;
+        virtual IGameModule::Entity createEntity(std::string file, std::string text, std::string color, std::string background_color, float x, float y, ENTITY_TYPE type, float xSprite = 0, float ySprite = 0) = 0;
         virtual IGameModule::GAME_STATUS getGameStatus() = 0;
 
     protected:

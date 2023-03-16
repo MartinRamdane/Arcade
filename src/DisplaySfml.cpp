@@ -17,10 +17,10 @@ DisplaySfml::~DisplaySfml()
 }
 
 void DisplaySfml::init() {
-    sf::VideoMode video({1000, 900});
+    sf::VideoMode video({1920, 1080});
     window.create(video, "Arcade-SFML");
     window.setFramerateLimit(60);
-    if (!font.loadFromFile("arial.ttf"))
+    if (!font.loadFromFile("./res/pixel.ttf"))
         throw "Error on loading Font";
 }
 
@@ -30,13 +30,26 @@ void DisplaySfml::stop() {
 }
 
 void DisplaySfml::update(std::map<std::string, IGameModule::Entity> entities) {
+    this->entities = entities;
     for (auto &entity : entities) {
-        if (entity.second.text != "" || texts[entity.first].getString() != "") {
+        if (entity.second.file != "" && ((std::get<1>(textures[entity.first]) != entities[entity.first].file) || ((sprites[entity.first].getPosition().x != entities[entity.first].xSprite) || (sprites[entity.first].getPosition().y != entities[entity.first].ySprite)))) {
+            sf::Texture* texture = new sf::Texture();
+            textures[entity.first] = std::make_tuple(std::shared_ptr<sf::Texture>(texture), entity.second.file);
+            if (!texture->loadFromFile(entity.second.file))
+                throw "Error on loading texture";
+            sprites[entity.first].setOrigin(texture->getSize().x / 2, texture->getSize().y / 2);
+            sprites[entity.first].setTexture(*std::get<0>(textures[entity.first]), true);
+            sprites[entity.first].setPosition({entity.second.xSprite * 20, entity.second.ySprite * 50});
+        }
+        if ((entity.second.text != "" && (entity.second.type == IGameModule::ENTITY_TYPE::SPRITE_TEXT || entity.second.type == IGameModule::ENTITY_TYPE::TEXT)) || texts[entity.first].getString() != "") {
             texts[entity.first].setFont(font);
             texts[entity.first].setString(entity.second.text);
             texts[entity.first].setCharacterSize(40);
-            texts[entity.first].setFillColor(colors[entity.second.color]);
-            texts[entity.first].setPosition({entity.second.x * 20, entity.second.y * 50});
+            texts[entity.first].setFillColor(colors[entity.second.spriteColor]);
+            if (std::get<0>(textures[entity.first]))
+                texts[entity.first].setPosition(sprites[entity.first].getPosition().x + sprites[entity.first].getLocalBounds().width / 2 - texts[entity.first].getLocalBounds().width / 2 - sprites[entity.first].getOrigin().x, sprites[entity.first].getPosition().y + sprites[entity.first].getLocalBounds().height / 2 - texts[entity.first].getLocalBounds().height / 2 - sprites[entity.first].getOrigin().y);
+            else
+                texts[entity.first].setPosition({entity.second.x * 20, entity.second.y * 50});
             backgroundColors[entity.first] = sf::RectangleShape(sf::Vector2f(texts[entity.second.text].getLocalBounds().width, texts[entity.second.text].getLocalBounds().height));
             backgroundColors[entity.first].setSize(sf::Vector2f(1.2f * backgroundColors[entity.second.text].getSize().x, 1.3f * backgroundColors[entity.second.text].getSize().y));
             backgroundColors[entity.first].setPosition(texts[entity.second.text].getPosition());
@@ -48,10 +61,19 @@ void DisplaySfml::update(std::map<std::string, IGameModule::Entity> entities) {
 void DisplaySfml::draw() {
     window.clear();
     for (auto &background: backgroundColors) {
-        window.draw(background.second);
+        auto it = entities.find(background.first);
+        if (it != entities.end())
+            window.draw(background.second);
+    }
+    for (auto &sprite: sprites) {
+        auto it = entities.find(sprite.first);
+        if (it != entities.end())
+            window.draw(sprite.second);
     }
     for (auto &text: texts) {
-        window.draw(text.second);
+        auto it = entities.find(text.first);
+        if (it != entities.end())
+            window.draw(text.second);
     }
     window.display();
 }

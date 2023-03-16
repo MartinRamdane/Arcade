@@ -21,7 +21,7 @@ LibMenu::~LibMenu()
 {
 }
 
-IGameModule::Entity LibMenu::createEntity(std::string file, std::string text, std::string color, std::string background_color, float x, float y, bool isSprite) {
+IGameModule::Entity LibMenu::createEntity(std::string file, std::string text, std::string color, std::string background_color, float x, float y, IGameModule::ENTITY_TYPE type) {
     IGameModule::Entity entity;
     entity.file = file;
     entity.text = text;
@@ -29,7 +29,7 @@ IGameModule::Entity LibMenu::createEntity(std::string file, std::string text, st
     entity.background_color = background_color;
     entity.x = x;
     entity.y = y;
-    entity.isSprite = isSprite;
+    entity.type = type;
     return entity;
 }
 
@@ -37,28 +37,28 @@ void LibMenu::init() {
     int x = 3;
     int y = 2;
     int i = 0;
-    infos["GameList"] = createEntity("", "Games list:", "white", "", 1, 0, false);
+    infos["GameList"] = createEntity("", "Games list:", "white", "", 1, 0, IGameModule::ENTITY_TYPE::TEXT);
     for (auto &game : games) {
         if (i == 0)
-            infos[game] = createEntity("", game, "black", "white", x, y, false);
+            infos[game] = createEntity("", game, "black", "white", x, y, IGameModule::ENTITY_TYPE::TEXT);
         else
-            infos[game] = createEntity("", game, "white", "", x, y, false);
+            infos[game] = createEntity("", game, "white", "", x, y, IGameModule::ENTITY_TYPE::TEXT);
         y += 1;
         i++;
     }
     i = 0;
     y += 1;
-    infos["GraphList"] = createEntity("", "Graph list:", "white", "", 1, y, false);
+    infos["GraphList"] = createEntity("", "Graph list:", "white", "", 1, y, IGameModule::ENTITY_TYPE::TEXT);
     y += 2;
     for (auto &graph : graphs) {
-        infos[graph] = createEntity("", graph, "white", "", x, y, false);
+        infos[graph] = createEntity("", graph, "white", "", x, y, IGameModule::ENTITY_TYPE::TEXT);
         y += 1;
         i++;
     }
     y += 1;
-    infos["Username:"] = createEntity("", "Username:", "white", "", 1, y, false);
+    infos["Username:"] = createEntity("", "Username:", "white", "", 1, y, IGameModule::ENTITY_TYPE::TEXT);
     y += 1;
-    infos["Username"] = createEntity("", "", "white", "", x, y, false);
+    infos["Username"] = createEntity("", "", "white", "", x, y, IGameModule::ENTITY_TYPE::TEXT);
     ySave = y;
 }
 
@@ -103,7 +103,7 @@ void LibMenu::handleKeys(std::vector<std::string> list, std::string key, std::st
             infos[graphs[0]].background_color = "white";
         }
         if (step == 2) {
-            infos["InputIndicator"] = createEntity("", "|", "white", "", xSave, ySave, false);
+            infos["InputIndicator"] = createEntity("", "|", "white", "", xSave, ySave, IGameModule::ENTITY_TYPE::TEXT);
         }
         step++;
         select = 0;

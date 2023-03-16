@@ -20,7 +20,7 @@ std::map<std::string, IGameModule::Entity> AGameModule::getInfos()
     return infos;
 }
 
-IGameModule::Entity AGameModule::createEntity(std::string file, std::string text, std::string color, std::string background_color, float x, float y, bool isSprite)
+IGameModule::Entity AGameModule::createEntity(std::string file, std::string text, std::string color, std::string background_color, float x, float y, ENTITY_TYPE type, float xSprite, float ySprite)
 {
     IGameModule::Entity entity;
     entity.file = file;
@@ -29,7 +29,16 @@ IGameModule::Entity AGameModule::createEntity(std::string file, std::string text
     entity.background_color = background_color;
     entity.x = x;
     entity.y = y;
-    entity.isSprite = isSprite;
+    if (xSprite == 0)
+        entity.xSprite = x;
+    else
+        entity.xSprite = xSprite;
+    if (ySprite == 0)
+        entity.ySprite = y;
+    else
+        entity.ySprite = ySprite;
+    entity.spriteColor = color;
+    entity.type = type;
     return entity;
 }
 

@@ -16,7 +16,7 @@ class AGameModule : public IGameModule {
         AGameModule();
         ~AGameModule();
         std::map<std::string, IGameModule::Entity> getInfos();
-        IGameModule::Entity createEntity(std::string file, std::string text, std::string color, std::string background_color, float x, float y, bool isSprite); //lets gooooo ca dit quoi lekip
+        IGameModule::Entity createEntity(std::string file, std::string text, std::string color, std::string background_color, float x, float y, ENTITY_TYPE type, float xSprite = 0, float ySprite = 0);
         IGameModule::GAME_STATUS getGameStatus();
 
     protected:

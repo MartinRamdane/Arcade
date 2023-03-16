@@ -4,3 +4,4 @@ build/*
 arcade
 .DS_Store
 lib/*
+Makefile

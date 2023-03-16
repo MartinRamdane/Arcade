@@ -12,6 +12,7 @@
 #include <SFML/Graphics.hpp>
 #include <iostream>
 #include <string>
+#include <tuple>
 #include <map>
 
 class DisplaySfml : public IDisplayModule {
@@ -30,8 +31,11 @@ class DisplaySfml : public IDisplayModule {
         std::string displayName = "sfml";
         sf::RenderWindow window;
         sf::Event event;
+        std::map<std::string, IGameModule::Entity> entities;
         std::map<std::string, sf::Text> texts;
         std::map<std::string, sf::RectangleShape> backgroundColors;
+        std::map<std::string, std::tuple<std::shared_ptr<sf::Texture>, std::string>> textures;
+        std::map<std::string, sf::Sprite> sprites;
         static std::map<std::string, sf::Color> colors;
         static std::map<sf::Keyboard::Key, std::string> keys;
         sf::Font font;
