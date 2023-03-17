@@ -23,7 +23,7 @@ class Core {
         ~Core();
         void init();
         void getLibs();
-        LibMenu *startMenu();
+        void startMenu(std::string lib);
         void mainloop();
         void switchLib();
 

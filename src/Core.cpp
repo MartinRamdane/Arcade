@@ -18,15 +18,7 @@ Core::~Core()
 
 void Core::init() {
     getLibs();
-    LibMenu *menu = startMenu();
-    _gameLoader = new DLLoader<IGameModule>(menu->getGameChoice());
-    _game = _gameLoader->getInstance();
-    _username = menu->getUsername();
-    _game->startGame(_username);
-    _graphLoader = new DLLoader<IDisplayModule>(menu->getGraphChoice());
-    it = std::find(graphs.begin(), graphs.end(), menu->getGraphChoice());
-    _display = _graphLoader->getInstance();
-    _display->init();
+    startMenu(_lib);
 }
 
 void Core::getLibs() {
@@ -57,9 +49,9 @@ void Core::getLibs() {
     }
 }
 
-LibMenu *Core::startMenu() {
-    _graphLoader = new DLLoader<IDisplayModule>(_lib);
-    it = std::find(graphs.begin(), graphs.end(), _lib);
+void Core::startMenu(std::string lib) {
+    _graphLoader = new DLLoader<IDisplayModule>(lib);
+    it = std::find(graphs.begin(), graphs.end(), lib);
     _display = _graphLoader->getInstance();
     LibMenu *menu = new LibMenu(games, graphs);
     menu->init();
@@ -73,7 +65,14 @@ LibMenu *Core::startMenu() {
         _display->draw();
     }
     _display->stop();
-    return menu;
+    _gameLoader = new DLLoader<IGameModule>(menu->getGameChoice());
+    _game = _gameLoader->getInstance();
+    _username = menu->getUsername();
+    _game->startGame(_username);
+    _graphLoader = new DLLoader<IDisplayModule>(menu->getGraphChoice());
+    it = std::find(graphs.begin(), graphs.end(), menu->getGraphChoice());
+    _display = _graphLoader->getInstance();
+    _display->init();
 }
 
 void Core::switchLib() {
@@ -94,6 +93,8 @@ void Core::mainloop() {
         std::string event = _display->getEvent();
         if (event == "\t")
             switchLib();
+        if (event == "m")
+            startMenu(*it);
         _game->update(event);
     }
 }

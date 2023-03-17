@@ -21,19 +21,6 @@ LibMenu::~LibMenu()
 {
 }
 
-// IGameModule::Entity LibMenu::createEntity(std::string file, std::string text, std::string color, std::string background_color, float x, float y, IGameModule::ENTITY_TYPE type) {
-//     IGameModule::Entity entity;
-//     entity.file = file;
-//     entity.text = text;
-//     entity.color = color;
-//     entity.background_color = background_color;
-//     entity.x = x;
-//     entity.y = y;
-//     entity.type = type;
-//     return entity;
-// }
-
-
 void LibMenu::init() {
     int x = 3;
     int y = 2;
@@ -163,8 +150,3 @@ void LibMenu::update(std::string key) {
         }
     }
 }
-
-// std::map<std::string, IGameModule::Entity> LibMenu::getInfos() {
-//     return infos;
-// }
-
