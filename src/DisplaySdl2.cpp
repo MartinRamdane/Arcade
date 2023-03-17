@@ -21,7 +21,7 @@ void DisplaySdl::init() {
         throw;
     }
     TTF_Init();
-    window = SDL_CreateWindow("GAME", SDL_WINDOWPOS_CENTERED, SDL_WINDOWPOS_CENTERED, 500, 450, SDL_WINDOW_SHOWN);
+    window = SDL_CreateWindow("GAME", SDL_WINDOWPOS_CENTERED, SDL_WINDOWPOS_CENTERED, 530, 595, SDL_WINDOW_SHOWN);
     renderer = SDL_CreateRenderer(window, -1, SDL_RENDERER_ACCELERATED);
     font = TTF_OpenFont("./res/pixel.ttf", 24);
 }

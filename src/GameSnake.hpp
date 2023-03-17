@@ -12,6 +12,9 @@
 #include <vector>
 #include <tuple>
 
+#define MARGIN_TOP 3
+#define MARGIN_LEFT 2
+
 class GameSnake: public AGameModule {
     public:
         enum DIRECTION {

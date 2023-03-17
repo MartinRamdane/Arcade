@@ -17,9 +17,9 @@ DisplaySfml::~DisplaySfml()
 }
 
 void DisplaySfml::init() {
-    sf::VideoMode video({1920, 1080});
+    sf::VideoMode video({1060, 1190});
     window = std::make_unique<sf::RenderWindow>(video, "Arcade-SFML");
-    window->setFramerateLimit(60);
+    window->setFramerateLimit(30);
     if (!font.loadFromFile("./res/pixel.ttf"))
         throw "Error on loading Font";
 }
@@ -49,7 +49,7 @@ void DisplaySfml::update(std::map<std::string, IGameModule::Entity> entities) {
             if (std::get<0>(textures[entity.first]))
                 texts[entity.first].setPosition(sf::Vector2f(sprites[entity.first].getPosition().x + sprites[entity.first].getLocalBounds().width / 2 - texts[entity.first].getLocalBounds().width / 2 - sprites[entity.first].getOrigin().x, sprites[entity.first].getPosition().y + sprites[entity.first].getLocalBounds().height / 2 - texts[entity.first].getLocalBounds().height / 2 - sprites[entity.first].getOrigin().y));
             else
-                texts[entity.first].setPosition({entity.second.x * 20, entity.second.y * 50});
+                texts[entity.first].setPosition({entity.second.xSprite * 20, entity.second.ySprite * 50});
             backgroundColors[entity.first] = sf::RectangleShape(sf::Vector2f(texts[entity.second.text].getLocalBounds().width, texts[entity.second.text].getLocalBounds().height));
             backgroundColors[entity.first].setSize(sf::Vector2f(1.2f * backgroundColors[entity.second.text].getSize().x, 1.3f * backgroundColors[entity.second.text].getSize().y));
             backgroundColors[entity.first].setPosition(sf::Vector2f(texts[entity.second.text].getPosition().x - 0.1f * backgroundColors[entity.second.text].getSize().x, texts[entity.second.text].getPosition().y - 0.15f * backgroundColors[entity.second.text].getSize().y));
