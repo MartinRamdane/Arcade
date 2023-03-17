@@ -72,6 +72,7 @@ LibMenu *Core::startMenu() {
         _display->update(menu->getInfos());
         _display->draw();
     }
+    _display->stop();
     return menu;
 }
 
