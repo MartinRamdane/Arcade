@@ -22,6 +22,7 @@ class Core {
         Core(std::string lib);
         ~Core();
         void init();
+        void stop();
         void getLibs();
         void startMenu(std::string lib);
         void mainloop();

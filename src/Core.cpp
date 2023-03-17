@@ -21,6 +21,13 @@ void Core::init() {
     startMenu(_lib);
 }
 
+void Core::stop() {
+    _display->stop();
+    delete _graphLoader;
+    delete _gameLoader;
+    exit(0);
+}
+
 void Core::getLibs() {
     std::string path = "./lib/";
     for (const auto &entry:std::filesystem::directory_iterator(path)) {
@@ -60,6 +67,8 @@ void Core::startMenu(std::string lib) {
         std::string event = _display->getEvent();
         if (event == "\t")
             switchLib();
+        if (event == "-")
+            stop();
         menu->update(event);
         _display->update(menu->getInfos());
         _display->draw();
@@ -95,6 +104,8 @@ void Core::mainloop() {
             switchLib();
         if (event == "m")
             startMenu(*it);
+        if (event == "-")
+            stop();
         _game->update(event);
     }
 }

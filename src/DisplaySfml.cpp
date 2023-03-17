@@ -25,7 +25,6 @@ void DisplaySfml::init() {
 }
 
 void DisplaySfml::stop() {
-    printf("Closing window\n");
     window->close();
 }
 
@@ -127,7 +126,8 @@ std::map<sf::Keyboard::Key, std::string> DisplaySfml::keys = {
     {sf::Keyboard::Down, "DOWN"},
     {sf::Keyboard::F1, "F1"},
     {sf::Keyboard::F2, "F2"},
-    {sf::Keyboard::Tab, "\t"}
+    {sf::Keyboard::Tab, "\t"},
+    {sf::Keyboard::Equal, "-"}
 };
 
 std::map<std::string, sf::Color> DisplaySfml::colors = {
