@@ -24,7 +24,6 @@ class DisplaySfml : public IDisplayModule {
         void stop();
         void update(std::map<std::string, IGameModule::Entity> entities);
         void draw();
-        void drawElement(IGameModule::Entity element);
         std::string getEvent();
         const std::string &getName() const;
 

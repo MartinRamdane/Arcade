@@ -78,10 +78,6 @@ void DisplaySfml::draw() {
     window->display();
 }
 
-void DisplaySfml::drawElement(IGameModule::Entity element) {
-
-}
-
 std::string DisplaySfml::getEvent() {
     while (window->pollEvent(event)) {
         if (event.type == sf::Event::Closed)
