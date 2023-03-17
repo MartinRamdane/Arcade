@@ -43,7 +43,7 @@ void DisplaySfml::update(std::map<std::string, IGameModule::Entity> entities) {
         if ((entity.second.text != "" && (entity.second.type == IGameModule::ENTITY_TYPE::SPRITE_TEXT || entity.second.type == IGameModule::ENTITY_TYPE::TEXT)) || texts[entity.first].getString() != "") {
             texts[entity.first].setFont(font);
             texts[entity.first].setString(entity.second.text);
-            texts[entity.first].setCharacterSize(40);
+            texts[entity.first].setCharacterSize(entity.second.fontSize);
             texts[entity.first].setFillColor(colors[entity.second.spriteColor]);
             if (std::get<0>(textures[entity.first]))
                 texts[entity.first].setPosition(sf::Vector2f(sprites[entity.first].getPosition().x + sprites[entity.first].getLocalBounds().width / 2 - texts[entity.first].getLocalBounds().width / 2 - sprites[entity.first].getOrigin().x, sprites[entity.first].getPosition().y + sprites[entity.first].getLocalBounds().height / 2 - texts[entity.first].getLocalBounds().height / 2 - sprites[entity.first].getOrigin().y));
