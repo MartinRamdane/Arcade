@@ -39,6 +39,7 @@ class DisplaySdl : public IDisplayModule {
         SDL_Window* window;
         SDL_Event event;
         SDL_Renderer* renderer;
+        std::string _name = "SDL2";
         std::map<std::string, Text> texts;
         TTF_Font* font;
         static std::map<std::string, SDL_Color> colors;
