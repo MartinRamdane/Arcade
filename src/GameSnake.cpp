@@ -152,8 +152,9 @@ void GameSnake::initLoose()
     infos["looseTitle3"] = createEntity("", "██   ███ ██   ███         ██", "white", "", (areaWidth / 2 - 12), (areaHeight / 2 - 5), ENTITY_TYPE::NONE);
     infos["looseTitle4"] = createEntity("", "██    ██ ██    ██     ██  ██", "white", "", (areaWidth / 2 - 12), (areaHeight / 2 - 4), ENTITY_TYPE::NONE);
     infos["looseTitle5"] = createEntity("", " ██████   ██████         ██ ", "white", "", (areaWidth / 2 - 12), (areaHeight / 2 - 3), ENTITY_TYPE::NONE);
+    int usernameLength = this->username.length() / 2;
     infos["username"] = createEntity("", this->username, "white", "", (areaWidth / 2 - (this->username.length() / 2) + 1), (areaHeight / 2 - 1), ENTITY_TYPE::TEXT), (areaWidth / 2 - (this->username.length() / 2)), (areaHeight / 2 - 1);
-    infos["score"] = createEntity("", std::to_string(score), "white", "", (areaWidth / 2 - (std::to_string(score).length() / 2) + 1), (areaHeight / 2), ENTITY_TYPE::TEXT), (this->username.length() / 2), (areaHeight / 2);
+    infos["score"] = createEntity("", std::to_string(score), "white", "", (areaWidth / 2 - (std::to_string(score).length() / 2) + 1), (areaHeight / 2), ENTITY_TYPE::TEXT), 0, (areaHeight / 2);
     infos["retryButton"] = createEntity("./res/snake/snake_buttonHover.png", "Retry", "yellow", "white", (areaWidth / 2 - 1), (areaHeight / 2 + 2), ENTITY_TYPE::SPRITE_TEXT, (areaWidth / 2), (areaHeight / 2 + 2));
     infos["quitButton"] = createEntity("./res/snake/snake_button.png", "Quit", "white", "", (areaWidth / 2 - 1), (areaHeight / 2 + 4), ENTITY_TYPE::SPRITE_TEXT, (areaWidth / 2), (areaHeight / 2 + 4));
 }
@@ -264,6 +265,12 @@ void GameSnake::spawnMeal()
 {
     int x = rand() % areaWidth + 2;
     int y = rand() % areaHeight + 1;
+    for (int i = 1; i < playerPart; i++) {
+        if ((x == infos["playerPart" + std::to_string(i)].x && y == infos["playerPart" + std::to_string(i)].y) || (x == infos["playerHead"].x && y == infos["playerHead"].y)) {
+            spawnMeal();
+            return;
+        }
+    }
     infos["meal"] = createEntity("./res/snake/snake_meal.png", "*", "white", "red", x, y, ENTITY_TYPE::SPRITE);
     hasMeal = true;
 }
