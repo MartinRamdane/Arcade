@@ -112,7 +112,7 @@ std::map<std::string, SDL_Color> DisplaySdl::colors = {
 };
 
 const std::string &DisplaySdl::getName() const {
-    return "SDL2";
+    return _name;
 }
 
 extern "C" IDisplayModule* create() {
