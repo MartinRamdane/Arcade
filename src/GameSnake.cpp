@@ -16,25 +16,25 @@ GameSnake::GameSnake() : areaWidth(50), areaHeight(20)
     int wallX = 2;
     int wallY = 1;
     for (int i = 0; i < areaWidth; i++) {
-        infos["wall" + std::to_string(nbWalls)] = createEntity("./res/snake/snake_wall.png", "█", "white", "", wallX, wallY, ENTITY_TYPE::SPRITE);
+        infos["wall" + std::to_string(nbWalls)] = createEntity("./res/snake/snake_wall.png", "█", "white", "", wallX, wallY, ENTITY_TYPE::SPRITE, 0, 0);
         wallX++;
         nbWalls++;
     }
     wallX--;
     for (int i = 0; i < areaHeight; i++) {
-        infos["wall" + std::to_string(nbWalls)] = createEntity("./res/snake/snake_wall.png", "█", "white", "", wallX, wallY, ENTITY_TYPE::SPRITE);
+        infos["wall" + std::to_string(nbWalls)] = createEntity("./res/snake/snake_wall.png", "█", "white", "", wallX, wallY, ENTITY_TYPE::SPRITE, 0, 0);
         wallY++;
         nbWalls++;
     }
     wallX = 2;
     for (int i = 0; i < areaWidth; i++) {
-        infos["wall" + std::to_string(nbWalls)] = createEntity("./res/snake/snake_wall.png", "█", "white", "", wallX, wallY, ENTITY_TYPE::SPRITE);
+        infos["wall" + std::to_string(nbWalls)] = createEntity("./res/snake/snake_wall.png", "█", "white", "", wallX, wallY, ENTITY_TYPE::SPRITE, 0, 0);
         wallX++;
         nbWalls++;
     }
     wallY = 1; wallX = 2;
     for (int i = 0; i < areaHeight; i++) {
-        infos["wall" + std::to_string(nbWalls)] = createEntity("./res/snake/snake_wall.png", "█", "white", "", wallX, wallY, ENTITY_TYPE::SPRITE);
+        infos["wall" + std::to_string(nbWalls)] = createEntity("./res/snake/snake_wall.png", "█", "white", "", wallX, wallY, ENTITY_TYPE::SPRITE, 0, 0);
         wallY++;
         nbWalls++;
     }
@@ -68,10 +68,10 @@ void GameSnake::initGame()
     infos.erase("gameTitle3");
     infos.erase("gameTitle4");
     infos.erase("gameTitle5");
-    infos["playerHead"] = createEntity("./res/snake/snakeHead_right.png", ">", "white", "green", (areaWidth / 2 + 2), (areaHeight / 2 + 1), ENTITY_TYPE::SPRITE_TEXT);
-    infos["playerPart1"] = createEntity("", "o", "white", "green", (areaWidth / 2 + 1), (areaHeight / 2 + 1), ENTITY_TYPE::SPRITE_TEXT);
-    infos["playerPart2"] = createEntity("", "o", "white", "green", (areaWidth / 2), (areaHeight / 2 + 1), ENTITY_TYPE::SPRITE_TEXT);
-    infos["playerPart3"] = createEntity("", "o", "white", "green", (areaWidth / 2 - 1), (areaHeight / 2 + 1), ENTITY_TYPE::SPRITE_TEXT);
+    infos["playerHead"] = createEntity("./res/snake/snakeHead_right.png", ">", "white", "green", (areaWidth / 2 + 2), (areaHeight / 2 + 1), ENTITY_TYPE::SPRITE_TEXT, 0, 0);
+    infos["playerPart1"] = createEntity("", "o", "white", "green", (areaWidth / 2 + 1), (areaHeight / 2 + 1), ENTITY_TYPE::SPRITE_TEXT, 0, 0);
+    infos["playerPart2"] = createEntity("", "o", "white", "green", (areaWidth / 2), (areaHeight / 2 + 1), ENTITY_TYPE::SPRITE_TEXT, 0, 0);
+    infos["playerPart3"] = createEntity("", "o", "white", "green", (areaWidth / 2 - 1), (areaHeight / 2 + 1), ENTITY_TYPE::SPRITE_TEXT, 0, 0);
     playerDir = RIGHT;
     spawnMeal();
 }
@@ -148,12 +148,12 @@ void GameSnake::initLoose()
     infos.erase("gameTitle4");
     infos.erase("gameTitle5");
     infos["looseTitle"] = createEntity("./res/snake/snake_loose.png", " ██████   ██████         ██ ", "white", "", (areaWidth / 2 - 12), (areaHeight / 2 - 7), ENTITY_TYPE::SPRITE, (areaWidth / 2), (areaHeight / 2 - 3));
-    infos["looseTitle2"] = createEntity("", "██       ██           ██  ██", "white", "", (areaWidth / 2 - 12), (areaHeight / 2 - 6), ENTITY_TYPE::NONE);
-    infos["looseTitle3"] = createEntity("", "██   ███ ██   ███         ██", "white", "", (areaWidth / 2 - 12), (areaHeight / 2 - 5), ENTITY_TYPE::NONE);
-    infos["looseTitle4"] = createEntity("", "██    ██ ██    ██     ██  ██", "white", "", (areaWidth / 2 - 12), (areaHeight / 2 - 4), ENTITY_TYPE::NONE);
-    infos["looseTitle5"] = createEntity("", " ██████   ██████         ██ ", "white", "", (areaWidth / 2 - 12), (areaHeight / 2 - 3), ENTITY_TYPE::NONE);
-    infos["username"] = createEntity("", this->username, "white", "", (areaWidth / 2 - (this->username.length() / 2) + 1), (areaHeight / 2 - 1), ENTITY_TYPE::TEXT), ((areaWidth / 2) - (username.length() / 2)), ((areaHeight / 2) - 1);
-    infos["score"] = createEntity("", std::to_string(score), "white", "", (areaWidth / 2 - (std::to_string(score).length() / 2) + 1), (areaHeight / 2), ENTITY_TYPE::TEXT), (std::to_string(score).length() / 2), (areaHeight / 2);
+    infos["looseTitle2"] = createEntity("", "██       ██           ██  ██", "white", "", (areaWidth / 2 - 12), (areaHeight / 2 - 6), ENTITY_TYPE::NONE, 0, 0);
+    infos["looseTitle3"] = createEntity("", "██   ███ ██   ███         ██", "white", "", (areaWidth / 2 - 12), (areaHeight / 2 - 5), ENTITY_TYPE::NONE, 0, 0);
+    infos["looseTitle4"] = createEntity("", "██    ██ ██    ██     ██  ██", "white", "", (areaWidth / 2 - 12), (areaHeight / 2 - 4), ENTITY_TYPE::NONE, 0, 0);
+    infos["looseTitle5"] = createEntity("", " ██████   ██████         ██ ", "white", "", (areaWidth / 2 - 12), (areaHeight / 2 - 3), ENTITY_TYPE::NONE, 0, 0);
+    infos["username"] = createEntity("", this->username, "white", "", (areaWidth / 2 - (this->username.length() / 2) + 1), (areaHeight / 2 - 1), ENTITY_TYPE::TEXT, (areaWidth / 2 - (this->username.length() / 2)), (areaHeight / 2));
+    infos["score"] = createEntity("", std::to_string(score), "white", "", (areaWidth / 2 - (std::to_string(score).length() / 2) + 1), (areaHeight / 2), ENTITY_TYPE::TEXT, 0, 0);
     infos["retryButton"] = createEntity("./res/snake/snake_buttonHover.png", "Retry", "yellow", "white", (areaWidth / 2 - 1), (areaHeight / 2 + 2), ENTITY_TYPE::SPRITE_TEXT, (areaWidth / 2), (areaHeight / 2 + 2));
     infos["quitButton"] = createEntity("./res/snake/snake_button.png", "Quit", "white", "", (areaWidth / 2 - 1), (areaHeight / 2 + 4), ENTITY_TYPE::SPRITE_TEXT, (areaWidth / 2), (areaHeight / 2 + 4));
 }
@@ -203,10 +203,10 @@ void GameSnake::initMenu()
     infos.erase("looseTitle4");
     infos.erase("looseTitle5");
     infos["gameTitle"] = createEntity("./res/snake/snake_logo.png", "███████ ███    ██  █████  ██   ██ ███████", "white", "", (areaWidth / 2 - 19), (areaHeight / 2 - 7), ENTITY_TYPE::SPRITE, (areaWidth / 2), (areaHeight / 2 - 3));
-    infos["gameTitle2"] = createEntity("", "██      ████   ██ ██   ██ ██  ██  ██     ", "white", "", (areaWidth / 2 - 19), (areaHeight / 2 - 6), ENTITY_TYPE::NONE);
-    infos["gameTitle3"] = createEntity("", "███████ ██ ██  ██ ███████ █████   █████  ", "white", "", (areaWidth / 2 - 19), (areaHeight / 2 - 5), ENTITY_TYPE::NONE);
-    infos["gameTitle4"] = createEntity("", "     ██ ██  ██ ██ ██   ██ ██  ██  ██     ", "white", "", (areaWidth / 2 - 19), (areaHeight / 2 - 4), ENTITY_TYPE::NONE);
-    infos["gameTitle5"] = createEntity("", "███████ ██   ████ ██   ██ ██   ██ ███████", "white", "", (areaWidth / 2 - 19), (areaHeight / 2 - 3), ENTITY_TYPE::NONE);
+    infos["gameTitle2"] = createEntity("", "██      ████   ██ ██   ██ ██  ██  ██     ", "white", "", (areaWidth / 2 - 19), (areaHeight / 2 - 6), ENTITY_TYPE::NONE, 0, 0);
+    infos["gameTitle3"] = createEntity("", "███████ ██ ██  ██ ███████ █████   █████  ", "white", "", (areaWidth / 2 - 19), (areaHeight / 2 - 5), ENTITY_TYPE::NONE, 0, 0);
+    infos["gameTitle4"] = createEntity("", "     ██ ██  ██ ██ ██   ██ ██  ██  ██     ", "white", "", (areaWidth / 2 - 19), (areaHeight / 2 - 4), ENTITY_TYPE::NONE, 0, 0);
+    infos["gameTitle5"] = createEntity("", "███████ ██   ████ ██   ██ ██   ██ ███████", "white", "", (areaWidth / 2 - 19), (areaHeight / 2 - 3), ENTITY_TYPE::NONE, 0, 0);
     infos["playButton"] = createEntity("./res/snake/snake_buttonHover.png", "Play", "yellow", "white", (areaWidth / 2 - 1), (areaHeight / 2 + 2), ENTITY_TYPE::SPRITE_TEXT, (areaWidth / 2), (areaHeight / 2 + 2));
     infos["quitButton"] = createEntity("./res/snake/snake_button.png", "Quit", "white", "", (areaWidth / 2 - 1), (areaHeight / 2 + 4), ENTITY_TYPE::SPRITE_TEXT, (areaWidth / 2), (areaHeight / 2 + 4));
 }
@@ -223,7 +223,7 @@ void GameSnake::updateGame(std::string key)
         score += 10;
         infos.erase("meal");
         spawnMeal();
-        infos["playerPart" + std::to_string(playerPart)] = createEntity("", "o", "white", "green", infos["playerPart" + std::to_string(playerPart - 1)].x, infos["playerPart" + std::to_string(playerPart - 1)].y, ENTITY_TYPE::SPRITE);
+        infos["playerPart" + std::to_string(playerPart)] = createEntity("", "o", "white", "green", infos["playerPart" + std::to_string(playerPart - 1)].x, infos["playerPart" + std::to_string(playerPart - 1)].y, ENTITY_TYPE::SPRITE, 0, 0);
         playerPart++;
     }
     if (key == "UP" && playerDir != UP && playerDir != DOWN) {
@@ -270,7 +270,7 @@ void GameSnake::spawnMeal()
             return;
         }
     }
-    infos["meal"] = createEntity("./res/snake/snake_meal.png", "*", "white", "red", x, y, ENTITY_TYPE::SPRITE);
+    infos["meal"] = createEntity("./res/snake/snake_meal.png", "*", "white", "red", x, y, ENTITY_TYPE::SPRITE, 0, 0);
     hasMeal = true;
 }
 

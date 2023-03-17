@@ -38,28 +38,28 @@ void LibMenu::init() {
     int x = 3;
     int y = 2;
     int i = 0;
-    infos["GameList"] = createEntity("", "Games list:", "white", "", 1, 0, IGameModule::ENTITY_TYPE::TEXT);
+    infos["GameList"] = createEntity("", "Games list:", "white", "", 1, 0, IGameModule::ENTITY_TYPE::TEXT, 0, 0);
     for (auto &game : games) {
         if (i == 0)
-            infos[game] = createEntity("", game, "black", "white", x, y, IGameModule::ENTITY_TYPE::TEXT);
+            infos[game] = createEntity("", game, "black", "white", x, y, IGameModule::ENTITY_TYPE::TEXT, 0, 0);
         else
-            infos[game] = createEntity("", game, "white", "", x, y, IGameModule::ENTITY_TYPE::TEXT);
+            infos[game] = createEntity("", game, "white", "", x, y, IGameModule::ENTITY_TYPE::TEXT, 0, 0);
         y += 1;
         i++;
     }
     i = 0;
     y += 1;
-    infos["GraphList"] = createEntity("", "Graph list:", "white", "", 1, y, IGameModule::ENTITY_TYPE::TEXT);
+    infos["GraphList"] = createEntity("", "Graph list:", "white", "", 1, y, IGameModule::ENTITY_TYPE::TEXT, 0, 0);
     y += 2;
     for (auto &graph : graphs) {
-        infos[graph] = createEntity("", graph, "white", "", x, y, IGameModule::ENTITY_TYPE::TEXT);
+        infos[graph] = createEntity("", graph, "white", "", x, y, IGameModule::ENTITY_TYPE::TEXT, 0, 0);
         y += 1;
         i++;
     }
     y += 1;
-    infos["Username:"] = createEntity("", "Username:", "white", "", 1, y, IGameModule::ENTITY_TYPE::TEXT);
+    infos["Username:"] = createEntity("", "Username:", "white", "", 1, y, IGameModule::ENTITY_TYPE::TEXT, 0, 0);
     y += 1;
-    infos["Username"] = createEntity("", "", "white", "", x, y, IGameModule::ENTITY_TYPE::TEXT);
+    infos["Username"] = createEntity("", "", "white", "", x, y, IGameModule::ENTITY_TYPE::TEXT, 0, 0);
     ySave = y;
 }
 
@@ -113,7 +113,7 @@ void LibMenu::handleKeys(std::vector<std::string> list, std::string key, std::st
             infos[graphs[0]].background_color = "white";
         }
         if (step == 2) {
-            infos["InputIndicator"] = createEntity("", "|", "white", "", xSave, ySave, IGameModule::ENTITY_TYPE::TEXT);
+            infos["InputIndicator"] = createEntity("", "|", "white", "", xSave, ySave, IGameModule::ENTITY_TYPE::TEXT, 0, 0);
         }
         step++;
         select = 0;
