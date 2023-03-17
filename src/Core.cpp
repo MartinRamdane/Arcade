@@ -40,7 +40,7 @@ void Core::getLibs() {
                 exit(84);
             }
             dlerror();
-            std::string type = ((std::string(*)(void))dlsym(handle, "getType"))();
+            std::string type = ((char *(*)(void))dlsym(handle, "getType"))();
             char *error;
             if ((error = dlerror()) != NULL)  {
                 fprintf(stderr, "%s\n", error);
