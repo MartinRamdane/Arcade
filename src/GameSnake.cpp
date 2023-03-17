@@ -264,6 +264,12 @@ void GameSnake::spawnMeal()
 {
     int x = rand() % areaWidth + 2;
     int y = rand() % areaHeight + 1;
+    for (int i = 1; i < playerPart; i++) {
+        if ((x == infos["playerPart" + std::to_string(i)].x && y == infos["playerPart" + std::to_string(i)].y) || (x == infos["playerHead"].x && y == infos["playerHead"].y)) {
+            spawnMeal();
+            return;
+        }
+    }
     infos["meal"] = createEntity("./res/snake/snake_meal.png", "*", "white", "red", x, y, ENTITY_TYPE::SPRITE);
     hasMeal = true;
 }
