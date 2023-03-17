@@ -30,7 +30,7 @@ class DisplaySfml : public IDisplayModule {
 
     private:
         std::string displayName = "sfml";
-        sf::RenderWindow window;
+        std::unique_ptr<sf::RenderWindow> window;
         sf::Event event;
         std::map<std::string, IGameModule::Entity> entities;
         std::map<std::string, sf::Text> texts;

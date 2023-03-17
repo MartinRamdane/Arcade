@@ -13,20 +13,20 @@ DisplaySfml::DisplaySfml()
 
 DisplaySfml::~DisplaySfml()
 {
-    window.close();
+    window->close();
 }
 
 void DisplaySfml::init() {
     sf::VideoMode video({1920, 1080});
-    window.create(video, "Arcade-SFML");
-    window.setFramerateLimit(60);
+    window = std::make_unique<sf::RenderWindow>(video, "Arcade-SFML");
+    window->setFramerateLimit(60);
     if (!font.loadFromFile("./res/pixel.ttf"))
         throw "Error on loading Font";
 }
 
 void DisplaySfml::stop() {
     printf("Closing window\n");
-    window.close();
+    window->close();
 }
 
 void DisplaySfml::update(std::map<std::string, IGameModule::Entity> entities) {
@@ -37,7 +37,7 @@ void DisplaySfml::update(std::map<std::string, IGameModule::Entity> entities) {
             textures[entity.first] = std::make_tuple(std::shared_ptr<sf::Texture>(texture), entity.second.file);
             if (!texture->loadFromFile(entity.second.file))
                 throw "Error on loading texture";
-            sprites[entity.first].setOrigin(texture->getSize().x / 2, texture->getSize().y / 2);
+            sprites[entity.first].setOrigin(sf::Vector2f(texture->getSize().x / 2, texture->getSize().y / 2));
             sprites[entity.first].setTexture(*std::get<0>(textures[entity.first]), true);
             sprites[entity.first].setPosition({entity.second.xSprite * 20, entity.second.ySprite * 50});
         }
@@ -47,7 +47,7 @@ void DisplaySfml::update(std::map<std::string, IGameModule::Entity> entities) {
             texts[entity.first].setCharacterSize(40);
             texts[entity.first].setFillColor(colors[entity.second.spriteColor]);
             if (std::get<0>(textures[entity.first]))
-                texts[entity.first].setPosition(sprites[entity.first].getPosition().x + sprites[entity.first].getLocalBounds().width / 2 - texts[entity.first].getLocalBounds().width / 2 - sprites[entity.first].getOrigin().x, sprites[entity.first].getPosition().y + sprites[entity.first].getLocalBounds().height / 2 - texts[entity.first].getLocalBounds().height / 2 - sprites[entity.first].getOrigin().y);
+                texts[entity.first].setPosition(sf::Vector2f(sprites[entity.first].getPosition().x + sprites[entity.first].getLocalBounds().width / 2 - texts[entity.first].getLocalBounds().width / 2 - sprites[entity.first].getOrigin().x, sprites[entity.first].getPosition().y + sprites[entity.first].getLocalBounds().height / 2 - texts[entity.first].getLocalBounds().height / 2 - sprites[entity.first].getOrigin().y));
             else
                 texts[entity.first].setPosition({entity.second.x * 20, entity.second.y * 50});
             backgroundColors[entity.first] = sf::RectangleShape(sf::Vector2f(texts[entity.second.text].getLocalBounds().width, texts[entity.second.text].getLocalBounds().height));
@@ -59,23 +59,23 @@ void DisplaySfml::update(std::map<std::string, IGameModule::Entity> entities) {
 }
 
 void DisplaySfml::draw() {
-    window.clear();
+    window->clear();
     for (auto &background: backgroundColors) {
         auto it = entities.find(background.first);
         if (it != entities.end())
-            window.draw(background.second);
+            window->draw(background.second);
     }
     for (auto &sprite: sprites) {
         auto it = entities.find(sprite.first);
         if (it != entities.end())
-            window.draw(sprite.second);
+            window->draw(sprite.second);
     }
     for (auto &text: texts) {
         auto it = entities.find(text.first);
         if (it != entities.end())
-            window.draw(text.second);
+            window->draw(text.second);
     }
-    window.display();
+    window->display();
 }
 
 void DisplaySfml::drawElement(IGameModule::Entity element) {
@@ -83,9 +83,9 @@ void DisplaySfml::drawElement(IGameModule::Entity element) {
 }
 
 std::string DisplaySfml::getEvent() {
-    while (window.pollEvent(event)) {
+    while (window->pollEvent(event)) {
         if (event.type == sf::Event::Closed)
-            window.close();
+            window->close();
         if (event.type == sf::Event::KeyPressed)
             return (keys[event.key.code]);
     }
@@ -154,6 +154,7 @@ extern "C" void destroy(IDisplayModule* obj) {
     delete obj;
 }
 
-extern "C" std::string getType() {
-    return "Graphic";
+extern "C" char *getType() {
+    char *type = strdup("Graphic");
+    return type;
 }
