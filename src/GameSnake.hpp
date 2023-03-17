@@ -23,7 +23,7 @@ class GameSnake: public AGameModule {
         GameSnake();
         ~GameSnake();
         void startGame(std::string username);
-        bool isGameOver() {};
+        bool isGameOver() {return false;};
         void update(std::string key);
         void moveSnake();
         void spawnMeal();
@@ -39,7 +39,6 @@ class GameSnake: public AGameModule {
     private:
         int areaWidth;
         int areaHeight;
-        int snakeSize;
         int score;
         int playerPart = 4;
         bool hasMeal;

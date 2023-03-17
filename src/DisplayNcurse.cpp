@@ -93,6 +93,7 @@ extern "C" void destroy(IDisplayModule* obj) {
     delete obj;
 }
 
-extern "C" std::string getType() {
-    return "Graphic";
+extern "C" char *getType() {
+    char *type = strdup("Graphic");
+    return type;
 }
