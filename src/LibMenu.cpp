@@ -21,17 +21,18 @@ LibMenu::~LibMenu()
 {
 }
 
-IGameModule::Entity LibMenu::createEntity(std::string file, std::string text, std::string color, std::string background_color, float x, float y, IGameModule::ENTITY_TYPE type) {
-    IGameModule::Entity entity;
-    entity.file = file;
-    entity.text = text;
-    entity.color = color;
-    entity.background_color = background_color;
-    entity.x = x;
-    entity.y = y;
-    entity.type = type;
-    return entity;
-}
+// IGameModule::Entity LibMenu::createEntity(std::string file, std::string text, std::string color, std::string background_color, float x, float y, IGameModule::ENTITY_TYPE type) {
+//     IGameModule::Entity entity;
+//     entity.file = file;
+//     entity.text = text;
+//     entity.color = color;
+//     entity.background_color = background_color;
+//     entity.x = x;
+//     entity.y = y;
+//     entity.type = type;
+//     return entity;
+// }
+
 
 void LibMenu::init() {
     int x = 3;
@@ -71,10 +72,13 @@ bool LibMenu::isFinished() {
 void LibMenu::handleKeys(std::vector<std::string> list, std::string key, std::string &toFill) {
     if (key == "ESCAPE" && step > 1) {
         infos[gameChoice].color = "white";
+        infos[gameChoice].spriteColor = "white";
         infos[gameChoice].background_color = "";
         infos[games[0]].color = "black";
+        infos[games[0]].spriteColor = "black";
         infos[games[0]].background_color = "white";
         infos[graphs[select]].color = "white";
+        infos[graphs[select]].spriteColor = "white";
         infos[graphs[select]].background_color = "";
         select = 0;
         step--;
@@ -82,24 +86,30 @@ void LibMenu::handleKeys(std::vector<std::string> list, std::string key, std::st
     }
     if (key == "UP" && select > 0) {
         infos[list[select]].color = "white";
+        infos[list[select]].spriteColor = "white";
         infos[list[select]].background_color = "";
         select--;
         infos[list[select]].color = "black";
+        infos[list[select]].spriteColor = "black";
         infos[list[select]].background_color = "white";
     }
     if (key == "DOWN" && select < (int)list.size() - 1) {
         infos[list[select]].color = "white";
+        infos[list[select]].spriteColor = "white";
         infos[list[select]].background_color = "";
         select++;
         infos[list[select]].color = "black";
+        infos[list[select]].spriteColor = "black";
         infos[list[select]].background_color = "white";
     }
     if (key == " ") {
         toFill = infos[list[select]].text;
         infos[list[select]].color = "black";
+        infos[list[select]].spriteColor = "black";
         infos[list[select]].background_color = "yellow";
         if (step == 1) {
             infos[graphs[0]].color = "black";
+            infos[graphs[0]].spriteColor = "black";
             infos[graphs[0]].background_color = "white";
         }
         if (step == 2) {
@@ -154,7 +164,7 @@ void LibMenu::update(std::string key) {
     }
 }
 
-std::map<std::string, IGameModule::Entity> LibMenu::getInfos() {
-    return infos;
-}
+// std::map<std::string, IGameModule::Entity> LibMenu::getInfos() {
+//     return infos;
+// }
 

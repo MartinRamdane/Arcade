@@ -14,6 +14,7 @@
 #include <string>
 #include <tuple>
 #include <map>
+#include <memory>
 
 class DisplaySfml : public IDisplayModule {
     public:

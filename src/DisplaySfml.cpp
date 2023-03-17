@@ -32,7 +32,7 @@ void DisplaySfml::stop() {
 void DisplaySfml::update(std::map<std::string, IGameModule::Entity> entities) {
     this->entities = entities;
     for (auto &entity : entities) {
-        if (entity.second.file != "" && ((std::get<1>(textures[entity.first]) != entities[entity.first].file) || ((sprites[entity.first].getPosition().x != entities[entity.first].xSprite) || (sprites[entity.first].getPosition().y != entities[entity.first].ySprite)))) {
+        if (entity.second.file != "" && (entity.second.type == IGameModule::ENTITY_TYPE::SPRITE || entity.second.type == IGameModule::ENTITY_TYPE::SPRITE_TEXT) && ((std::get<1>(textures[entity.first]) != entities[entity.first].file) || ((sprites[entity.first].getPosition().x != entities[entity.first].xSprite) || (sprites[entity.first].getPosition().y != entities[entity.first].ySprite)))) {
             sf::Texture* texture = new sf::Texture();
             textures[entity.first] = std::make_tuple(std::shared_ptr<sf::Texture>(texture), entity.second.file);
             if (!texture->loadFromFile(entity.second.file))
@@ -52,7 +52,7 @@ void DisplaySfml::update(std::map<std::string, IGameModule::Entity> entities) {
                 texts[entity.first].setPosition({entity.second.x * 20, entity.second.y * 50});
             backgroundColors[entity.first] = sf::RectangleShape(sf::Vector2f(texts[entity.second.text].getLocalBounds().width, texts[entity.second.text].getLocalBounds().height));
             backgroundColors[entity.first].setSize(sf::Vector2f(1.2f * backgroundColors[entity.second.text].getSize().x, 1.3f * backgroundColors[entity.second.text].getSize().y));
-            backgroundColors[entity.first].setPosition(texts[entity.second.text].getPosition());
+            backgroundColors[entity.first].setPosition(sf::Vector2f(texts[entity.second.text].getPosition().x - 0.1f * backgroundColors[entity.second.text].getSize().x, texts[entity.second.text].getPosition().y - 0.15f * backgroundColors[entity.second.text].getSize().y));
             backgroundColors[entity.first].setFillColor(colors[entity.second.background_color]);
         }
     }

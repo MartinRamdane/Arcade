@@ -8,21 +8,21 @@
 #ifndef LIB_MENU
     #define LIB_MENU
 
-#include "IGameModule.hpp"
+#include "AGameModule.hpp"
 #include <iostream>
 #include <map>
 #include <vector>
 #include <map>
 
-class LibMenu {
+class LibMenu : public AGameModule {
     public:
         LibMenu(std::vector<std::string> games, std::vector<std::string> graphs);
         ~LibMenu();
+        void startGame(std::string username){this->username = username;};
+        bool isGameOver(){return false;};
         void init();
         bool isFinished();
         void update(std::string key);
-        IGameModule::Entity createEntity(std::string file, std::string text, std::string color, std::string background_color, float x, float y, IGameModule::ENTITY_TYPE type);
-        std::map<std::string, IGameModule::Entity> getInfos();
         void handleKeys(std::vector<std::string> list, std::string key, std::string &toFill);
         void inputUser(std::string key);
         std::string getGameChoice() { return gameChoice; };
@@ -31,7 +31,6 @@ class LibMenu {
 
     protected:
     private:
-        std::map<std::string, IGameModule::Entity> infos;
         std::vector<std::string> games;
         std::vector<std::string> graphs;
         std::string graphChoice;
