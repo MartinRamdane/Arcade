@@ -15,7 +15,7 @@ DisplayNcurse::~DisplayNcurse()
 {
 }
 
-void DisplayNcurse::init() {
+void DisplayNcurse::init(std::map<std::string, IGameModule::Entity> &entites) {
     setlocale(LC_ALL, "");
     initscr();
     curs_set(0);
@@ -24,10 +24,21 @@ void DisplayNcurse::init() {
     start_color();
     keypad(stdscr, TRUE);
     nodelay(stdscr, TRUE);
+    this->entities = entites;
 }
 
-void DisplayNcurse::update(std::map<std::string, IGameModule::Entity> entities) {
-    this->entities = entities;
+void DisplayNcurse::update(std::map<std::string, IGameModule::Entity> &entities) {
+    for (auto &entity : entities) {
+        if (entity.second.toUpdate) {
+            this->entities[entity.first] = entity.second;
+            entity.second.toUpdate = false;
+        }
+    }
+    for (auto &entity : this->entities) {
+        if (entities.find(entity.first) == entities.end()) {
+            this->entities.erase(entity.first);
+        }
+    }
 }
 
 void DisplayNcurse::draw() {

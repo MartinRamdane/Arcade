@@ -15,7 +15,7 @@ DisplaySdl::~DisplaySdl()
 {
 }
 
-void DisplaySdl::init() {
+void DisplaySdl::init(std::map<std::string, IGameModule::Entity> &entities) {
     if (SDL_Init(SDL_INIT_VIDEO) != 0) {
         printf("error initializing SDL: %s\n", SDL_GetError());
         throw;
@@ -34,16 +34,18 @@ void DisplaySdl::stop() {
     SDL_Quit();
 }
 
-void DisplaySdl::update(std::map<std::string, IGameModule::Entity> entities) {
+void DisplaySdl::update(std::map<std::string, IGameModule::Entity> &entities) {
     for (auto &entity : entities) {
-        if (entity.second.type == IGameModule::TEXT) {
-            SDL_Color color = colors[entity.second.color];
-            Text text;
-            TTF_SetFontSize(font, (entity.second.fontSize / 1.7));
-            text.surface = TTF_RenderText_Shaded(font, entity.second.text.c_str(), color, colors[entity.second.background_color]);
-            text.texture = SDL_CreateTextureFromSurface(renderer, text.surface);
-            text.rect = { (int)entity.second.x * 10, (int)entity.second.y * 30, 0, 0 };
-            texts[entity.first] = text;
+        if (entity.second.toUpdate) {
+            if (entity.second.type == IGameModule::TEXT || entity.second.type == IGameModule::SPRITE_TEXT) {
+                SDL_Color color = colors[entity.second.color];
+                Text text;
+                TTF_SetFontSize(font, (entity.second.fontSize / 1.7));
+                text.surface = TTF_RenderText_Shaded(font, entity.second.text.c_str(), color, colors[entity.second.background_color]);
+                text.texture = SDL_CreateTextureFromSurface(renderer, text.surface);
+                text.rect = { (int)entity.second.x * 10, (int)entity.second.y * 30, 0, 0 };
+                texts[entity.first] = text;
+            }
         }
     }
 }

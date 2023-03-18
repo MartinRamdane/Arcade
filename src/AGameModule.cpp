@@ -15,7 +15,7 @@ AGameModule::~AGameModule()
 {
 }
 
-std::map<std::string, IGameModule::Entity> AGameModule::getInfos()
+std::map<std::string, IGameModule::Entity> &AGameModule::getInfos()
 {
     return infos;
 }
@@ -40,6 +40,7 @@ IGameModule::Entity AGameModule::createEntity(std::string file, std::string text
     entity.spriteColor = color;
     entity.type = type;
     entity.fontSize = fontSize;
+    entity.toUpdate = true;
     return entity;
 }
 

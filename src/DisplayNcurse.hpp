@@ -17,9 +17,9 @@ class DisplayNcurse : public IDisplayModule {
     public:
         DisplayNcurse();
         ~DisplayNcurse();
-        void init();
+        void init(std::map<std::string, IGameModule::Entity> &entites);
         void stop();
-        void update(std::map<std::string, IGameModule::Entity> entities);
+        void update(std::map<std::string, IGameModule::Entity> &entities);
         void draw();
         void drawElement(IGameModule::Entity element);
         std::string getEvent();

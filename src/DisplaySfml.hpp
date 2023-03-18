@@ -20,22 +20,23 @@ class DisplaySfml : public IDisplayModule {
     public:
         DisplaySfml();
         ~DisplaySfml();
-        void init();
+        void init(std::map<std::string, IGameModule::Entity> &entities);
         void stop();
-        void update(std::map<std::string, IGameModule::Entity> entities);
+        void update(std::map<std::string, IGameModule::Entity> &entities);
         void draw();
         std::string getEvent();
         const std::string &getName() const;
+        std::unique_ptr<sf::Text> createText(std::string name, std::string text, std::string color, std::string background_color, float x, float y, int fontSize);
+        std::unique_ptr<sf::Sprite> createSprite(std::string name, std::string file, float x, float ye);
 
     private:
         std::string displayName = "sfml";
         std::unique_ptr<sf::RenderWindow> window;
         sf::Event event;
-        std::map<std::string, IGameModule::Entity> entities;
-        std::map<std::string, sf::Text> texts;
-        std::map<std::string, sf::RectangleShape> backgroundColors;
+        std::map<std::string, std::unique_ptr<sf::Text>> texts;
+        std::map<std::string, std::unique_ptr<sf::RectangleShape>> backgroundColors;
         std::map<std::string, std::tuple<std::shared_ptr<sf::Texture>, std::string>> textures;
-        std::map<std::string, sf::Sprite> sprites;
+        std::map<std::string,  std::unique_ptr<sf::Sprite>> sprites;
         static std::map<std::string, sf::Color> colors;
         static std::map<sf::Keyboard::Key, std::string> keys;
         sf::Font font;

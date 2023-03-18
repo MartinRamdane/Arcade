@@ -16,64 +16,58 @@ DisplaySfml::~DisplaySfml()
     window->close();
 }
 
-void DisplaySfml::init() {
+void DisplaySfml::init(std::map<std::string, IGameModule::Entity> &entities) {
     sf::VideoMode video({1060, 1190});
     window = std::make_unique<sf::RenderWindow>(video, "Arcade-SFML");
     window->setFramerateLimit(30);
     if (!font.loadFromFile("./res/pixel.ttf"))
         throw "Error on loading Font";
+    for (auto &entity : entities) {
+        if (entity.second.type == IGameModule::ENTITY_TYPE::SPRITE) {
+            sprites[entity.first] = createSprite(entity.first, entity.second.file, entity.second.xSprite, entity.second.ySprite);
+        } else if (entity.second.type == IGameModule::ENTITY_TYPE::SPRITE_TEXT || entity.second.type == IGameModule::ENTITY_TYPE::TEXT) {
+            texts[entity.first] = createText(entity.first, entity.second.text, entity.second.color, entity.second.background_color, entity.second.x, entity.second.y, entity.second.fontSize);
+        }
+        entity.second.toUpdate = false;
+    }
 }
 
 void DisplaySfml::stop() {
     window->close();
 }
 
-void DisplaySfml::update(std::map<std::string, IGameModule::Entity> entities) {
-    this->entities = entities;
+void DisplaySfml::update(std::map<std::string, IGameModule::Entity> &entities) {
     for (auto &entity : entities) {
-        if (entity.second.file != "" && (entity.second.type == IGameModule::ENTITY_TYPE::SPRITE || entity.second.type == IGameModule::ENTITY_TYPE::SPRITE_TEXT) && ((std::get<1>(textures[entity.first]) != entities[entity.first].file) || ((sprites[entity.first].getPosition().x != entities[entity.first].xSprite) || (sprites[entity.first].getPosition().y != entities[entity.first].ySprite)))) {
-            sf::Texture* texture = new sf::Texture();
-            textures[entity.first] = std::make_tuple(std::shared_ptr<sf::Texture>(texture), entity.second.file);
-            if (!texture->loadFromFile(entity.second.file))
-                throw "Error on loading texture";
-            sprites[entity.first].setOrigin(sf::Vector2f(texture->getSize().x / 2, texture->getSize().y / 2));
-            sprites[entity.first].setTexture(*std::get<0>(textures[entity.first]), true);
-            sprites[entity.first].setPosition({entity.second.xSprite * 20, entity.second.ySprite * 50});
+        if (entity.second.toUpdate) {
+            if (entity.second.type == IGameModule::ENTITY_TYPE::SPRITE) {
+                sprites[entity.first] = createSprite(entity.first, entity.second.file, entity.second.xSprite, entity.second.ySprite);
+            } else if (entity.second.type == IGameModule::ENTITY_TYPE::SPRITE_TEXT || entity.second.type == IGameModule::ENTITY_TYPE::TEXT) {
+                texts[entity.first] = createText(entity.first, entity.second.text, entity.second.color, entity.second.background_color, entity.second.x, entity.second.y, entity.second.fontSize);
+            }
+            entity.second.toUpdate = false;
         }
-        if ((entity.second.text != "" && (entity.second.type == IGameModule::ENTITY_TYPE::SPRITE_TEXT || entity.second.type == IGameModule::ENTITY_TYPE::TEXT)) || texts[entity.first].getString() != "") {
-            texts[entity.first].setFont(font);
-            texts[entity.first].setString(entity.second.text);
-            texts[entity.first].setCharacterSize(entity.second.fontSize);
-            texts[entity.first].setFillColor(colors[entity.second.spriteColor]);
-            if (std::get<0>(textures[entity.first]))
-                texts[entity.first].setPosition(sf::Vector2f(sprites[entity.first].getPosition().x + sprites[entity.first].getLocalBounds().width / 2 - texts[entity.first].getLocalBounds().width / 2 - sprites[entity.first].getOrigin().x, sprites[entity.first].getPosition().y + sprites[entity.first].getLocalBounds().height / 2 - texts[entity.first].getLocalBounds().height / 2 - sprites[entity.first].getOrigin().y));
-            else
-                texts[entity.first].setPosition({entity.second.xSprite * 20, entity.second.ySprite * 50});
-            backgroundColors[entity.first] = sf::RectangleShape(sf::Vector2f(texts[entity.second.text].getLocalBounds().width, texts[entity.second.text].getLocalBounds().height));
-            backgroundColors[entity.first].setSize(sf::Vector2f(1.2f * backgroundColors[entity.second.text].getSize().x, 1.3f * backgroundColors[entity.second.text].getSize().y));
-            backgroundColors[entity.first].setPosition(sf::Vector2f(texts[entity.second.text].getPosition().x - 0.1f * backgroundColors[entity.second.text].getSize().x, texts[entity.second.text].getPosition().y - 0.15f * backgroundColors[entity.second.text].getSize().y));
-            backgroundColors[entity.first].setFillColor(colors[entity.second.background_color]);
+    }
+    for (auto &text: texts) {
+        if (entities.find(text.first) == entities.end()) {
+            texts.erase(text.first);
+            backgroundColors.erase(text.first);
         }
+    }
+    for (auto &sprite: sprites) {
+        if (entities.find(sprite.first) == entities.end())
+            sprites.erase(sprite.first);
     }
 }
 
 void DisplaySfml::draw() {
     window->clear();
-    for (auto &background: backgroundColors) {
-        auto it = entities.find(background.first);
-        if (it != entities.end())
-            window->draw(background.second);
-    }
-    for (auto &sprite: sprites) {
-        auto it = entities.find(sprite.first);
-        if (it != entities.end())
-            window->draw(sprite.second);
-    }
-    for (auto &text: texts) {
-        auto it = entities.find(text.first);
-        if (it != entities.end())
-            window->draw(text.second);
-    }
+    for (auto &background: backgroundColors)
+        window->draw(*background.second);
+    for (auto &sprite: sprites)
+        window->draw(*sprite.second);
+    for (auto &text: texts)
+        window->draw(*text.second);
+    window->setActive();
     window->display();
 }
 
@@ -141,6 +135,37 @@ std::map<std::string, sf::Color> DisplaySfml::colors = {
     {"black", sf::Color::Black},
     {"transparent", sf::Color::Transparent}
 };
+
+std::unique_ptr<sf::Text> DisplaySfml::createText(std::string name, std::string _text, std::string color, std::string background_color, float x, float y, int fontSize) {
+    std::unique_ptr<sf::Text> text = std::make_unique<sf::Text>();
+    text->setFont(font);
+    text->setString(_text);
+    text->setCharacterSize(fontSize);
+    text->setFillColor(colors[color]);
+    text->setPosition({x * 20, y * 50});
+    if (background_color == "") {
+        if (backgroundColors.find(name) != backgroundColors.end())
+            backgroundColors.erase(name);
+        return text;
+    }
+    backgroundColors[name] = std::make_unique<sf::RectangleShape>();
+    backgroundColors[name]->setSize(sf::Vector2f(text->getLocalBounds().width * 1.1f, text->getLocalBounds().height * 1.4f));
+    backgroundColors[name]->setFillColor(colors[background_color]);
+    backgroundColors[name]->setPosition({text.get()->getPosition().x - text->getLocalBounds().width * 0.05f, text.get()->getPosition().y - text->getLocalBounds().height * 0.2f});
+    return text;
+}
+
+std::unique_ptr<sf::Sprite> DisplaySfml::createSprite(std::string name, std::string file, float x, float y) {
+    std::shared_ptr<sf::Texture> texture = std::make_shared<sf::Texture>();
+    textures[name] = std::make_tuple(texture, file);
+    if (!texture->loadFromFile(file))
+        throw "Error on loading texture";
+    std::unique_ptr<sf::Sprite> sprite = std::make_unique<sf::Sprite>();
+    sprite->setOrigin(sf::Vector2f(texture->getSize().x / 2, texture->getSize().y / 2));
+    sprite->setTexture(*std::get<0>(textures[name]), true);
+    sprite->setPosition({x * 20, y * 50});
+    return sprite;
+}
 
 extern "C" IDisplayModule* create() {
     return new DisplaySfml();

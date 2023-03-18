@@ -62,11 +62,11 @@ void Core::startMenu(std::string lib) {
     _display = _graphLoader->getInstance();
     LibMenu *menu = new LibMenu(games, graphs);
     menu->init();
-    _display->init();
+    _display->init(menu->getInfos());
     while (menu->isFinished() == false) {
         std::string event = _display->getEvent();
         if (event == "\t")
-            switchLib();
+            switchLib(menu);
         if (event == "-")
             stop();
         menu->update(event);
@@ -81,10 +81,10 @@ void Core::startMenu(std::string lib) {
     _graphLoader = new DLLoader<IDisplayModule>(menu->getGraphChoice());
     it = std::find(graphs.begin(), graphs.end(), menu->getGraphChoice());
     _display = _graphLoader->getInstance();
-    _display->init();
+    _display->init(_game->getInfos());
 }
 
-void Core::switchLib() {
+void Core::switchLib(IGameModule *lib) {
     _display->stop();
     delete _graphLoader;
     it++;
@@ -92,7 +92,7 @@ void Core::switchLib() {
         it = graphs.begin();
     _graphLoader = new DLLoader<IDisplayModule>(*it);
     _display = _graphLoader->getInstance();
-    _display->init();
+    _display->init(lib->getInfos());
 }
 
 void Core::mainloop() {
@@ -101,7 +101,7 @@ void Core::mainloop() {
         _display->draw();
         std::string event = _display->getEvent();
         if (event == "\t")
-            switchLib();
+            switchLib(_game);
         if (event == "m")
             startMenu(*it);
         if (event == "-")

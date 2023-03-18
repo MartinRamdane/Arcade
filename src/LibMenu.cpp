@@ -61,12 +61,15 @@ void LibMenu::handleKeys(std::vector<std::string> list, std::string key, std::st
         infos[gameChoice].color = "white";
         infos[gameChoice].spriteColor = "white";
         infos[gameChoice].background_color = "";
+        infos[gameChoice].toUpdate = true;
         infos[games[0]].color = "black";
         infos[games[0]].spriteColor = "black";
         infos[games[0]].background_color = "white";
+        infos[games[0]].toUpdate = true;
         infos[graphs[select]].color = "white";
         infos[graphs[select]].spriteColor = "white";
         infos[graphs[select]].background_color = "";
+        infos[graphs[select]].toUpdate = true;
         select = 0;
         step--;
         return;
@@ -75,29 +78,35 @@ void LibMenu::handleKeys(std::vector<std::string> list, std::string key, std::st
         infos[list[select]].color = "white";
         infos[list[select]].spriteColor = "white";
         infos[list[select]].background_color = "";
+        infos[list[select]].toUpdate = true;
         select--;
         infos[list[select]].color = "black";
         infos[list[select]].spriteColor = "black";
         infos[list[select]].background_color = "white";
+        infos[list[select]].toUpdate = true;
     }
     if (key == "DOWN" && select < (int)list.size() - 1) {
         infos[list[select]].color = "white";
         infos[list[select]].spriteColor = "white";
         infos[list[select]].background_color = "";
+        infos[list[select]].toUpdate = true;
         select++;
         infos[list[select]].color = "black";
         infos[list[select]].spriteColor = "black";
         infos[list[select]].background_color = "white";
+        infos[list[select]].toUpdate = true;
     }
     if (key == " ") {
         toFill = infos[list[select]].text;
         infos[list[select]].color = "black";
         infos[list[select]].spriteColor = "black";
         infos[list[select]].background_color = "yellow";
+        infos[list[select]].toUpdate = true;
         if (step == 1) {
             infos[graphs[0]].color = "black";
             infos[graphs[0]].spriteColor = "black";
             infos[graphs[0]].background_color = "white";
+            infos[graphs[0]].toUpdate = true;
         }
         if (step == 2) {
             infos["InputIndicator"] = createEntity("", "|", "white", "", xSave, ySave, IGameModule::ENTITY_TYPE::TEXT, 0, 0, 30);
@@ -111,8 +120,10 @@ void LibMenu::inputUser(std::string key) {
     if (key == "ESCAPE") {
         infos[graphChoice].color = "white";
         infos[graphChoice].background_color = "";
+        infos[graphChoice].toUpdate = true;
         infos[graphs[0]].color = "black";
         infos[graphs[0]].background_color = "white";
+        infos[graphs[0]].toUpdate = true;
         select = 0;
         xSave = infos["InputIndicator"].x;
         step--;
@@ -124,11 +135,15 @@ void LibMenu::inputUser(std::string key) {
     }
     if (key == "BACKSPACE" && infos["Username"].text.size() > 0) {
         infos["Username"].text.pop_back();
+        infos["Username"].toUpdate = true;
         infos["InputIndicator"].x -= 1;
+        infos["InputIndicator"].toUpdate = true;
     }
     if (((key >= "a" && key <= "z") || (key >= "A" && key <= "Z") || (key >= "0" && key <= "9") || key == "_" || key == "-") && (key != "BACKSPACE")) {
         infos["Username"].text += key;
+        infos["Username"].toUpdate = true;
         infos["InputIndicator"].x += 1;
+        infos["InputIndicator"].toUpdate = true;
     }
 }
 
@@ -145,8 +160,10 @@ void LibMenu::update(std::string key) {
         blink = !blink;
         if (blink) {
             infos["InputIndicator"].color = "black";
+            infos["InputIndicator"].toUpdate = true;
         } else {
             infos["InputIndicator"].color = "white";
+            infos["InputIndicator"].toUpdate = true;
         }
     }
 }

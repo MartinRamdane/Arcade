@@ -37,7 +37,7 @@ class LibMenu : public AGameModule {
         std::string gameChoice;
         std::string username;
         int ySave = 0;
-        int xSave = 3;
+        int xSave = 4;
         int step;
         int select;
 };

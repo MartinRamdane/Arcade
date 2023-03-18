@@ -27,9 +27,9 @@ class DisplaySdl : public IDisplayModule {
 
         DisplaySdl();
         ~DisplaySdl();
-        void init();
+        void init(std::map<std::string, IGameModule::Entity> &entities);
         void stop();
-        void update(std::map<std::string, IGameModule::Entity> entities);
+        void update(std::map<std::string, IGameModule::Entity> &entities);
         void draw();
         std::string getEvent();
         const std::string &getName() const;

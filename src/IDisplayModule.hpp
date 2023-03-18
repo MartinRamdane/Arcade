@@ -14,9 +14,9 @@
 class IDisplayModule {
     public:
         virtual ~IDisplayModule () = default ;
-        virtual void init() = 0;
+        virtual void init(std::map<std::string, IGameModule::Entity> &entites) = 0;
         virtual void stop() = 0;
-        virtual void update(std::map<std::string, IGameModule::Entity> entities) = 0;
+        virtual void update(std::map<std::string, IGameModule::Entity> &entities) = 0;
         virtual void draw() = 0;
         virtual std::string getEvent() = 0;
         virtual const std::string &getName() const = 0;

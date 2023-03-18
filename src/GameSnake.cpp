@@ -159,20 +159,24 @@ void GameSnake::updateMenu(std::string key)
         infos["playButton"].background_color = "white";
         infos["playButton"].file = "./res/snake/snake_buttonHover.png";
         infos["playButton"].spriteColor = "yellow";
+        infos["playButton"].toUpdate = true;
         infos["quitButton"].color = "white";
         infos["quitButton"].background_color = "";
         infos["quitButton"].file = "./res/snake/snake_button.png";
         infos["quitButton"].spriteColor = "white";
+        infos["quitButton"].toUpdate = true;
         selectMenu = 1;
     } else if (key == "DOWN" && infos["quitButton"].color == "white" && selectMenu == 1) {
         infos["quitButton"].color = "black";
         infos["quitButton"].background_color = "white";
         infos["quitButton"].file = "./res/snake/snake_buttonHover.png";
         infos["quitButton"].spriteColor = "yellow";
+        infos["quitButton"].toUpdate = true;
         infos["playButton"].color = "white";
         infos["playButton"].background_color = "";
         infos["playButton"].file = "./res/snake/snake_button.png";
         infos["playButton"].spriteColor = "white";
+        infos["playButton"].toUpdate = true;
         selectMenu = 2;
     }
     if (key == " " && selectMenu == 1) {
@@ -190,20 +194,24 @@ void GameSnake::updateLoose(std::string key)
         infos["retryButton"].background_color = "white";
         infos["retryButton"].file = "./res/snake/snake_buttonHover.png";
         infos["retryButton"].spriteColor = "yellow";
+        infos["retryButton"].toUpdate = true;
         infos["quitButton"].color = "white";
         infos["quitButton"].background_color = "";
         infos["quitButton"].file = "./res/snake/snake_button.png";
         infos["quitButton"].spriteColor = "white";
+        infos["quitButton"].toUpdate = true;
         selectMenu = 1;
     } else if (key == "DOWN" && infos["quitButton"].color == "white" && selectMenu == 1) {
         infos["quitButton"].color = "black";
         infos["quitButton"].background_color = "white";
         infos["quitButton"].file = "./res/snake/snake_buttonHover.png";
         infos["quitButton"].spriteColor = "yellow";
+        infos["quitButton"].toUpdate = true;
         infos["retryButton"].color = "white";
         infos["retryButton"].background_color = "";
         infos["retryButton"].file = "./res/snake/snake_button.png";
         infos["retryButton"].spriteColor = "white";
+        infos["retryButton"].toUpdate = true;
         selectMenu = 2;
     }
     if (key == " " && selectMenu == 1) {
@@ -241,6 +249,7 @@ void GameSnake::updateGame(std::string key)
         infos["playerHead"].ySprite = infos["playerHead"].y;
         infos["playerHead"].text = "⏶";
         infos["playerHead"].file = "./res/snake/snakeHead_up.png";
+        infos["playerHead"].toUpdate = true;
         playerDir = UP;
     } else if (key == "DOWN" && playerDir != DOWN && playerDir != UP) {
         if (playerDir == RIGHT)
@@ -252,14 +261,17 @@ void GameSnake::updateGame(std::string key)
         infos["playerHead"].ySprite = infos["playerHead"].y;
         infos["playerHead"].text = "⏷";
         infos["playerHead"].file = "./res/snake/snakeHead_down.png";
+        infos["playerHead"].toUpdate = true;
         playerDir = DOWN;
     } else if (key == "LEFT" && playerDir != LEFT && playerDir!= RIGHT) {
         infos["playerHead"].text = "⏴";
         infos["playerHead"].file = "./res/snake/snakeHead_left.png";
+        infos["playerHead"].toUpdate = true;
         playerDir = LEFT;
     } else if (key == "RIGHT" && playerDir != RIGHT && playerDir != LEFT) {
         infos["playerHead"].text = "⏵";
         infos["playerHead"].file = "./res/snake/snakeHead_right.png";
+        infos["playerHead"].toUpdate = true;
         playerDir = RIGHT;
     }
     moveSnake();
@@ -294,9 +306,11 @@ void GameSnake::moveSnake()
     }
     infos["playerPart1"].x = prevX;
     infos["playerPart1"].y = prevY;
+    infos["playerPart1"].toUpdate = true;
     for (int i = 2, y = 0; i < playerPart; i++, y++) {
         infos["playerPart" + std::to_string(i)].x = std::get<0>(prevPartPos[y]);
         infos["playerPart" + std::to_string(i)].y = std::get<1>(prevPartPos[y]);
+        infos["playerPart" + std::to_string(i)].toUpdate = true;
     }
     if (playerDir == UP) {
         infos["playerHead"].y -= 1;
@@ -314,6 +328,7 @@ void GameSnake::moveSnake()
         infos["playerHead"].x += 1;
         infos["playerHead"].xSprite = infos["playerHead"].x;
     }
+    infos["playerHead"].toUpdate = true;
 }
 
 extern "C" IGameModule* create() {
