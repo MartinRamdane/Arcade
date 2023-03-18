@@ -26,8 +26,10 @@ class DisplaySfml : public IDisplayModule {
         void draw();
         std::string getEvent();
         const std::string &getName() const;
-        std::unique_ptr<sf::Text> createText(std::string name, std::string text, std::string color, std::string background_color, float x, float y, int fontSize);
-        std::unique_ptr<sf::Sprite> createSprite(std::string name, std::string file, float x, float ye);
+        void createText(std::string name, IGameModule::Entity entity);
+        void updateText(std::string name, IGameModule::Entity entity);
+        void createSprite(std::string name, IGameModule::Entity entity);
+        void updateSprite(std::string name, IGameModule::Entity entity);
 
     private:
         std::string displayName = "sfml";
