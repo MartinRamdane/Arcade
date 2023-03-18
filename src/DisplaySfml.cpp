@@ -47,15 +47,21 @@ void DisplaySfml::update(std::map<std::string, IGameModule::Entity> &entities) {
             entity.second.toUpdate = false;
         }
     }
-    for (auto &text: texts) {
-        if (entities.find(text.first) == entities.end()) {
-            texts.erase(text.first);
-            backgroundColors.erase(text.first);
+    for (auto it = texts.begin(); it != texts.end();) {
+        if (entities.find(it->first) == entities.end()) {
+            it = texts.erase(it);
+            backgroundColors.erase(it->first);
+        } else {
+            ++it;
         }
     }
-    for (auto &sprite: sprites) {
-        if (entities.find(sprite.first) == entities.end())
-            sprites.erase(sprite.first);
+    for (auto it = sprites.begin(); it != sprites.end();) {
+        if (entities.find(it->first) == entities.end()) {
+            it = sprites.erase(it);
+            backgroundColors.erase(it->first);
+        } else {
+            ++it;
+        }
     }
 }
 
@@ -155,6 +161,8 @@ void DisplaySfml::createText(std::string name, IGameModule::Entity entity) {
 }
 
 void DisplaySfml::createSprite(std::string name, IGameModule::Entity entity) {
+    if (entity.file == "" || entity.xSprite == -1 || entity.ySprite == -1)
+        return;
     std::shared_ptr<sf::Texture> texture = std::make_shared<sf::Texture>();
     textures[name] = std::make_tuple(texture, entity.file);
     if (!texture->loadFromFile(entity.file))
@@ -162,7 +170,7 @@ void DisplaySfml::createSprite(std::string name, IGameModule::Entity entity) {
     sprites[name] = std::make_unique<sf::Sprite>();
     sprites[name]->setOrigin(sf::Vector2f(texture->getSize().x / 2, texture->getSize().y / 2));
     sprites[name]->setTexture(*std::get<0>(textures[name]), true);
-    sprites[name]->setPosition({entity.x * 20, entity.y * 50});
+    sprites[name]->setPosition({entity.xSprite * 20, entity.ySprite * 50});
 }
 
 void DisplaySfml::updateText(std::string name, IGameModule::Entity entity) {
@@ -183,14 +191,14 @@ void DisplaySfml::updateText(std::string name, IGameModule::Entity entity) {
 }
 
 void DisplaySfml::updateSprite(std::string name, IGameModule::Entity entity) {
-    if (std::get<1>(textures[name]) != entity.file) {
+    if (std::get<1>(textures[name]) != entity.file && entity.file != "") {
         std::shared_ptr<sf::Texture> texture = std::make_shared<sf::Texture>();
         textures[name] = std::make_tuple(texture, entity.file);
         if (!texture->loadFromFile(entity.file))
             throw "Error on loading texture";
     }
     sprites[name]->setTexture(*std::get<0>(textures[name]), true);
-    sprites[name]->setPosition({entity.x * 20, entity.y * 50});
+    sprites[name]->setPosition({entity.xSprite * 20, entity.ySprite * 50});
 }
 
 extern "C" IDisplayModule* create() {
