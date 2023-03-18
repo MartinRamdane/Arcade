@@ -95,7 +95,7 @@ void GameSnake::initMenu()
     infos["gameTitle3"] = createEntity("", "███████ ██ ██  ██ ███████ █████   █████  ", "white", "", (areaWidth / 2 - 19), (areaHeight / 2 - 5 + MARGIN_TOP), ENTITY_TYPE::NONE, 0, 0, 40);
     infos["gameTitle4"] = createEntity("", "     ██ ██  ██ ██ ██   ██ ██  ██  ██     ", "white", "", (areaWidth / 2 - 19), (areaHeight / 2 - 4 + MARGIN_TOP), ENTITY_TYPE::NONE, 0, 0, 40);
     infos["gameTitle5"] = createEntity("", "███████ ██   ████ ██   ██ ██   ██ ███████", "white", "", (areaWidth / 2 - 19), (areaHeight / 2 - 3 + MARGIN_TOP), ENTITY_TYPE::NONE, 0, 0, 40);
-    infos["playButton"] = createEntity("./res/snake/snake_buttonHover.png", "Play", "yellow", "white", (areaWidth / 2 - 1), (areaHeight / 2 + 2 + MARGIN_TOP), ENTITY_TYPE::SPRITE_TEXT, (areaWidth / 2), (areaHeight / 2 + 2 + MARGIN_TOP), 40);
+    infos["playButton"] = createEntity("./res/snake/snake_buttonHover.png", "Play", "black", "white", (areaWidth / 2 - 1), (areaHeight / 2 + 2 + MARGIN_TOP), ENTITY_TYPE::SPRITE_TEXT, (areaWidth / 2), (areaHeight / 2 + 2 + MARGIN_TOP), 40);
     infos["quitButton"] = createEntity("./res/snake/snake_button.png", "Quit", "white", "", (areaWidth / 2 - 1), (areaHeight / 2 + 4 + MARGIN_TOP), ENTITY_TYPE::SPRITE_TEXT, (areaWidth / 2), (areaHeight / 2 + 4 + MARGIN_TOP), 40);
 }
 
@@ -123,7 +123,7 @@ void GameSnake::initLoose()
     infos["looseTitle5"] = createEntity("", " ██████   ██████         ██ ", "white", "", (areaWidth / 2 - 12), (areaHeight / 2 - 3 + MARGIN_TOP), ENTITY_TYPE::NONE, 0, 0, 40);
     infos["username"] = createEntity("", this->username, "white", "", (areaWidth / 2 - (this->username.length() / 2) + 1), (areaHeight / 2 - 1 + MARGIN_TOP), ENTITY_TYPE::TEXT, (areaWidth / 2 - username.length()), (areaHeight / 2 - 2 + MARGIN_TOP), 40);
     infos["score"] = createEntity("", std::to_string(score), "white", "", (areaWidth / 2 - (std::to_string(score).length() / 2) + 1), (areaHeight / 2 + MARGIN_TOP), ENTITY_TYPE::TEXT, (areaWidth / 2 - std::to_string(score).length()), (areaHeight / 2 - 1 + MARGIN_TOP), 40);
-    infos["retryButton"] = createEntity("./res/snake/snake_buttonHover.png", "Retry", "yellow", "white", (areaWidth / 2 - 1), (areaHeight / 2 + 2 + MARGIN_TOP), ENTITY_TYPE::SPRITE_TEXT, (areaWidth / 2), (areaHeight / 2 + 2 + MARGIN_TOP), 40);
+    infos["retryButton"] = createEntity("./res/snake/snake_buttonHover.png", "Retry", "black", "white", (areaWidth / 2 - 1), (areaHeight / 2 + 2 + MARGIN_TOP), ENTITY_TYPE::SPRITE_TEXT, (areaWidth / 2), (areaHeight / 2 + 2 + MARGIN_TOP), 40);
     infos["quitButton"] = createEntity("./res/snake/snake_button.png", "Quit", "white", "", (areaWidth / 2 - 1), (areaHeight / 2 + 4 + MARGIN_TOP), ENTITY_TYPE::SPRITE_TEXT, (areaWidth / 2), (areaHeight / 2 + 4 + MARGIN_TOP), 40);
 }
 

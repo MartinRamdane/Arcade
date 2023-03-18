@@ -24,28 +24,18 @@ void DisplayNcurse::init(std::map<std::string, IGameModule::Entity> &entites) {
     start_color();
     keypad(stdscr, TRUE);
     nodelay(stdscr, TRUE);
-    this->entities = entites;
+    texts = entites;
 }
 
 void DisplayNcurse::update(std::map<std::string, IGameModule::Entity> &entities) {
-    for (auto &entity : entities) {
-        if (entity.second.toUpdate) {
-            this->entities[entity.first] = entity.second;
-            entity.second.toUpdate = false;
-        }
-    }
-    for (auto &entity : this->entities) {
-        if (entities.find(entity.first) == entities.end()) {
-            this->entities.erase(entity.first);
-        }
-    }
+    texts = entities;
 }
 
 void DisplayNcurse::draw() {
     halfdelay(2);
     clear();
     int i = 2;
-    for (auto &entity : entities) {
+    for (auto &entity : texts) {
         init_pair(i, colors[entity.second.color], colors[entity.second.background_color]);
         attron(COLOR_PAIR(i));
         mvprintw(entity.second.y, entity.second.x, entity.second.text.c_str());
@@ -93,7 +83,8 @@ std::map<std::string, int> DisplayNcurse::colors = {
     {"magenta", COLOR_MAGENTA},
     {"cyan", COLOR_CYAN},
     {"white", COLOR_WHITE},
-    {"black", COLOR_BLACK}
+    {"black", COLOR_BLACK},
+    {"", COLOR_BLACK}
 };
 
 extern "C" IDisplayModule* create() {

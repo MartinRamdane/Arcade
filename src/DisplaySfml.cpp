@@ -39,9 +39,9 @@ void DisplaySfml::stop() {
 void DisplaySfml::update(std::map<std::string, IGameModule::Entity> &entities) {
     for (auto &entity : entities) {
         if (entity.second.toUpdate) {
-            if (entity.second.type == IGameModule::ENTITY_TYPE::SPRITE) {
+            if (entity.second.type == IGameModule::ENTITY_TYPE::SPRITE || entity.second.type == IGameModule::ENTITY_TYPE::SPRITE_TEXT) {
                 (sprites.find(entity.first) != sprites.end()) ? updateSprite(entity.first, entity.second) : createSprite(entity.first, entity.second);
-            } else if (entity.second.type == IGameModule::ENTITY_TYPE::SPRITE_TEXT || entity.second.type == IGameModule::ENTITY_TYPE::TEXT) {
+            } else if (entity.second.type == IGameModule::ENTITY_TYPE::TEXT) {
                 (texts.find(entity.first) != texts.end()) ? updateText(entity.first, entity.second) : createText(entity.first, entity.second);
             }
             entity.second.toUpdate = false;

@@ -28,7 +28,7 @@ class DisplayNcurse : public IDisplayModule {
     private:
         std::string displayName;
         static std::map<std::string, int> colors;
-        std::map<std::string, IGameModule::Entity> entities;
+        std::map<std::string, IGameModule::Entity> texts;
 };
 
 #endif /* !DISPLAY_NCURSE */
