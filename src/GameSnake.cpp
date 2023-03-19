@@ -339,7 +339,7 @@ extern "C" void destroy(IGameModule* obj) {
     delete obj;
 }
 
-extern "C" char *getType() {
-    char *type = strdup("Game");
+extern "C" const char *getType() {
+    const char *type = "Game";
     return type;
 }

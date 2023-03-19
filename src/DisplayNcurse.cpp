@@ -95,7 +95,7 @@ extern "C" void destroy(IDisplayModule* obj) {
     delete obj;
 }
 
-extern "C" char *getType() {
-    char *type = strdup("Graphic");
+extern "C" const char *getType() {
+    const char *type = "Graphic";
     return type;
 }
