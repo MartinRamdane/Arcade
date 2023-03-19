@@ -24,6 +24,11 @@ void DisplaySdl::init(std::map<std::string, IGameModule::Entity> &entities) {
     window = SDL_CreateWindow("Arcade-SDL2", SDL_WINDOWPOS_CENTERED, SDL_WINDOWPOS_CENTERED, 530, 595, SDL_WINDOW_SHOWN);
     renderer = SDL_CreateRenderer(window, -1, SDL_RENDERER_ACCELERATED);
     font = TTF_OpenFont("./res/pixel.ttf", 24);
+    for (auto &entity : entities) {
+        if (entity.second.type == IGameModule::TEXT || entity.second.type == IGameModule::SPRITE_TEXT) {
+            createText(entity.first, entity.second);
+        }
+    }
 }
 
 void DisplaySdl::stop() {
@@ -38,15 +43,10 @@ void DisplaySdl::update(std::map<std::string, IGameModule::Entity> &entities) {
     for (auto &entity : entities) {
         if (entity.second.toUpdate) {
             if (entity.second.type == IGameModule::TEXT || entity.second.type == IGameModule::SPRITE_TEXT) {
-                SDL_Color color = colors[entity.second.color];
-                Text text;
-                TTF_SetFontSize(font, (entity.second.fontSize / 1.7));
-                text.surface = TTF_RenderText_Shaded(font, entity.second.text.c_str(), color, colors[entity.second.background_color]);
-                text.texture = SDL_CreateTextureFromSurface(renderer, text.surface);
-                text.rect = { (int)entity.second.x * 10, (int)entity.second.y * 30, 0, 0 };
-                texts[entity.first] = text;
+                (entities.find(entity.first) != entities.end()) ? updateText(entity.first, entity.second) : createText(entity.first, entity.second);
             }
         }
+        entity.second.toUpdate = false;
     }
 }
 
@@ -55,8 +55,6 @@ void DisplaySdl::draw() {
     for (auto &text: texts) {
         SDL_QueryTexture(text.second.texture, NULL, NULL, &text.second.rect.w, &text.second.rect.h);
         SDL_RenderCopy(renderer, text.second.texture, NULL, &text.second.rect);
-        SDL_DestroyTexture(text.second.texture);
-        SDL_FreeSurface(text.second.surface);
     }
     SDL_RenderPresent(renderer);
 }
@@ -86,6 +84,24 @@ std::string DisplaySdl::getEvent() {
         }
     }
     return "";
+}
+
+void DisplaySdl::createText(std::string name, IGameModule::Entity entity) {
+    SDL_Color color = colors[entity.color];
+    Text text;
+    TTF_SetFontSize(font, (entity.fontSize / 1.7));
+    text.surface = TTF_RenderText_Shaded(font, entity.text.c_str(), color, colors[entity.background_color]);
+    text.texture = SDL_CreateTextureFromSurface(renderer, text.surface);
+    text.rect = { (int)entity.x * 10, (int)entity.y * 30, 0, 0 };
+    texts[name] = text;
+}
+
+void DisplaySdl::updateText(std::string name, IGameModule::Entity entity) {
+    texts[name].rect = { (int)entity.x * 10, (int)entity.y * 30, 0, 0 };
+    SDL_Color color = colors[entity.color];
+    TTF_SetFontSize(font, (entity.fontSize / 1.7));
+    texts[name].surface = TTF_RenderText_Shaded(font, entity.text.c_str(), color, colors[entity.background_color]);
+    texts[name].texture = SDL_CreateTextureFromSurface(renderer, texts[name].surface);
 }
 
 std::map<std::string, SDL_Color> DisplaySdl::colors = {

@@ -33,6 +33,8 @@ class DisplaySdl : public IDisplayModule {
         void draw();
         std::string getEvent();
         const std::string &getName() const;
+        void createText(std::string name, IGameModule::Entity entity);
+        void updateText(std::string name, IGameModule::Entity entity);
 
     private:
         std::string displayName = "sdl";
