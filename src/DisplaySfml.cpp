@@ -23,9 +23,10 @@ void DisplaySfml::init(std::map<std::string, IGameModule::Entity> &entities) {
     if (!font.loadFromFile("./res/pixel.ttf"))
         throw "Error on loading Font";
     for (auto &entity : entities) {
-        if (entity.second.type == IGameModule::ENTITY_TYPE::SPRITE) {
+        if (entity.second.type == IGameModule::ENTITY_TYPE::SPRITE || entity.second.type == IGameModule::ENTITY_TYPE::SPRITE_TEXT) {
             createSprite(entity.first, entity.second);
-        } else if (entity.second.type == IGameModule::ENTITY_TYPE::SPRITE_TEXT || entity.second.type == IGameModule::ENTITY_TYPE::TEXT) {
+        }
+        if (entity.second.type == IGameModule::ENTITY_TYPE::SPRITE_TEXT || entity.second.type == IGameModule::ENTITY_TYPE::TEXT) {
             createText(entity.first, entity.second);
         }
         entity.second.toUpdate = false;
@@ -41,7 +42,8 @@ void DisplaySfml::update(std::map<std::string, IGameModule::Entity> &entities) {
         if (entity.second.toUpdate) {
             if (entity.second.type == IGameModule::ENTITY_TYPE::SPRITE || entity.second.type == IGameModule::ENTITY_TYPE::SPRITE_TEXT) {
                 (sprites.find(entity.first) != sprites.end()) ? updateSprite(entity.first, entity.second) : createSprite(entity.first, entity.second);
-            } else if (entity.second.type == IGameModule::ENTITY_TYPE::TEXT) {
+            }
+            if (entity.second.type == IGameModule::ENTITY_TYPE::TEXT || entity.second.type == IGameModule::ENTITY_TYPE::SPRITE_TEXT) {
                 (texts.find(entity.first) != texts.end()) ? updateText(entity.first, entity.second) : createText(entity.first, entity.second);
             }
             entity.second.toUpdate = false;
@@ -147,13 +149,19 @@ void DisplaySfml::createText(std::string name, IGameModule::Entity entity) {
     texts[name]->setFont(font);
     texts[name]->setString(entity.text);
     texts[name]->setCharacterSize(entity.fontSize);
-    texts[name]->setFillColor(colors[entity.color]);
-    texts[name]->setPosition({entity.x * 20, entity.y * 50});
+    if (entity.type == IGameModule::TEXT)
+        texts[name]->setFillColor(colors[entity.color]);
+    if (std::get<0>(textures[name]))
+        texts[name]->setPosition(sf::Vector2f(sprites[name]->getPosition().x + sprites[name]->getLocalBounds().width / 2 - texts[name]->getLocalBounds().width / 2 - sprites[name]->getOrigin().x, sprites[name]->getPosition().y + sprites[name]->getLocalBounds().height / 2 - texts[name]->getLocalBounds().height / 2 - sprites[name]->getOrigin().y));
+    else
+        texts[name]->setPosition({entity.xSprite * 20, entity.ySprite * 50});
     if (entity.background_color == "") {
         if (backgroundColors.find(name) != backgroundColors.end())
             backgroundColors.erase(name);
         return;
     }
+    if (entity.type!= IGameModule::TEXT)
+        return;
     backgroundColors[name] = std::make_unique<sf::RectangleShape>();
     backgroundColors[name]->setSize(sf::Vector2f(texts[name]->getLocalBounds().width * 1.1f, texts[name]->getLocalBounds().height * 1.4f));
     backgroundColors[name]->setFillColor(colors[entity.background_color]);
@@ -176,13 +184,19 @@ void DisplaySfml::createSprite(std::string name, IGameModule::Entity entity) {
 void DisplaySfml::updateText(std::string name, IGameModule::Entity entity) {
     texts[name]->setString(entity.text);
     texts[name]->setCharacterSize(entity.fontSize);
-    texts[name]->setFillColor(colors[entity.color]);
-    texts[name]->setPosition({entity.x * 20, entity.y * 50});
+    if (entity.type == IGameModule::TEXT)
+        texts[name]->setFillColor(colors[entity.color]);
+    if (std::get<0>(textures[name]))
+        texts[name]->setPosition(sf::Vector2f(sprites[name]->getPosition().x + sprites[name]->getLocalBounds().width / 2 - texts[name]->getLocalBounds().width / 2 - sprites[name]->getOrigin().x, sprites[name]->getPosition().y + sprites[name]->getLocalBounds().height / 2 - texts[name]->getLocalBounds().height / 2 - sprites[name]->getOrigin().y));
+    else
+        texts[name]->setPosition({entity.xSprite * 20, entity.ySprite * 50});
     if (entity.background_color == "") {
         if (backgroundColors.find(name) != backgroundColors.end())
             backgroundColors.erase(name);
         return;
     }
+    if (entity.type != IGameModule::TEXT)
+        return;
     if (backgroundColors.find(name) == backgroundColors.end())
         backgroundColors[name] = std::make_unique<sf::RectangleShape>();
     backgroundColors[name]->setSize(sf::Vector2f(texts[name]->getLocalBounds().width * 1.1f, texts[name]->getLocalBounds().height * 1.4f));

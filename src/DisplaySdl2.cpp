@@ -21,6 +21,7 @@ void DisplaySdl::init(std::map<std::string, IGameModule::Entity> &entities) {
         throw;
     }
     TTF_Init();
+    IMG_Init(IMG_INIT_PNG);
     window = SDL_CreateWindow("Arcade-SDL2", SDL_WINDOWPOS_CENTERED, SDL_WINDOWPOS_CENTERED, 530, 595, SDL_WINDOW_SHOWN);
     renderer = SDL_CreateRenderer(window, -1, SDL_RENDERER_ACCELERATED);
     font = TTF_OpenFont("./res/pixel.ttf", 24);
@@ -28,6 +29,10 @@ void DisplaySdl::init(std::map<std::string, IGameModule::Entity> &entities) {
         if (entity.second.type == IGameModule::TEXT || entity.second.type == IGameModule::SPRITE_TEXT) {
             createText(entity.first, entity.second);
         }
+        if (entity.second.type == IGameModule::SPRITE) {
+            createSprite(entity.first, entity.second);
+        }
+        entity.second.toUpdate = false;
     }
 }
 
@@ -37,6 +42,7 @@ void DisplaySdl::stop() {
     SDL_DestroyWindow(window);
     TTF_Quit();
     SDL_Quit();
+    IMG_Quit();
 }
 
 void DisplaySdl::update(std::map<std::string, IGameModule::Entity> &entities) {
@@ -45,16 +51,23 @@ void DisplaySdl::update(std::map<std::string, IGameModule::Entity> &entities) {
             if (entity.second.type == IGameModule::TEXT || entity.second.type == IGameModule::SPRITE_TEXT) {
                 (entities.find(entity.first) != entities.end()) ? updateText(entity.first, entity.second) : createText(entity.first, entity.second);
             }
+            if (entity.second.type == IGameModule::SPRITE) {
+                (entities.find(entity.first) != entities.end()) ? updateSprite(entity.first, entity.second) : createSprite(entity.first, entity.second);
+            }
         }
         entity.second.toUpdate = false;
     }
 }
 
 void DisplaySdl::draw() {
+    SDL_SetRenderDrawColor(renderer, 0, 0, 0, 255);
     SDL_RenderClear(renderer);
     for (auto &text: texts) {
         SDL_QueryTexture(text.second.texture, NULL, NULL, &text.second.rect.w, &text.second.rect.h);
         SDL_RenderCopy(renderer, text.second.texture, NULL, &text.second.rect);
+    }
+    for (auto &sprite: sprites) {
+        SDL_RenderCopy(renderer, sprite.second.texture, NULL, &sprite.second.rect);
     }
     SDL_RenderPresent(renderer);
 }
@@ -102,6 +115,33 @@ void DisplaySdl::updateText(std::string name, IGameModule::Entity entity) {
     TTF_SetFontSize(font, (entity.fontSize / 1.7));
     texts[name].surface = TTF_RenderText_Shaded(font, entity.text.c_str(), color, colors[entity.background_color]);
     texts[name].texture = SDL_CreateTextureFromSurface(renderer, texts[name].surface);
+}
+
+void DisplaySdl::createSprite(std::string name, IGameModule::Entity entity) {
+    if (entity.file == "" || entity.xSprite == -1 || entity.ySprite == -1)
+        return;
+    Sprite sprite;
+    SDL_Surface* surface = IMG_Load(entity.file.c_str());
+
+    // Récupérez les dimensions de l'image
+    int textureWidth = surface->w;
+    int textureHeight = surface->h;
+
+    // Créez la texture à partir de la surface d'image
+    sprite.texture = SDL_CreateTextureFromSurface(renderer, surface);
+    SDL_FreeSurface(surface);
+
+    // Utilisez les dimensions de la texture pour définir la taille du sprite
+    sprite.rect = { (int)entity.xSprite * 10 - (textureWidth / 2), (int)entity.ySprite * 30 - (textureHeight / 2), textureWidth, textureHeight };
+
+    sprites[name] = sprite;
+}
+
+
+
+void DisplaySdl::updateSprite(std::string name, IGameModule::Entity entity) {
+    // sprites[name].rect = { 0, 0, 400, 300 };
+    // SDL_RenderCopy(renderer, sprites[name].texture, NULL, &sprites[name].rect);
 }
 
 std::map<std::string, SDL_Color> DisplaySdl::colors = {
