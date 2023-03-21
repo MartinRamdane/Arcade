@@ -10,6 +10,8 @@
 
 #include "IGameModule.hpp"
 #include <map>
+#include <chrono>
+#include <thread>
 
 class AGameModule : public IGameModule {
     public:

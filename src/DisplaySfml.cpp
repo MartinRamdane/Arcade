@@ -19,7 +19,7 @@ DisplaySfml::~DisplaySfml()
 void DisplaySfml::init(std::map<std::string, IGameModule::Entity> &entities) {
     sf::VideoMode video({1060, 1190});
     window = std::make_unique<sf::RenderWindow>(video, "Arcade-SFML");
-    window->setFramerateLimit(30);
+    window->setFramerateLimit(60);
     if (!font.loadFromFile("./res/pixel.ttf"))
         throw "Error on loading Font";
     for (auto &entity : entities) {
