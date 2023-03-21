@@ -58,7 +58,12 @@ void Core::getLibs() {
 
 void Core::startMenu(std::string lib) {
     _graphLoader = new DLLoader<IDisplayModule>(lib);
-    it = std::find(graphs.begin(), graphs.end(), lib);
+    for (auto ite = graphs.begin(); ite != graphs.end(); ite++) {
+        if (*ite == lib) {
+            it = ite;
+            break;
+        }
+    }
     _display = _graphLoader->getInstance();
     LibMenu *menu = new LibMenu(games, graphs);
     menu->init();
@@ -79,7 +84,12 @@ void Core::startMenu(std::string lib) {
     _username = menu->getUsername();
     _game->startGame(_username);
     _graphLoader = new DLLoader<IDisplayModule>(menu->getGraphChoice());
-    it = std::find(graphs.begin(), graphs.end(), menu->getGraphChoice());
+    for (auto ite = graphs.begin(); ite != graphs.end(); ite++) {
+        if (*ite == menu->getGraphChoice()) {
+            it = ite;
+            break;
+        }
+    }
     _display = _graphLoader->getInstance();
     _display->init(_game->getInfos());
 }

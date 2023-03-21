@@ -22,8 +22,8 @@ void DisplaySdl::init(std::map<std::string, IGameModule::Entity> &entities) {
     }
     TTF_Init();
     IMG_Init(IMG_INIT_PNG);
-    window = SDL_CreateWindow("Arcade-SDL2", SDL_WINDOWPOS_CENTERED, SDL_WINDOWPOS_CENTERED, 530, 595, SDL_WINDOW_SHOWN);
-    renderer = SDL_CreateRenderer(window, -1, SDL_RENDERER_ACCELERATED);
+    window = SDL_CreateWindow("Arcade-SDL2", SDL_WINDOWPOS_CENTERED, SDL_WINDOWPOS_CENTERED, 1060, 1190, SDL_WINDOW_SHOWN);
+    renderer = SDL_CreateRenderer(window, -1, 0);
     font = TTF_OpenFont("./res/pixel.ttf", 24);
     for (auto &entity : entities) {
         if (entity.second.type == IGameModule::TEXT || entity.second.type == IGameModule::SPRITE_TEXT) {
@@ -121,19 +121,10 @@ void DisplaySdl::createSprite(std::string name, IGameModule::Entity entity) {
     if (entity.file == "" || entity.xSprite == -1 || entity.ySprite == -1)
         return;
     Sprite sprite;
-    SDL_Surface* surface = IMG_Load(entity.file.c_str());
-
-    // Récupérez les dimensions de l'image
-    int textureWidth = surface->w;
-    int textureHeight = surface->h;
-
-    // Créez la texture à partir de la surface d'image
-    sprite.texture = SDL_CreateTextureFromSurface(renderer, surface);
-    SDL_FreeSurface(surface);
-
-    // Utilisez les dimensions de la texture pour définir la taille du sprite
-    sprite.rect = { (int)entity.xSprite * 10 - (textureWidth / 2), (int)entity.ySprite * 30 - (textureHeight / 2), textureWidth, textureHeight };
-
+    sprite.surface = IMG_Load(entity.file.c_str());
+    sprite.texture = SDL_CreateTextureFromSurface(renderer, sprite.surface);
+    sprite.rect = { (int)entity.xSprite * 10, (int)entity.ySprite * 30, sprite.surface->w, sprite.surface->h};
+    SDL_FreeSurface(sprite.surface);
     sprites[name] = sprite;
 }
 
