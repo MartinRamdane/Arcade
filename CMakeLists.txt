@@ -4,11 +4,7 @@ project(arcade VERSION 1.0)
 
 set(CMAKE_CXX_STANDARD 17)
 set(CMAKE_CXX_STANDARD_REQUIRED True)
-if(APPLE)
-    set(CMAKE_CXX_FLAGS "-Wall -Wextra")
-elseif(UNIX)
-    set(CMAKE_CXX_FLAGS "-Wall -Wextra -lncurses -lsfml-graphics -lsfml-window -lsfml-system -lSDL2 -lSDL2_ttf -lSDL2_image")
-endif()
+set(CMAKE_CXX_FLAGS "-Wall -Wextra")
 set(SRC_FILES main.cpp
     Core.cpp
     LibMenu.cpp
