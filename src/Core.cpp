@@ -23,8 +23,6 @@ void Core::init() {
 
 void Core::stop() {
     _display->stop();
-    delete _graphLoader;
-    delete _gameLoader;
     exit(0);
 }
 
@@ -57,7 +55,7 @@ void Core::getLibs() {
 }
 
 void Core::startMenu(std::string lib) {
-    _graphLoader = new DLLoader<IDisplayModule>(lib);
+    _graphLoader = std::make_unique<DLLoader<IDisplayModule>>(lib);
     for (auto ite = graphs.begin(); ite != graphs.end(); ite++) {
         if (*ite == lib) {
             it = ite;
@@ -65,13 +63,13 @@ void Core::startMenu(std::string lib) {
         }
     }
     _display = _graphLoader->getInstance();
-    LibMenu *menu = new LibMenu(games, graphs);
+    std::unique_ptr<LibMenu> menu = std::make_unique<LibMenu>(games, graphs);
     menu->init();
     _display->init(menu->getInfos());
     while (menu->isFinished() == false) {
         std::string event = _display->getEvent();
         if (event == "\t")
-            switchLib(menu);
+            switchLib(menu.get());
         if (event == "-")
             stop();
         menu->update(event);
@@ -79,11 +77,11 @@ void Core::startMenu(std::string lib) {
         _display->draw();
     }
     _display->stop();
-    _gameLoader = new DLLoader<IGameModule>(menu->getGameChoice());
+    _gameLoader = std::make_unique<DLLoader<IGameModule>>(menu->getGameChoice());
     _game = _gameLoader->getInstance();
     _username = menu->getUsername();
     _game->startGame(_username);
-    _graphLoader = new DLLoader<IDisplayModule>(menu->getGraphChoice());
+    _graphLoader = std::make_unique<DLLoader<IDisplayModule>>(menu->getGraphChoice());
     for (auto ite = graphs.begin(); ite != graphs.end(); ite++) {
         if (*ite == menu->getGraphChoice()) {
             it = ite;
@@ -96,11 +94,11 @@ void Core::startMenu(std::string lib) {
 
 void Core::switchLib(IGameModule *lib) {
     _display->stop();
-    delete _graphLoader;
+    _graphLoader.release();
     it++;
     if (it == graphs.end())
         it = graphs.begin();
-    _graphLoader = new DLLoader<IDisplayModule>(*it);
+    _graphLoader = std::make_unique<DLLoader<IDisplayModule>>(*it);
     _display = _graphLoader->getInstance();
     _display->init(lib->getInfos());
 }
@@ -111,7 +109,7 @@ void Core::mainloop() {
         _display->draw();
         std::string event = _display->getEvent();
         if (event == "\t")
-            switchLib(_game);
+            switchLib(_game.get());
         if (event == "m")
             startMenu(*it);
         if (event == "-")

@@ -11,6 +11,7 @@
 #include "AGameModule.hpp"
 #include <vector>
 #include <tuple>
+#include <memory>
 
 #define MARGIN_TOP 3
 #define MARGIN_LEFT 2

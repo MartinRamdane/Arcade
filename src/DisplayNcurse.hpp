@@ -12,6 +12,7 @@
 #include <ncurses.h>
 #include <iostream>
 #include <string>
+#include <memory>
 
 class DisplayNcurse : public IDisplayModule {
     public:

@@ -11,6 +11,7 @@
 #include <iostream>
 #include <string>
 #include <vector>
+#include <memory>
 #include <filesystem>
 #include "DLLoader.hpp"
 #include "IDisplayModule.hpp"
@@ -31,14 +32,14 @@ class Core {
     protected:
     private:
         std::string _lib;
-        IDisplayModule *_display;
-        IGameModule *_game;
+        std::shared_ptr<IDisplayModule> _display;
+        std::shared_ptr<IGameModule> _game;
         std::vector<std::string> games;
         std::vector<std::string> graphs;
         std::vector<std::string>::iterator it;
         std::string _username;
-        DLLoader<IGameModule> *_gameLoader;
-        DLLoader<IDisplayModule> *_graphLoader;
+        std::unique_ptr<DLLoader<IGameModule>> _gameLoader;
+        std::unique_ptr<DLLoader<IDisplayModule>> _graphLoader;
 };
 
 #endif /* !CLASS_CORE */

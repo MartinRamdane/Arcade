@@ -22,9 +22,9 @@ void DisplaySdl::init(std::map<std::string, IGameModule::Entity> &entities) {
     }
     TTF_Init();
     IMG_Init(IMG_INIT_PNG);
-    window = SDL_CreateWindow("Arcade-SDL2", SDL_WINDOWPOS_CENTERED, SDL_WINDOWPOS_CENTERED, 1060, 1190, SDL_WINDOW_SHOWN);
+    window = SDL_CreateWindow("Arcade-SDL2", SDL_WINDOWPOS_CENTERED, SDL_WINDOWPOS_CENTERED, 530, 595, SDL_WINDOW_SHOWN);
     renderer = SDL_CreateRenderer(window, -1, 0);
-    font = TTF_OpenFont("./res/pixel.ttf", 24);
+    font = TTF_OpenFont("./res/pixel.ttf", 18);
     for (auto &entity : entities) {
         if (entity.second.type == IGameModule::TEXT || entity.second.type == IGameModule::SPRITE_TEXT) {
             createText(entity.first, entity.second);
@@ -102,7 +102,6 @@ std::string DisplaySdl::getEvent() {
 void DisplaySdl::createText(std::string name, IGameModule::Entity entity) {
     SDL_Color color = colors[entity.color];
     Text text;
-    TTF_SetFontSize(font, (entity.fontSize / 1.7));
     text.surface = TTF_RenderText_Shaded(font, entity.text.c_str(), color, colors[entity.background_color]);
     text.texture = SDL_CreateTextureFromSurface(renderer, text.surface);
     text.rect = { (int)entity.x * 10, (int)entity.y * 30, 0, 0 };
@@ -112,7 +111,6 @@ void DisplaySdl::createText(std::string name, IGameModule::Entity entity) {
 void DisplaySdl::updateText(std::string name, IGameModule::Entity entity) {
     texts[name].rect = { (int)entity.x * 10, (int)entity.y * 30, 0, 0 };
     SDL_Color color = colors[entity.color];
-    TTF_SetFontSize(font, (entity.fontSize / 1.7));
     texts[name].surface = TTF_RenderText_Shaded(font, entity.text.c_str(), color, colors[entity.background_color]);
     texts[name].texture = SDL_CreateTextureFromSurface(renderer, texts[name].surface);
 }
@@ -165,12 +163,8 @@ const std::string &DisplaySdl::getName() const {
     return _name;
 }
 
-extern "C" IDisplayModule* create() {
-    return new DisplaySdl();
-}
-
-extern "C" void destroy(IDisplayModule* obj) {
-    delete obj;
+extern "C" std::shared_ptr<IDisplayModule> create() {
+    return std::make_shared<DisplaySdl>();
 }
 
 extern "C" const char *getType() {

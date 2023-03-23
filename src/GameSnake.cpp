@@ -335,12 +335,8 @@ void GameSnake::moveSnake()
     infos["playerHead"].toUpdate = true;
 }
 
-extern "C" IGameModule* create() {
-    return new GameSnake();
-}
-
-extern "C" void destroy(IGameModule* obj) {
-    delete obj;
+extern "C" std::shared_ptr<IGameModule> create() {
+    return std::make_shared<GameSnake>();
 }
 
 extern "C" const char *getType() {

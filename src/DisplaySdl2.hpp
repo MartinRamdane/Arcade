@@ -15,6 +15,7 @@
 #include <iostream>
 #include <string>
 #include <map>
+#include <memory>
 
 class DisplaySdl : public IDisplayModule {
 
