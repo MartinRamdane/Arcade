@@ -32,8 +32,8 @@ class Core {
     protected:
     private:
         std::string _lib;
-        std::shared_ptr<IDisplayModule> _display;
-        std::shared_ptr<IGameModule> _game;
+        std::unique_ptr<IDisplayModule> _display;
+        std::unique_ptr<IGameModule> _game;
         std::vector<std::string> games;
         std::vector<std::string> graphs;
         std::vector<std::string>::iterator it;

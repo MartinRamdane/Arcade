@@ -21,7 +21,7 @@ class DLLoader {
                 std::cerr << "Error: " << dlerror() << std::endl;
                 exit(84);
             }
-            instance = ((std::shared_ptr<T> (*)())dlsym(handle, "create"))();
+            instance = ((T*(*)())dlsym(handle, "create"))();
             char *error;
             if ((error = dlerror()) != NULL)  {
                 fprintf(stderr, "%s\n", error);
@@ -30,11 +30,17 @@ class DLLoader {
             dlerror();
         };
         ~DLLoader() {
+            ((void(*)(T*))dlsym(handle, "destroy"))(instance);
+            char *error;
+            if ((error = dlerror()) != NULL)  {
+                fprintf(stderr, "%s\n", error);
+                exit(EXIT_FAILURE);
+            }
             dlclose(handle);
         };
-        std::shared_ptr<T> getInstance() {return instance;};
+        T *getInstance() {return instance;};
     private:
-        std::shared_ptr<T> instance;
+        T *instance;
         void *handle = nullptr;
 };
 

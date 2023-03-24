@@ -87,8 +87,12 @@ std::map<std::string, int> DisplayNcurse::colors = {
     {"", COLOR_BLACK}
 };
 
-extern "C" std::shared_ptr<IDisplayModule> create() {
-    return std::make_shared<DisplayNcurse>();
+extern "C" IDisplayModule *create() {
+    return new DisplayNcurse();
+}
+
+extern "C" void destroy(IDisplayModule *display) {
+    delete display;
 }
 
 extern "C" const char *getType() {

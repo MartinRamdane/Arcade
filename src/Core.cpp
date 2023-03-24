@@ -62,7 +62,7 @@ void Core::startMenu(std::string lib) {
             break;
         }
     }
-    _display = _graphLoader->getInstance();
+    _display = std::unique_ptr<IDisplayModule>(_graphLoader->getInstance());
     std::unique_ptr<LibMenu> menu = std::make_unique<LibMenu>(games, graphs);
     menu->init();
     _display->init(menu->getInfos());
@@ -78,9 +78,10 @@ void Core::startMenu(std::string lib) {
     }
     _display->stop();
     _gameLoader = std::make_unique<DLLoader<IGameModule>>(menu->getGameChoice());
-    _game = _gameLoader->getInstance();
+    _game = std::unique_ptr<IGameModule>(_gameLoader->getInstance());
     _username = menu->getUsername();
     _game->startGame(_username);
+    _graphLoader.release();
     _graphLoader = std::make_unique<DLLoader<IDisplayModule>>(menu->getGraphChoice());
     for (auto ite = graphs.begin(); ite != graphs.end(); ite++) {
         if (*ite == menu->getGraphChoice()) {
@@ -88,7 +89,8 @@ void Core::startMenu(std::string lib) {
             break;
         }
     }
-    _display = _graphLoader->getInstance();
+    _display.release();
+    _display = std::unique_ptr<IDisplayModule>(_graphLoader->getInstance());
     _display->init(_game->getInfos());
 }
 
@@ -99,7 +101,8 @@ void Core::switchLib(IGameModule *lib) {
     if (it == graphs.end())
         it = graphs.begin();
     _graphLoader = std::make_unique<DLLoader<IDisplayModule>>(*it);
-    _display = _graphLoader->getInstance();
+    _display.release();
+    _display = std::unique_ptr<IDisplayModule>(_graphLoader->getInstance());
     _display->init(lib->getInfos());
 }
 
@@ -110,8 +113,14 @@ void Core::mainloop() {
         std::string event = _display->getEvent();
         if (event == "\t")
             switchLib(_game.get());
-        if (event == "m")
+        if (event == "m") {
+            _display->stop();
+            _graphLoader.release();
+            _display.release();
+            _gameLoader.release();
+            _game.release();
             startMenu(*it);
+        }
         if (event == "-")
             stop();
         std::this_thread::sleep_for(std::chrono::milliseconds(16));

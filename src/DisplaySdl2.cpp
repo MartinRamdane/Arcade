@@ -16,14 +16,22 @@ DisplaySdl::~DisplaySdl()
 }
 
 void DisplaySdl::init(std::map<std::string, IGameModule::Entity> &entities) {
+    SDL_SetHint(SDL_HINT_VIDEO_HIGHDPI_DISABLED, "1");
     if (SDL_Init(SDL_INIT_VIDEO) != 0) {
         printf("error initializing SDL: %s\n", SDL_GetError());
         throw;
     }
     TTF_Init();
     IMG_Init(IMG_INIT_PNG);
+
+    int logicalWidth, logicalHeight;
     window = SDL_CreateWindow("Arcade-SDL2", SDL_WINDOWPOS_CENTERED, SDL_WINDOWPOS_CENTERED, 530, 595, SDL_WINDOW_SHOWN);
+    logicalWidth = 530;
+    logicalHeight = 595;
+    SDL_GetWindowSize(window, &logicalWidth, &logicalHeight);
     renderer = SDL_CreateRenderer(window, -1, 0);
+    SDL_RenderSetLogicalSize(renderer, logicalWidth, logicalHeight);
+
     font = TTF_OpenFont("./res/pixel.ttf", 18);
     for (auto &entity : entities) {
         if (entity.second.type == IGameModule::TEXT || entity.second.type == IGameModule::SPRITE_TEXT) {
@@ -163,8 +171,12 @@ const std::string &DisplaySdl::getName() const {
     return _name;
 }
 
-extern "C" std::shared_ptr<IDisplayModule> create() {
-    return std::make_shared<DisplaySdl>();
+extern "C" IDisplayModule *create() {
+    return new DisplaySdl();
+}
+
+extern "C" void destroy(IDisplayModule *display) {
+    delete display;
 }
 
 extern "C" const char *getType() {

@@ -215,8 +215,12 @@ void DisplaySfml::updateSprite(std::string name, IGameModule::Entity entity) {
     sprites[name]->setPosition({entity.xSprite * 20, entity.ySprite * 50});
 }
 
-extern "C" std::shared_ptr<IDisplayModule> create() {
-    return std::make_shared<DisplaySfml>();
+extern "C" IDisplayModule *create() {
+    return new DisplaySfml();
+}
+
+extern "C" void destroy(IDisplayModule *display) {
+    delete display;
 }
 
 extern "C" const char *getType() {
