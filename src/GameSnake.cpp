@@ -146,11 +146,7 @@ void GameSnake::update(std::string key)
     if (gameStatus == IGameModule::GAME_STATUS::MENU) {
         updateMenu(key);
     } else if (gameStatus == IGameModule::GAME_STATUS::IN_GAME) {
-        auto start = std::chrono::steady_clock::now();
         updateGame(key);
-        auto end = std::chrono::steady_clock::now();
-        auto duration = std::chrono::duration_cast<std::chrono::milliseconds>(end - start);
-        std::this_thread::sleep_for(std::chrono::milliseconds(100) - duration);
     } else if (gameStatus == IGameModule::GAME_STATUS::FINISHED) {
         updateLoose(key);
     }

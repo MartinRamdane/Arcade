@@ -114,6 +114,7 @@ void Core::mainloop() {
             startMenu(*it);
         if (event == "-")
             stop();
+        std::this_thread::sleep_for(std::chrono::milliseconds(16));
         _game->update(event);
     }
 }
