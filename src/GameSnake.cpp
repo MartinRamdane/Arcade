@@ -129,7 +129,7 @@ void GameSnake::initLoose()
 
 bool GameSnake::checkCollision()
 {
-    if (infos["playerHead"].x == MARGIN_LEFT || infos["playerHead"].x == areaWidth + 1 || infos["playerHead"].y == MARGIN_TOP || infos["playerHead"].y == areaHeight + MARGIN_TOP) {
+    if (infos["playerHead"].x <= MARGIN_LEFT || infos["playerHead"].x >= areaWidth + 1 || infos["playerHead"].y <= MARGIN_TOP || infos["playerHead"].y >= areaHeight + MARGIN_TOP) {
         return true;
     }
     for (int i = 1; i < playerPart; i++) {

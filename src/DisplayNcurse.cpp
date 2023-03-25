@@ -32,7 +32,6 @@ void DisplayNcurse::update(std::map<std::string, IGameModule::Entity> &entities)
 }
 
 void DisplayNcurse::draw() {
-    halfdelay(2);
     clear();
     int i = 2;
     for (auto &entity : texts) {
