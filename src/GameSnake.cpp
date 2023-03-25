@@ -179,10 +179,10 @@ void GameSnake::updateMenu(std::string key)
         infos["playButton"].toUpdate = true;
         selectMenu = 2;
     }
-    if (key == " " && selectMenu == 1) {
+    if ((key == " " && selectMenu == 1) || key == "playButton") {
         initGame();
         gameStatus = IGameModule::GAME_STATUS::IN_GAME;
-    } else if (key == " " && selectMenu == 2) {
+    } else if ((key == " " && selectMenu == 2) || key == "quitButton") {
         exit(0);
     }
 }
@@ -214,10 +214,10 @@ void GameSnake::updateLoose(std::string key)
         infos["retryButton"].toUpdate = true;
         selectMenu = 2;
     }
-    if (key == " " && selectMenu == 1) {
+    if ((key == " " && selectMenu == 1) || key == "retryButton") {
         initGame();
         gameStatus = IGameModule::GAME_STATUS::IN_GAME;
-    } else if (key == " " && selectMenu == 2) {
+    } else if ((key == " " && selectMenu == 2) || key == "quitButton") {
         selectMenu = 1;
         initMenu();
         gameStatus = IGameModule::GAME_STATUS::MENU;

@@ -24,6 +24,7 @@ class DisplayNcurse : public IDisplayModule {
         void draw();
         void drawElement(IGameModule::Entity element);
         std::string getEvent();
+        std::string getMouseEvent();
         const std::string &getName() const;
 
     private:

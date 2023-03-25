@@ -24,6 +24,7 @@ void DisplayNcurse::init(std::map<std::string, IGameModule::Entity> &entites) {
     start_color();
     keypad(stdscr, TRUE);
     nodelay(stdscr, TRUE);
+    mousemask(ALL_MOUSE_EVENTS, NULL);
     texts = entites;
 }
 
@@ -61,9 +62,27 @@ std::string DisplayNcurse::getEvent() {
             return std::string("BACKSPACE");
         case 10:
             return std::string("ENTER");
+        case KEY_MOUSE:
+            return getMouseEvent();
     }
     std::string s(1, input);
     return s;
+}
+
+std::string DisplayNcurse::getMouseEvent() {
+    MEVENT event;
+    if (getmouse(&event) == OK) {
+        if (event.bstate & BUTTON1_CLICKED) {
+            int x = event.x;
+            int y = event.y;
+            for (auto &entity : texts) {
+                if (x >= entity.second.x && x <= entity.second.x + entity.second.text.size() && y == entity.second.y) {
+                    return entity.first;
+                }
+            }
+        }
+    }
+    return std::string("");
 }
 
 const std::string &DisplayNcurse::getName() const {

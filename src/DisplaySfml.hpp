@@ -30,6 +30,7 @@ class DisplaySfml : public IDisplayModule {
         void updateText(std::string name, IGameModule::Entity entity);
         void createSprite(std::string name, IGameModule::Entity entity);
         void updateSprite(std::string name, IGameModule::Entity entity);
+        std::string getMouseEvent();
 
     private:
         std::string displayName = "sfml";

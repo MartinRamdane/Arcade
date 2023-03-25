@@ -84,6 +84,20 @@ std::string DisplaySfml::getEvent() {
             window->close();
         if (event.type == sf::Event::KeyPressed)
             return (keys[event.key.code]);
+        if (event.type == sf::Event::MouseButtonPressed)
+            return getMouseEvent();
+    }
+    return "";
+}
+
+std::string DisplaySfml::getMouseEvent() {
+    if (event.mouseButton.button == sf::Mouse::Left) {
+        float x = event.mouseButton.x;
+        float y = event.mouseButton.y;
+        for (auto &sprite: sprites) {
+            if (sprite.second->getGlobalBounds().contains(x, y))
+                return sprite.first;
+        }
     }
     return "";
 }
