@@ -139,6 +139,8 @@ std::map<sf::Keyboard::Key, std::string> DisplaySfml::keys = {
     {sf::Keyboard::Escape, "ESCAPE"},
     {sf::Keyboard::Up, "UP"},
     {sf::Keyboard::Down, "DOWN"},
+    {sf::Keyboard::Left, "LEFT"},
+    {sf::Keyboard::Right, "RIGHT"},
     {sf::Keyboard::F1, "F1"},
     {sf::Keyboard::F2, "F2"},
     {sf::Keyboard::Tab, "\t"},
