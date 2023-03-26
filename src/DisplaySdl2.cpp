@@ -84,6 +84,8 @@ std::string DisplaySdl::getEvent() {
     while (SDL_PollEvent(&event)) {
         if (event.type == SDL_QUIT)
             SDL_Quit();
+        if (event.type == SDL_MOUSEBUTTONDOWN)
+            return getMouseEvent();
         if (event.type == SDL_KEYDOWN) {
             switch (event.key.keysym.sym) {
                 case SDLK_UP:
@@ -102,6 +104,19 @@ std::string DisplaySdl::getEvent() {
                     return std::string("ENTER");
             }
             return std::string(1, event.key.keysym.sym);
+        }
+    }
+    return "";
+}
+
+std::string DisplaySdl::getMouseEvent() {
+    if (event.button.button == SDL_BUTTON_LEFT) {
+        float x = event.button.x;
+        float y = event.button.y;
+        for (auto &sprite: sprites) {
+            if (x >= sprite.second.rect.x && x <= sprite.second.rect.x + sprite.second.rect.w && y >= sprite.second.rect.y && y <= sprite.second.rect.y + sprite.second.rect.h) {
+                return sprite.first;
+            }
         }
     }
     return "";
