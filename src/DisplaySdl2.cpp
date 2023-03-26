@@ -152,8 +152,7 @@ void DisplaySdl::createSprite(std::string name, IGameModule::Entity entity) {
 
 
 void DisplaySdl::updateSprite(std::string name, IGameModule::Entity entity) {
-    // sprites[name].rect = { 0, 0, 400, 300 };
-    // SDL_RenderCopy(renderer, sprites[name].texture, NULL, &sprites[name].rect);
+    sprites[name].rect = { (int)entity.xSprite * 10, (int)entity.ySprite * 30, sprites[name].surface->w, sprites[name].surface->h};
 }
 
 std::map<std::string, SDL_Color> DisplaySdl::colors = {

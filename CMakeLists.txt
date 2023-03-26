@@ -8,7 +8,8 @@ set(CMAKE_CXX_FLAGS "-Wall -Wextra")
 set(SRC_FILES main.cpp
     Core.cpp
     LibMenu.cpp
-    AGameModule.cpp)
+    AGameModule.cpp
+    Libs.cpp)
 add_subdirectory(src)
 set(CMAKE_SHARED_LIBRARY_PREFIX "arcade")
 set(CMAKE_SHARED_LIBRARY_SUFFIX ".so")
