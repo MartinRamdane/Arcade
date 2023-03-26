@@ -14,6 +14,10 @@
 
 class IGameModule {
     public:
+
+        /**
+        ** @brief The status of the game
+        **/
         enum GAME_STATUS {
             MENU,
             PAUSED,
@@ -21,6 +25,9 @@ class IGameModule {
             FINISHED
         };
 
+        /**
+        ** @brief The type of the entity
+        **/
         enum ENTITY_TYPE {
             SPRITE,
             TEXT,
@@ -30,6 +37,9 @@ class IGameModule {
             NONE
         };
 
+        /**
+        ** @brief The entity, an object to display
+        **/
         struct Entity {
             std::string file;
             std::string text;
