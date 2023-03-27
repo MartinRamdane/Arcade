@@ -25,6 +25,10 @@ class AGameModule : public IGameModule {
         std::string username;
         std::map<std::string, IGameModule::Entity> infos;
         IGameModule::GAME_STATUS gameStatus;
+        int areaWidth;
+        int areaHeight;
+        int score;
+        int selectMenu;
     private:
 };
 

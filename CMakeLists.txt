@@ -16,6 +16,8 @@ set(CMAKE_SHARED_LIBRARY_SUFFIX ".so")
 add_library(_ncurses SHARED src/DisplayNcurse.cpp)
 add_library(_snake SHARED src/GameSnake.cpp
                         src/AGameModule.cpp)
+add_library(_pacman SHARED src/GamePacman.cpp
+                            src/AGameModule.cpp)
 if (APPLE)
     include_directories(/usr/local/Cellar/sfml/2.5.1_2/include)
     link_directories(/usr/local/Cellar/sfml/2.5.1_2/lib)
@@ -33,6 +35,7 @@ add_library(_sdl2 SHARED src/DisplaySdl2.cpp)
 set_target_properties(_ncurses PROPERTIES LIBRARY_OUTPUT_DIRECTORY ../lib/)
 set_target_properties(_sfml PROPERTIES LIBRARY_OUTPUT_DIRECTORY ../lib/)
 set_target_properties(_snake PROPERTIES LIBRARY_OUTPUT_DIRECTORY ../lib/)
+set_target_properties(_pacman PROPERTIES LIBRARY_OUTPUT_DIRECTORY ../lib/)
 set_target_properties(_sdl2 PROPERTIES LIBRARY_OUTPUT_DIRECTORY ../lib/)
 target_link_libraries(${PROJECT_NAME} PRIVATE dl)
 set_target_properties(${PROJECT_NAME} PROPERTIES
