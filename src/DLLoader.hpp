@@ -14,28 +14,29 @@
 
 template <typename T>
 class DLLoader {
+    public:
+        class Error : public std::exception {
+            public:
+                Error(std::string const &message) : _message(message) {}
+                const char *what() const noexcept override { return _message.c_str(); }
+            private:
+                std::string _message;
+        };
     public :
         DLLoader(std::string libName) {
             handle = dlopen(libName.c_str(), RTLD_LAZY);
             if (!handle) {
-                std::cerr << "Error: " << dlerror() << std::endl;
-                exit(84);
+                throw Error("Error on loading library, library doesn't exist or is not a valid library");
             }
             instance = ((T*(*)())dlsym(handle, "create"))();
             char *error;
             if ((error = dlerror()) != NULL)  {
-                fprintf(stderr, "%s\n", error);
-                exit(EXIT_FAILURE);
+               throw Error("Error on creating library instance");
             }
             dlerror();
         };
         ~DLLoader() {
             ((void(*)(T*))dlsym(handle, "destroy"))(instance);
-            char *error;
-            if ((error = dlerror()) != NULL)  {
-                fprintf(stderr, "%s\n", error);
-                exit(EXIT_FAILURE);
-            }
             dlclose(handle);
         };
         T *getInstance() {return instance;};

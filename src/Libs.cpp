@@ -9,20 +9,21 @@
 
 Libs::Libs(std::string path)
 {
+    if (!std::filesystem::exists(path)) {
+        throw Error("Path doesn't exist");
+    }
     for (const auto &entry:std::filesystem::directory_iterator(path)) {
         std::string file = entry.path();
         if (file.substr(file.find_last_of(".") + 1) == "so") {
             void *handle = dlopen(file.c_str(), RTLD_LAZY);
             if (!handle) {
-                fprintf(stderr, "%s\n", dlerror());
-                exit(84);
+                throw Error("Error on loading library");
             }
             dlerror();
             std::string type = ((char *(*)(void))dlsym(handle, "getType"))();
             char *error;
             if ((error = dlerror()) != NULL)  {
-                fprintf(stderr, "%s\n", error);
-                exit(84);
+                throw Error("Error on getting library type");
             }
 
             dlclose(handle);

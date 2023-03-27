@@ -7,8 +7,13 @@ int main(int ac, char **av) {
         std::cerr << "Usage: ./arcade ./lib/lib.so" << std::endl;
         return 84;
     }
-    Core core(av[1]);
-    core.init();
-    core.mainloop();
+    try {
+        Core core(av[1]);
+        core.init();
+        core.mainloop();
+    } catch (std::exception &e) {
+        std::cerr << e.what() << std::endl;
+        return 84;
+    }
     return 0;
 }
