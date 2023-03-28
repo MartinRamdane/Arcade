@@ -36,14 +36,23 @@ void DisplayNcurse::draw() {
     clear();
     int i = 2;
     for (auto &entity : texts) {
-        init_pair(i, colors[entity.second.color], colors[entity.second.background_color]);
-        attron(COLOR_PAIR(i));
+        std::tuple<std::string, std::string> color_entity_pair = std::make_tuple(entity.second.color, entity.second.background_color);
+        auto color_it = colors_map.find(color_entity_pair);
+
+        if (color_it == colors_map.end()) {
+            init_pair(i, colors[entity.second.color], colors[entity.second.background_color]);
+            colors_map[color_entity_pair] = i;
+            i++;
+        }
+
+        attron(COLOR_PAIR(colors_map[color_entity_pair]));
         mvprintw(entity.second.y, entity.second.x, entity.second.text.c_str());
-        attroff(COLOR_PAIR(i));
-        i++;
+        attroff(COLOR_PAIR(colors_map[color_entity_pair]));
     }
     refresh();
 }
+
+
 
 std::string DisplayNcurse::getEvent() {
     int input = getch();
@@ -102,6 +111,7 @@ std::map<std::string, int> DisplayNcurse::colors = {
     {"cyan", COLOR_CYAN},
     {"white", COLOR_WHITE},
     {"black", COLOR_BLACK},
+    {"orange", 208},
     {"", COLOR_BLACK}
 };
 

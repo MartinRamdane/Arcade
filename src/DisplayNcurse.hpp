@@ -13,6 +13,7 @@
 #include <iostream>
 #include <string>
 #include <memory>
+#include <unordered_map>
 
 class DisplayNcurse : public IDisplayModule {
     public:
@@ -31,6 +32,7 @@ class DisplayNcurse : public IDisplayModule {
         std::string displayName;
         static std::map<std::string, int> colors;
         std::map<std::string, IGameModule::Entity> texts;
+        std::map<std::tuple<std::string, std::string>, int> colors_map;
 };
 
 #endif /* !DISPLAY_NCURSE */
