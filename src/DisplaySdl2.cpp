@@ -16,28 +16,21 @@ DisplaySdl::~DisplaySdl()
 }
 
 void DisplaySdl::init(std::map<std::string, IGameModule::Entity> &entities) {
-    SDL_SetHint(SDL_HINT_VIDEO_HIGHDPI_DISABLED, "1");
+    SDL_SetHint(SDL_HINT_VIDEO_HIGHDPI_DISABLED, "0");
     if (SDL_Init(SDL_INIT_VIDEO) != 0) {
         printf("error initializing SDL: %s\n", SDL_GetError());
         throw;
     }
     TTF_Init();
     IMG_Init(IMG_INIT_PNG);
-
-    int logicalWidth, logicalHeight;
-    window = SDL_CreateWindow("Arcade-SDL2", SDL_WINDOWPOS_CENTERED, SDL_WINDOWPOS_CENTERED, 530, 595, SDL_WINDOW_SHOWN);
-    logicalWidth = 530;
-    logicalHeight = 595;
-    SDL_GetWindowSize(window, &logicalWidth, &logicalHeight);
+    window = SDL_CreateWindow("Arcade-SDL2", SDL_WINDOWPOS_CENTERED, SDL_WINDOWPOS_CENTERED, 432, 400, SDL_WINDOW_SHOWN | SDL_WINDOW_ALLOW_HIGHDPI);
     renderer = SDL_CreateRenderer(window, -1, 0);
-    SDL_RenderSetLogicalSize(renderer, logicalWidth, logicalHeight);
-
-    font = TTF_OpenFont("./res/pixel.ttf", 18);
+    font = TTF_OpenFont("./res/pixel.ttf", 30);
     for (auto &entity : entities) {
-        if (entity.second.type == IGameModule::TEXT || entity.second.type == IGameModule::SPRITE_TEXT) {
+        if (entity.second.type == IGameModule::ENTITY_TYPE::SPRITE_TEXT || entity.second.type == IGameModule::ENTITY_TYPE::TEXT) {
             createText(entity.first, entity.second);
         }
-        if (entity.second.type == IGameModule::SPRITE) {
+        if (entity.second.type == IGameModule::ENTITY_TYPE::SPRITE || entity.second.type == IGameModule::ENTITY_TYPE::SPRITE_TEXT) {
             createSprite(entity.first, entity.second);
         }
         entity.second.toUpdate = false;
@@ -56,14 +49,28 @@ void DisplaySdl::stop() {
 void DisplaySdl::update(std::map<std::string, IGameModule::Entity> &entities) {
     for (auto &entity : entities) {
         if (entity.second.toUpdate) {
-            if (entity.second.type == IGameModule::TEXT || entity.second.type == IGameModule::SPRITE_TEXT) {
+            if (entity.second.type == IGameModule::ENTITY_TYPE::TEXT || entity.second.type == IGameModule::ENTITY_TYPE::SPRITE_TEXT) {
                 (entities.find(entity.first) != entities.end()) ? updateText(entity.first, entity.second) : createText(entity.first, entity.second);
             }
-            if (entity.second.type == IGameModule::SPRITE) {
+            if (entity.second.type == IGameModule::ENTITY_TYPE::SPRITE || entity.second.type == IGameModule::ENTITY_TYPE::SPRITE_TEXT) {
                 (entities.find(entity.first) != entities.end()) ? updateSprite(entity.first, entity.second) : createSprite(entity.first, entity.second);
             }
         }
         entity.second.toUpdate = false;
+    }
+    for (auto it = texts.begin(); it != texts.end();) {
+        if (entities.find(it->first) == entities.end()) {
+            it = texts.erase(it);
+        } else {
+            ++it;
+        }
+    }
+    for (auto it = sprites.begin(); it != sprites.end();) {
+        if (entities.find(it->first) == entities.end()) {
+            it = sprites.erase(it);
+        } else {
+            ++it;
+        }
     }
 }
 
@@ -75,7 +82,7 @@ void DisplaySdl::draw() {
         SDL_RenderCopy(renderer, text.second.texture, NULL, &text.second.rect);
     }
     for (auto &sprite: sprites) {
-        SDL_RenderCopy(renderer, sprite.second.texture, NULL, &sprite.second.rect);
+        SDL_RenderCopy(renderer, std::get<0>(textures[sprite.first]), NULL, &sprite.second.rect);
     }
     SDL_RenderPresent(renderer);
 }
@@ -125,16 +132,26 @@ std::string DisplaySdl::getMouseEvent() {
 void DisplaySdl::createText(std::string name, IGameModule::Entity entity) {
     SDL_Color color = colors[entity.color];
     Text text;
-    text.surface = TTF_RenderText_Shaded(font, entity.text.c_str(), color, colors[entity.background_color]);
+    if (entity.type != IGameModule::TEXT)
+        color = {255, 255, 255, 255};
+    if (entity.type != IGameModule::TEXT)
+        text.surface = TTF_RenderText_Shaded(font, entity.text.c_str(), color, {0, 0, 0, 255});
+    else
+        text.surface = TTF_RenderText_Shaded(font, entity.text.c_str(), color, colors[entity.background_color]);
     text.texture = SDL_CreateTextureFromSurface(renderer, text.surface);
-    text.rect = { (int)entity.x * 10, (int)entity.y * 30, 0, 0 };
+    text.rect = { (int)(entity.x * 16) , (int)(entity.y * 32), 0, 0};
     texts[name] = text;
 }
 
 void DisplaySdl::updateText(std::string name, IGameModule::Entity entity) {
-    texts[name].rect = { (int)entity.x * 10, (int)entity.y * 30, 0, 0 };
+    texts[name].rect = { (int)entity.x * 16, (int)entity.y * 32, 0, 0 };
     SDL_Color color = colors[entity.color];
-    texts[name].surface = TTF_RenderText_Shaded(font, entity.text.c_str(), color, colors[entity.background_color]);
+    if (entity.type != IGameModule::TEXT)
+        color = {255, 255, 255, 255};
+    if (entity.type != IGameModule::TEXT)
+        texts[name].surface = TTF_RenderText_Shaded(font, entity.text.c_str(), color, {0, 0, 0, 255});
+    else
+        texts[name].surface = TTF_RenderText_Shaded(font, entity.text.c_str(), color, colors[entity.background_color]);
     texts[name].texture = SDL_CreateTextureFromSurface(renderer, texts[name].surface);
 }
 
@@ -143,16 +160,20 @@ void DisplaySdl::createSprite(std::string name, IGameModule::Entity entity) {
         return;
     Sprite sprite;
     sprite.surface = IMG_Load(entity.file.c_str());
-    sprite.texture = SDL_CreateTextureFromSurface(renderer, sprite.surface);
-    sprite.rect = { (int)entity.xSprite * 10, (int)entity.ySprite * 30, sprite.surface->w, sprite.surface->h};
-    SDL_FreeSurface(sprite.surface);
+    textures[name] = std::make_tuple(SDL_CreateTextureFromSurface(renderer, sprite.surface), entity.file);
+    sprite.rect = { (int)((entity.xSprite * 16) - (sprite.surface->w /4/2)), (int)((entity.ySprite * 32) - (sprite.surface->h /4)), (int)(sprite.surface->w /4), (int)(sprite.surface->h /2)};
     sprites[name] = sprite;
 }
 
 
 
 void DisplaySdl::updateSprite(std::string name, IGameModule::Entity entity) {
-    sprites[name].rect = { (int)entity.xSprite * 10, (int)entity.ySprite * 30, sprites[name].surface->w, sprites[name].surface->h};
+   if (std::get<1>(textures[name]) != entity.file && entity.file != "") {
+        sprites.erase(name);
+        textures.erase(name);
+        createSprite(name, entity);
+    }
+    sprites[name].rect = { (int)((entity.xSprite *16) - (sprites[name].surface->w /4/2)), (int)((entity.ySprite *32) - (sprites[name].surface->h /4)), (int)(sprites[name].surface->w /4), (int)(sprites[name].surface->h /2)};
 }
 
 std::map<std::string, SDL_Color> DisplaySdl::colors = {

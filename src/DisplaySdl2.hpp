@@ -54,6 +54,7 @@ class DisplaySdl : public IDisplayModule {
         std::string _name = "SDL2";
         std::map<std::string, Text> texts;
         std::map<std::string, Sprite> sprites;
+        std::map<std::string, std::tuple<SDL_Texture*, std::string>> textures;
         TTF_Font* font;
         static std::map<std::string, SDL_Color> colors;
 };

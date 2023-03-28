@@ -31,21 +31,21 @@ void LibMenu::init() {
             infos[game] = createEntity("", game, "black", "white", x, y, IGameModule::ENTITY_TYPE::TEXT, 0, 0, 30);
         else
             infos[game] = createEntity("", game, "white", "", x, y, IGameModule::ENTITY_TYPE::TEXT, 0, 0, 30);
-        y += 1;
+        y += 2;
         i++;
     }
     i = 0;
-    y += 1;
+    y += 2;
     infos["GraphList"] = createEntity("", "Graph list:", "white", "", 2, y, IGameModule::ENTITY_TYPE::TEXT, 0, 0, 30);
     y += 2;
     for (auto &graph : graphs) {
         infos[graph] = createEntity("", graph, "white", "", x, y, IGameModule::ENTITY_TYPE::TEXT, 0, 0, 30);
-        y += 1;
+        y += 2;
         i++;
     }
     y += 1;
     infos["Username:"] = createEntity("", "Username:", "white", "", 2, y, IGameModule::ENTITY_TYPE::TEXT, 0, 0, 30);
-    y += 1;
+    y += 2;
     infos["Username"] = createEntity("", "", "white", "", x, y, IGameModule::ENTITY_TYPE::TEXT, 0, 0, 30);
     ySave = y;
 }

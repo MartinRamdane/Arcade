@@ -17,7 +17,7 @@ DisplaySfml::~DisplaySfml()
 }
 
 void DisplaySfml::init(std::map<std::string, IGameModule::Entity> &entities) {
-    sf::VideoMode video({1060, 1190});
+    sf::VideoMode video({854, 784});
     window = std::make_unique<sf::RenderWindow>(video, "Arcade-SFML");
     if (!font.loadFromFile("./res/pixel.ttf"))
         throw "Error on loading Font";
@@ -169,7 +169,7 @@ void DisplaySfml::createText(std::string name, IGameModule::Entity entity) {
     if (std::get<0>(textures[name]))
         texts[name]->setPosition(sf::Vector2f(sprites[name]->getPosition().x + sprites[name]->getLocalBounds().width / 2 - texts[name]->getLocalBounds().width / 2 - sprites[name]->getOrigin().x, sprites[name]->getPosition().y + sprites[name]->getLocalBounds().height / 2 - texts[name]->getLocalBounds().height / 2 - sprites[name]->getOrigin().y));
     else
-        texts[name]->setPosition({entity.xSprite * 20, entity.ySprite * 50});
+        texts[name]->setPosition({entity.xSprite * 16, entity.ySprite * 32});
     if (entity.background_color == "") {
         if (backgroundColors.find(name) != backgroundColors.end())
             backgroundColors.erase(name);
@@ -193,7 +193,8 @@ void DisplaySfml::createSprite(std::string name, IGameModule::Entity entity) {
     sprites[name] = std::make_unique<sf::Sprite>();
     sprites[name]->setOrigin(sf::Vector2f(texture->getSize().x / 2, texture->getSize().y / 2));
     sprites[name]->setTexture(*std::get<0>(textures[name]), true);
-    sprites[name]->setPosition({entity.xSprite * 20, entity.ySprite * 50});
+    sprites[name]->setPosition({entity.xSprite * 16, entity.ySprite * 32});
+    sprites[name]->setScale(0.25f, 0.5f);
 }
 
 void DisplaySfml::updateText(std::string name, IGameModule::Entity entity) {
@@ -204,7 +205,7 @@ void DisplaySfml::updateText(std::string name, IGameModule::Entity entity) {
     if (std::get<0>(textures[name]))
         texts[name]->setPosition(sf::Vector2f(sprites[name]->getPosition().x + sprites[name]->getLocalBounds().width / 2 - texts[name]->getLocalBounds().width / 2 - sprites[name]->getOrigin().x, sprites[name]->getPosition().y + sprites[name]->getLocalBounds().height / 2 - texts[name]->getLocalBounds().height / 2 - sprites[name]->getOrigin().y));
     else
-        texts[name]->setPosition({entity.xSprite * 20, entity.ySprite * 50});
+        texts[name]->setPosition({entity.xSprite * 16, entity.ySprite * 32});
     if (entity.background_color == "") {
         if (backgroundColors.find(name) != backgroundColors.end())
             backgroundColors.erase(name);
@@ -227,7 +228,7 @@ void DisplaySfml::updateSprite(std::string name, IGameModule::Entity entity) {
             throw "Error on loading texture";
     }
     sprites[name]->setTexture(*std::get<0>(textures[name]), true);
-    sprites[name]->setPosition({entity.xSprite * 20, entity.ySprite * 50});
+    sprites[name]->setPosition({entity.xSprite * 16, entity.ySprite * 32});
 }
 
 extern "C" IDisplayModule *create() {
