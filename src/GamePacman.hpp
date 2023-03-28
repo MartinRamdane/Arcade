@@ -42,8 +42,8 @@ class GamePacman: public AGameModule {
         void updateMenu(std::string key){};
         void updateLoose(std::string key){};
         void movePlayer();
-        bool checkCollision(){};
-        void resetFood();
+        bool checkCollision();
+        void resetGame();
 
     private:
         std::vector<std::vector<char>> gameMap;
@@ -52,6 +52,7 @@ class GamePacman: public AGameModule {
         std::map<std::string, std::tuple<int, int>> spawnPos;
         bool canKillGhost;
         bool eatAnimation;
+        int life = 2;
 };
 
 #endif /* !GAME_PACMAN_INCLUDE */
