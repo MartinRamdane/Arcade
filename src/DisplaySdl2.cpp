@@ -27,13 +27,15 @@ void DisplaySdl::init(std::map<std::string, IGameModule::Entity> &entities) {
     renderer = SDL_CreateRenderer(window, -1, 0);
     font = TTF_OpenFont("./res/pixel.ttf", 30);
     for (auto &entity : entities) {
-        if (entity.second.type == IGameModule::ENTITY_TYPE::SPRITE_TEXT || entity.second.type == IGameModule::ENTITY_TYPE::TEXT) {
-            createText(entity.first, entity.second);
+        if (entity.second.toUpdate) {
+            if (entity.second.type == IGameModule::ENTITY_TYPE::SPRITE_TEXT || entity.second.type == IGameModule::ENTITY_TYPE::TEXT) {
+                createText(entity.first, entity.second);
+            }
+            if (entity.second.type == IGameModule::ENTITY_TYPE::SPRITE || entity.second.type == IGameModule::ENTITY_TYPE::SPRITE_TEXT) {
+                createSprite(entity.first, entity.second);
+            }
+            entity.second.toUpdate = false;
         }
-        if (entity.second.type == IGameModule::ENTITY_TYPE::SPRITE || entity.second.type == IGameModule::ENTITY_TYPE::SPRITE_TEXT) {
-            createSprite(entity.first, entity.second);
-        }
-        entity.second.toUpdate = false;
     }
 }
 
@@ -49,14 +51,14 @@ void DisplaySdl::stop() {
 void DisplaySdl::update(std::map<std::string, IGameModule::Entity> &entities) {
     for (auto &entity : entities) {
         if (entity.second.toUpdate) {
-            if (entity.second.type == IGameModule::ENTITY_TYPE::TEXT || entity.second.type == IGameModule::ENTITY_TYPE::SPRITE_TEXT) {
-                (entities.find(entity.first) != entities.end()) ? updateText(entity.first, entity.second) : createText(entity.first, entity.second);
-            }
             if (entity.second.type == IGameModule::ENTITY_TYPE::SPRITE || entity.second.type == IGameModule::ENTITY_TYPE::SPRITE_TEXT) {
-                (entities.find(entity.first) != entities.end()) ? updateSprite(entity.first, entity.second) : createSprite(entity.first, entity.second);
+                (sprites.find(entity.first) != sprites.end()) ? updateSprite(entity.first, entity.second) : createSprite(entity.first, entity.second);
             }
+            if (entity.second.type == IGameModule::ENTITY_TYPE::TEXT || entity.second.type == IGameModule::ENTITY_TYPE::SPRITE_TEXT) {
+                (texts.find(entity.first) != texts.end()) ? updateText(entity.first, entity.second) : createText(entity.first, entity.second);
+            }
+            entity.second.toUpdate = false;
         }
-        entity.second.toUpdate = false;
     }
     for (auto it = texts.begin(); it != texts.end();) {
         if (entities.find(it->first) == entities.end()) {
@@ -139,12 +141,12 @@ void DisplaySdl::createText(std::string name, IGameModule::Entity entity) {
     else
         text.surface = TTF_RenderText_Shaded(font, entity.text.c_str(), color, colors[entity.background_color]);
     text.texture = SDL_CreateTextureFromSurface(renderer, text.surface);
-    text.rect = { (int)(entity.x * 16) , (int)(entity.y * 32), 0, 0};
+    text.rect = { (int)entity.x * 14, (int)entity.y * 31, 0, 0 };
     texts[name] = text;
 }
 
 void DisplaySdl::updateText(std::string name, IGameModule::Entity entity) {
-    texts[name].rect = { (int)entity.x * 16, (int)entity.y * 32, 0, 0 };
+    texts[name].rect ={ (int)entity.x * 14, (int)entity.y * 31, 0, 0 };
     SDL_Color color = colors[entity.color];
     if (entity.type != IGameModule::TEXT)
         color = {255, 255, 255, 255};
