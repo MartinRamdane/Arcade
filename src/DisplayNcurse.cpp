@@ -9,6 +9,7 @@
 
 DisplayNcurse::DisplayNcurse() : displayName("ncurse")
 {
+    pairNb = 2;
 }
 
 DisplayNcurse::~DisplayNcurse()
@@ -34,15 +35,14 @@ void DisplayNcurse::update(std::map<std::string, IGameModule::Entity> &entities)
 
 void DisplayNcurse::draw() {
     clear();
-    int i = 2;
     for (auto &entity : texts) {
         std::tuple<std::string, std::string> color_entity_pair = std::make_tuple(entity.second.color, entity.second.background_color);
         auto color_it = colors_map.find(color_entity_pair);
 
         if (color_it == colors_map.end()) {
-            init_pair(i, colors[entity.second.color], colors[entity.second.background_color]);
-            colors_map[color_entity_pair] = i;
-            i++;
+            colors_map[color_entity_pair] = pairNb;
+            init_pair(pairNb, colors[entity.second.color], colors[entity.second.background_color]);
+            pairNb++;
         }
 
         attron(COLOR_PAIR(colors_map[color_entity_pair]));

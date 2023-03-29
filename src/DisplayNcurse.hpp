@@ -33,6 +33,7 @@ class DisplayNcurse : public IDisplayModule {
         static std::map<std::string, int> colors;
         std::map<std::string, IGameModule::Entity> texts;
         std::map<std::tuple<std::string, std::string>, int> colors_map;
+        int pairNb;
 };
 
 #endif /* !DISPLAY_NCURSE */

@@ -133,6 +133,7 @@ void GamePacman::update(std::string key)
         if (life > 0) {
             life--;
             resetGame();
+            playerDir = UNDEFINED;
         } else {
             exit(84);
         }
@@ -157,7 +158,6 @@ void GamePacman::update(std::string key)
     }
     if (foodScore == 470) {
         resetGame();
-        foodScore = 0;
         playerDir = UNDEFINED;
         infos["player"].text = "C";
     }
