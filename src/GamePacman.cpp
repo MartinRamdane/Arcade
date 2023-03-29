@@ -140,6 +140,13 @@ bool GamePacman::checkCollision()
 
 void GamePacman::update(std::string key)
 {
+    if (key == "r") {
+        infos["score"].toUpdate = true;
+        score = 0;
+        infos["score"].text = std::to_string(score);
+        resetGame();
+        playerDir = UNDEFINED;
+    }
     if (checkCollision()) {
         if (life > 0) {
             life--;
