@@ -57,6 +57,8 @@ class GamePacman: public AGameModule {
         std::chrono::steady_clock::time_point startClock;
         int blinkGhostScared = false;
         std::map<std::string, bool> isGhostScared;
+        std::map<std::string, DIRECTION> ghostsDir;
+        int combo;
 };
 
 #endif /* !GAME_PACMAN_INCLUDE */
