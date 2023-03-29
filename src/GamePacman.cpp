@@ -208,73 +208,79 @@ bool GamePacman::checkCollision()
     return false;
 }
 
-double distance(int x1, int y1, int x2, int y2) {
-    return sqrt(pow(x2 - x1, 2) + pow(y2 - y1, 2));
-}
-
-std::vector<std::pair<int, int>> GamePacman::getFreeDirections() {
-    std::vector<std::pair<int, int>> freeDirections;
-    if (gameMap[infos["blinky"].y][infos["blinky"].x + 1] != '#' && gameMap[infos["blinky"].y][infos["blinky"].x + 1] != '-') {
-        freeDirections.push_back({1, 0});
-    }
-    if (gameMap[infos["blinky"].y][infos["blinky"].x - 1] != '#' && gameMap[infos["blinky"].y][infos["blinky"].x - 1] != '-') {
-        freeDirections.push_back({-1, 0});
-    }
-    if (gameMap[infos["blinky"].y + 1][infos["blinky"].x] != '#' && gameMap[infos["blinky"].y + 1][infos["blinky"].x] != '-') {
-        freeDirections.push_back({0, 1});
-    }
-    if (gameMap[infos["blinky"].y - 1][infos["blinky"].x] != '#' && gameMap[infos["blinky"].y - 1][infos["blinky"].x] != '-') {
-        freeDirections.push_back({0, -1});
-    }
-    return freeDirections;
-}
-
-// the algorithm for make the ghosts follow the player (A*)
 void GamePacman::ghostChased() {
     int dx = infos["player"].x - infos["blinky"].x;
     int dy = infos["player"].y - infos["blinky"].y;
-    bool moved = false;
+    int nextX = infos["blinky"].x;
+    int nextY = infos["blinky"].y;
+
     if (abs(dx) > abs(dy)) {
-        if (dx > 0 && gameMap[infos["blinky"].y][infos["blinky"].x + 1] != '#' && gameMap[infos["blinky"].y][infos["blinky"].x + 1] != '-') {
-            infos["blinky"].x++;
-            moved = true;
-        } else if (dx < 0 && gameMap[infos["blinky"].y][infos["blinky"].x - 1] != '#' && gameMap[infos["blinky"].y][infos["blinky"].x - 1] != '-') {
-            infos["blinky"].x--;
-            moved = true;
-        } else {
-            if (dy > 0 && gameMap[infos["blinky"].y + 1][infos["blinky"].x] != '#' && gameMap[infos["blinky"].y + 1][infos["blinky"].x] != '-') {
-                infos["blinky"].y++;
-                moved = true;
-            } else if (dy < 0 && gameMap[infos["blinky"].y - 1][infos["blinky"].x] != '#' && gameMap[infos["blinky"].y - 1][infos["blinky"].x] != '-') {
-                infos["blinky"].y--;
-                moved = true;
-            }
+        nextX += (dx > 0) ? 1 : -1;
+    } else {
+        nextY += (dy > 0) ? 1 : -1;
+    }
+
+    bool isNextPositionValid = true;
+    std::queue<std::pair<int, int>> tempQueue = lastPositions;
+    while (!tempQueue.empty()) {
+        if (tempQueue.front().first == nextX && tempQueue.front().second == nextY) {
+            isNextPositionValid = false;
+            break;
+        }
+        tempQueue.pop();
+    }
+
+    if (isNextPositionValid && gameMap[nextY][nextX] != '#' && gameMap[nextY][nextX] != '-') {
+        infos["blinky"].x = nextX;
+        infos["blinky"].y = nextY;
+        lastPositions.push(std::make_pair(nextX, nextY));
+        if (lastPositions.size() > 3) {
+            lastPositions.pop();
         }
     } else {
-        if (dy > 0 && gameMap[infos["blinky"].y + 1][infos["blinky"].x] != '#' && gameMap[infos["blinky"].y + 1][infos["blinky"].x] != '-') {
-            infos["blinky"].y++;
-            moved = true;
-        } else if (dy < 0 && gameMap[infos["blinky"].y - 1][infos["blinky"].x] != '#' && gameMap[infos["blinky"].y - 1][infos["blinky"].x] != '-') {
-            infos["blinky"].y--;
-            moved = true;
-        } else {
-            if (dx > 0 && gameMap[infos["blinky"].y][infos["blinky"].x + 1] != '#' && gameMap[infos["blinky"].y][infos["blinky"].x + 1] != '-') {
-                infos["blinky"].x++;
-                moved = true;
-            } else if (dx > 0 && gameMap[infos["blinky"].y][infos["blinky"].x + 1] != '#' && gameMap[infos["blinky"].y][infos["blinky"].x + 1] != '-') {
-                infos["blinky"].x++;
-                moved = true;
-            } else if (dx < 0 && gameMap[infos["blinky"].y][infos["blinky"].x - 1] != '#' && gameMap[infos["blinky"].y][infos["blinky"].x - 1] != '-') {
-                infos["blinky"].x--;
-                moved = true;
-            }
-        }
-        if (!moved) {
-            std::vector<std::pair<int, int>> freeDirections = getFreeDirections();
-            if (!freeDirections.empty()) {
-                std::pair<int, int> randomDirection = freeDirections[rand() % freeDirections.size()];
-                infos["blinky"].x += randomDirection.first;
-                infos["blinky"].y += randomDirection.second;
+        bool canMoveUp = gameMap[infos["blinky"].y - 1][infos["blinky"].x] != '#' && gameMap[infos["blinky"].y - 1][infos["blinky"].x] != '-';
+        bool canMoveDown = gameMap[infos["blinky"].y + 1][infos["blinky"].x] != '#' && gameMap[infos["blinky"].y + 1][infos["blinky"].x] != '-';
+        bool canMoveLeft = gameMap[infos["blinky"].y][infos["blinky"].x - 1] != '#' && gameMap[infos["blinky"].y][infos["blinky"].x - 1] != '-';
+        bool canMoveRight = gameMap[infos["blinky"].y][infos["blinky"].x + 1] != '#' && gameMap[infos["blinky"].y][infos["blinky"].x + 1] != '-';
+
+        if (canMoveUp || canMoveDown || canMoveLeft || canMoveRight) {
+            while (true) {
+                int randDirection = rand() % 4;
+                if (randDirection == 0 && canMoveUp) {
+                    nextX = infos["blinky"].x;
+                    nextY = infos["blinky"].y - 1;
+                } else if (randDirection == 1 && canMoveDown) {
+                    nextX = infos["blinky"].x;
+                    nextY = infos["blinky"].y + 1;
+                } else if (randDirection == 2 && canMoveLeft) {
+                    nextX = infos["blinky"].x - 1;
+                    nextY = infos["blinky"].y;
+                } else if (randDirection == 3 && canMoveRight) {
+                    nextX = infos["blinky"].x + 1;
+                    nextY = infos["blinky"].y;
+                } else {
+                    continue;
+                }
+
+                isNextPositionValid = true;
+                tempQueue = lastPositions;
+                while (!tempQueue.empty()) {
+                    if (tempQueue.front().first == nextX && tempQueue.front().second == nextY) {
+                        isNextPositionValid = false;
+                        break;
+                    }
+                    tempQueue.pop();
+                }
+
+                if (isNextPositionValid) {
+                    infos["blinky"].x = nextX;
+                    infos["blinky"].y = nextY;
+                    lastPositions.push(std::make_pair(nextX, nextY));
+                    if (lastPositions.size() > 3) {
+                        lastPositions.pop();
+                    }
+                    break;
+                }
             }
         }
     }

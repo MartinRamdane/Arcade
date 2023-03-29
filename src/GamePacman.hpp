@@ -18,6 +18,7 @@
 #include <tuple>
 #include <memory>
 #include <math.h>
+#include <queue>
 
 #define MARGIN_TOP 3
 #define MARGIN_LEFT 2
@@ -46,7 +47,6 @@ class GamePacman: public AGameModule {
         bool checkCollision();
         void resetGame();
         void ghostChased();
-        std::vector<std::pair<int, int>> getFreeDirections();
 
     private:
         std::vector<std::vector<char>> gameMap;
@@ -62,6 +62,7 @@ class GamePacman: public AGameModule {
         std::map<std::string, bool> isGhostScared;
         std::map<std::string, DIRECTION> ghostsDir;
         int combo;
+        std::queue<std::pair<int, int>> lastPositions;
 };
 
 #endif /* !GAME_PACMAN_INCLUDE */
