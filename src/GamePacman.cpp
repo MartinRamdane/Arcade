@@ -90,7 +90,7 @@ void GamePacman::resetGame() {
         }
         if (info.first.find("power") == 0) {
             infos[info.first].toUpdate = true;
-            infos[info.first].text = "*";
+            infos[info.first].text = "●";
             infos[info.first].file = "./res/pacman/pacman_Power.png";
         }
     }
@@ -135,6 +135,8 @@ bool GamePacman::checkCollision()
                     infos["pinky"].xSprite = std::get<0>(spawnPos["pinky"]);
                     infos["pinky"].ySprite = std::get<1>(spawnPos["pinky"]);
                     infos["pinky"].file = "./res/pacman/pinky_up.png";
+                    infos["pinky"].text = "A";
+                    isGhostScared["pinky"] = false;
                     return false;
                 }
             }
@@ -154,6 +156,8 @@ bool GamePacman::checkCollision()
                     infos["inky"].xSprite = std::get<0>(spawnPos["inky"]);
                     infos["inky"].ySprite = std::get<1>(spawnPos["inky"]);
                     infos["inky"].file = "./res/pacman/inky_up.png";
+                    infos["inky"].text = "A";
+                    isGhostScared["inky"] = false;
                     return false;
                 }
             }
@@ -173,6 +177,8 @@ bool GamePacman::checkCollision()
                     infos["blinky"].xSprite = std::get<0>(spawnPos["blinky"]);
                     infos["blinky"].ySprite = std::get<1>(spawnPos["blinky"]);
                     infos["blinky"].file = "./res/pacman/blinky_right.png";
+                    infos["blinky"].text = "A";
+                    isGhostScared["blinky"] = false;
                     return false;
                 }
             }
@@ -192,6 +198,8 @@ bool GamePacman::checkCollision()
                     infos["clyde"].xSprite = std::get<0>(spawnPos["clyde"]);
                     infos["clyde"].ySprite = std::get<1>(spawnPos["clyde"]);
                     infos["clyde"].file = "./res/pacman/clyde_up.png";
+                    infos["clyde"].text = "A";
+                    isGhostScared["clyde"] = false;
                     return false;
                 }
             }
@@ -238,7 +246,7 @@ void GamePacman::update(std::string key)
                 std::cout << "touch power" << std::endl;
                 infos[info.first].toUpdate = true;
                 infos["score"].toUpdate = true;
-                infos[info.first].text = " ";
+                infos[info.first].text = infos["player"].text;
                 infos[info.first].file = "./res/pacman/pacman_food_empty.png";
                 score += 50;
                 infos["score"].text = std::to_string(score);
@@ -274,9 +282,11 @@ void GamePacman::update(std::string key)
                     if (blinkGhostScared) {
                         infos[ghost.first].toUpdate = true;
                         infos[ghost.first].file = "./res/pacman/ghost_waiting.png";
+                        infos[ghost.first].text = "A";
                     } else {
                         infos[ghost.first].toUpdate = true;
                         infos[ghost.first].file = "./res/pacman/ghost_scared.png";
+                        infos[ghost.first].text = "S";
                     }
                 }
             }
@@ -291,6 +301,10 @@ void GamePacman::update(std::string key)
             infos["blinky"].file = "./res/pacman/blinky_right.png";
             infos["inky"].file = "./res/pacman/inky_right.png";
             infos["pinky"].file = "./res/pacman/pinky_right.png";
+            infos["clyde"].text = "A";
+            infos["pinky"].text = "A";
+            infos["inky"].text = "A";
+            infos["blinky"].text = "A";
             isGhostScared["blinky"] = false;
             isGhostScared["inky"] = false;
             isGhostScared["pinky"] = false;
