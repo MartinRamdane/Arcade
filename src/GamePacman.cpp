@@ -107,6 +107,10 @@ void GamePacman::resetGame() {
     // sprite
     infos["player"].xSprite = std::get<0>(spawnPos["player"]);
     infos["player"].ySprite = std::get<1>(spawnPos["player"]);
+    infos["blinky"].toUpdate = true;
+    infos["inky"].toUpdate = true;
+    infos["pinky"].toUpdate = true;
+    infos["clyde"].toUpdate = true;
     infos["blinky"].xSprite = std::get<0>(spawnPos["blinky"]);
     infos["blinky"].ySprite = std::get<1>(spawnPos["blinky"]);
     infos["inky"].xSprite = std::get<0>(spawnPos["inky"]);
@@ -115,6 +119,15 @@ void GamePacman::resetGame() {
     infos["pinky"].ySprite = std::get<1>(spawnPos["pinky"]);
     infos["clyde"].xSprite = std::get<0>(spawnPos["clyde"]);
     infos["clyde"].ySprite = std::get<1>(spawnPos["clyde"]);
+    infos["blinky"].file = "./res/pacman/blinky_right.png";
+    infos["inky"].file = "./res/pacman/inky_up.png";
+    infos["pinky"].file = "./res/pacman/pinky_up.png";
+    infos["clyde"].file = "./res/pacman/clyde_up.png";
+    isGhostScared["blinky"] = false;
+    isGhostScared["inky"] = false;
+    isGhostScared["pinky"] = false;
+    isGhostScared["clyde"] = false;
+    canKillGhost = false;
 }
 
 bool GamePacman::checkCollision()
@@ -230,7 +243,7 @@ void GamePacman::ghostChased() {
         tempQueue.pop();
     }
 
-    if (isNextPositionValid && gameMap[nextY][nextX] != '#' && gameMap[nextY][nextX] != '-' && playerDir != UNDEFINED) {
+    if (isNextPositionValid && gameMap[nextY][nextX] != '#' && gameMap[nextY][nextX] != '-') {
         infos["blinky"].x = nextX;
         infos["blinky"].y = nextY;
         lastPositions.push(std::make_pair(nextX, nextY));
@@ -449,7 +462,8 @@ void GamePacman::update(std::string key)
         }
     }
     movePlayer();
-    ghostChased();
+    if (playerDir != UNDEFINED)
+        ghostChased();
 }
 
 void GamePacman::movePlayer()
