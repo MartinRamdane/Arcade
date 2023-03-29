@@ -27,19 +27,25 @@ void DisplaySdl::init(std::map<std::string, IGameModule::Entity> &entities) {
     renderer = SDL_CreateRenderer(window, -1, 0);
     font = TTF_OpenFont("./res/pixel.ttf", 30);
     for (auto &entity : entities) {
-        if (entity.second.toUpdate) {
-            if (entity.second.type == IGameModule::ENTITY_TYPE::SPRITE_TEXT || entity.second.type == IGameModule::ENTITY_TYPE::TEXT) {
-                createText(entity.first, entity.second);
-            }
-            if (entity.second.type == IGameModule::ENTITY_TYPE::SPRITE || entity.second.type == IGameModule::ENTITY_TYPE::SPRITE_TEXT) {
-                createSprite(entity.first, entity.second);
-            }
-            entity.second.toUpdate = false;
+        if (entity.second.type == IGameModule::ENTITY_TYPE::SPRITE || entity.second.type == IGameModule::ENTITY_TYPE::SPRITE_TEXT) {
+            createSprite(entity.first, entity.second);
         }
+        if (entity.second.type == IGameModule::ENTITY_TYPE::SPRITE_TEXT || entity.second.type == IGameModule::ENTITY_TYPE::TEXT) {
+            createText(entity.first, entity.second);
+        }
+        entity.second.toUpdate = false;
     }
 }
 
 void DisplaySdl::stop() {
+    for (auto &sprite : sprites) {
+        SDL_FreeSurface(sprite.second.surface);
+        SDL_DestroyTexture(std::get<0>(textures[sprite.first]));
+    }
+    for (auto &text : texts) {
+        SDL_FreeSurface(text.second.surface);
+        SDL_DestroyTexture(text.second.texture);
+    }
     TTF_CloseFont(font);
     SDL_DestroyRenderer(renderer);
     SDL_DestroyWindow(window);
