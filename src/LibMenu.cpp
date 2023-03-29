@@ -137,12 +137,14 @@ void LibMenu::inputUser(std::string key) {
         infos["Username"].text.pop_back();
         infos["Username"].toUpdate = true;
         infos["InputIndicator"].x -= 1;
+        infos["InputIndicator"].xSprite = infos["InputIndicator"].x + 0.5;
         infos["InputIndicator"].toUpdate = true;
     }
     if (((key >= "a" && key <= "z") || (key >= "A" && key <= "Z") || (key >= "0" && key <= "9") || key == "_" || key == "-") && (key != "BACKSPACE")) {
         infos["Username"].text += key;
         infos["Username"].toUpdate = true;
         infos["InputIndicator"].x += 1;
+        infos["InputIndicator"].xSprite = infos["InputIndicator"].x + 0.5;
         infos["InputIndicator"].toUpdate = true;
     }
 }

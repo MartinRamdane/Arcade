@@ -13,6 +13,7 @@
 #include <map>
 #include <vector>
 #include <map>
+#include <unistd.h>
 
 class LibMenu : public AGameModule {
     public:

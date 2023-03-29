@@ -72,7 +72,7 @@ GamePacman::GamePacman()
         x = 0;
     }
     infos["scoreText"] = createEntity("", "Score: ", "white", "", 2, y + 1, ENTITY_TYPE::TEXT, 0, y, 30);
-    infos["score"] = createEntity("", std::to_string(score), "white", "", 10, y + 1, ENTITY_TYPE::TEXT, 15, y, 30);
+    infos["score"] = createEntity("", std::to_string(score), "white", "", 12, y + 1, ENTITY_TYPE::TEXT, 15, y, 30);
     infos["score"].toUpdate = true;
 }
 
