@@ -153,8 +153,6 @@ void GamePacman::update(std::string key)
     infos["player"].toUpdate = true;
     for (auto &info: infos) {
         if (info.first.find("food") == 0) {
-            if (info.second.toUpdate)
-                info.second.toUpdate = false;
             if (info.second.x == infos["player"].x && info.second.y == infos["player"].y && info.second.text == ".") {
                 infos[info.first].toUpdate = true;
                 infos["score"].toUpdate = true;
