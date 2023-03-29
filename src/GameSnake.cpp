@@ -14,6 +14,15 @@ GameSnake::GameSnake()
     gameStatus = IGameModule::GAME_STATUS::MENU;
     selectMenu = 1;
     hasMeal = true;
+    initArea();
+    initMenu();
+}
+
+GameSnake::~GameSnake()
+{
+}
+
+void GameSnake::initArea() {
     int nbWalls = 1;
     int wallX = MARGIN_LEFT;
     int wallY = MARGIN_TOP;
@@ -40,11 +49,6 @@ GameSnake::GameSnake()
         wallY++;
         nbWalls++;
     }
-    initMenu();
-}
-
-GameSnake::~GameSnake()
-{
 }
 
 void GameSnake::startGame(std::string username)
@@ -231,6 +235,13 @@ void GameSnake::updateLoose(std::string key)
 
 void GameSnake::updateGame(std::string key)
 {
+    if (key == "r") {
+        score = 0;
+        infos.clear();
+        initArea();
+        initGame();
+        return;
+    }
     if (checkCollision() == true) {
         initLoose();
         gameStatus = IGameModule::GAME_STATUS::FINISHED;

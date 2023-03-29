@@ -38,6 +38,7 @@ class GameSnake: public AGameModule {
         GameSnake();
         ~GameSnake();
         void startGame(std::string username);
+        void initArea();
         bool isGameOver() {return false;};
         void update(std::string key);
         void moveSnake();
