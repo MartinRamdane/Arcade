@@ -138,6 +138,81 @@ bool GamePacman::checkCollision()
     return false;
 }
 
+double distance(int x1, int y1, int x2, int y2) {
+    return sqrt(pow(x2 - x1, 2) + pow(y2 - y1, 2));
+}
+
+std::vector<std::pair<int, int>> GamePacman::getFreeDirections() {
+    std::vector<std::pair<int, int>> freeDirections;
+    if (gameMap[infos["blinky"].y][infos["blinky"].x + 1] != '#' && gameMap[infos["blinky"].y][infos["blinky"].x + 1] != '-') {
+        freeDirections.push_back({1, 0});
+    }
+    if (gameMap[infos["blinky"].y][infos["blinky"].x - 1] != '#' && gameMap[infos["blinky"].y][infos["blinky"].x - 1] != '-') {
+        freeDirections.push_back({-1, 0});
+    }
+    if (gameMap[infos["blinky"].y + 1][infos["blinky"].x] != '#' && gameMap[infos["blinky"].y + 1][infos["blinky"].x] != '-') {
+        freeDirections.push_back({0, 1});
+    }
+    if (gameMap[infos["blinky"].y - 1][infos["blinky"].x] != '#' && gameMap[infos["blinky"].y - 1][infos["blinky"].x] != '-') {
+        freeDirections.push_back({0, -1});
+    }
+    return freeDirections;
+}
+
+// the algorithm for make the ghosts follow the player (A*)
+void GamePacman::ghostChased() {
+    int dx = infos["player"].x - infos["blinky"].x;
+    int dy = infos["player"].y - infos["blinky"].y;
+    bool moved = false;
+    if (abs(dx) > abs(dy)) {
+        if (dx > 0 && gameMap[infos["blinky"].y][infos["blinky"].x + 1] != '#' && gameMap[infos["blinky"].y][infos["blinky"].x + 1] != '-') {
+            infos["blinky"].x++;
+            moved = true;
+        } else if (dx < 0 && gameMap[infos["blinky"].y][infos["blinky"].x - 1] != '#' && gameMap[infos["blinky"].y][infos["blinky"].x - 1] != '-') {
+            infos["blinky"].x--;
+            moved = true;
+        } else {
+            if (dy > 0 && gameMap[infos["blinky"].y + 1][infos["blinky"].x] != '#' && gameMap[infos["blinky"].y + 1][infos["blinky"].x] != '-') {
+                infos["blinky"].y++;
+                moved = true;
+            } else if (dy < 0 && gameMap[infos["blinky"].y - 1][infos["blinky"].x] != '#' && gameMap[infos["blinky"].y - 1][infos["blinky"].x] != '-') {
+                infos["blinky"].y--;
+                moved = true;
+            }
+        }
+    } else {
+        if (dy > 0 && gameMap[infos["blinky"].y + 1][infos["blinky"].x] != '#' && gameMap[infos["blinky"].y + 1][infos["blinky"].x] != '-') {
+            infos["blinky"].y++;
+            moved = true;
+        } else if (dy < 0 && gameMap[infos["blinky"].y - 1][infos["blinky"].x] != '#' && gameMap[infos["blinky"].y - 1][infos["blinky"].x] != '-') {
+            infos["blinky"].y--;
+            moved = true;
+        } else {
+            if (dx > 0 && gameMap[infos["blinky"].y][infos["blinky"].x + 1] != '#' && gameMap[infos["blinky"].y][infos["blinky"].x + 1] != '-') {
+                infos["blinky"].x++;
+                moved = true;
+            } else if (dx > 0 && gameMap[infos["blinky"].y][infos["blinky"].x + 1] != '#' && gameMap[infos["blinky"].y][infos["blinky"].x + 1] != '-') {
+                infos["blinky"].x++;
+                moved = true;
+            } else if (dx < 0 && gameMap[infos["blinky"].y][infos["blinky"].x - 1] != '#' && gameMap[infos["blinky"].y][infos["blinky"].x - 1] != '-') {
+                infos["blinky"].x--;
+                moved = true;
+            }
+        }
+        if (!moved) {
+            std::vector<std::pair<int, int>> freeDirections = getFreeDirections();
+            if (!freeDirections.empty()) {
+                std::pair<int, int> randomDirection = freeDirections[rand() % freeDirections.size()];
+                infos["blinky"].x += randomDirection.first;
+                infos["blinky"].y += randomDirection.second;
+            }
+        }
+    }
+    infos["blinky"].xSprite = infos["blinky"].x;
+    infos["blinky"].ySprite = infos["blinky"].y;
+    infos["blinky"].toUpdate = true;
+}
+
 void GamePacman::update(std::string key)
 {
     if (key == "r") {
@@ -227,6 +302,7 @@ void GamePacman::update(std::string key)
         }
     }
     movePlayer();
+    ghostChased();
 }
 
 void GamePacman::movePlayer()
