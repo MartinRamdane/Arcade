@@ -36,7 +36,7 @@ void Core::startMenu(std::string lib) {
     _graphLoader = std::make_unique<DLLoader<IDisplayModule>>(lib);
     for (auto ite = graphs.begin(); ite != graphs.end(); ite++) {
         if (*ite == lib) {
-            it = ite;
+            itGraph = ite;
             break;
         }
     }
@@ -63,7 +63,13 @@ void Core::startMenu(std::string lib) {
     _graphLoader = std::make_unique<DLLoader<IDisplayModule>>(menu->getGraphChoice());
     for (auto ite = graphs.begin(); ite != graphs.end(); ite++) {
         if (*ite == menu->getGraphChoice()) {
-            it = ite;
+            itGraph = ite;
+            break;
+        }
+    }
+    for (auto ite = games.begin(); ite != games.end(); ite++) {
+        if (*ite == menu->getGameChoice()) {
+            itGame = ite;
             break;
         }
     }
@@ -75,13 +81,24 @@ void Core::startMenu(std::string lib) {
 void Core::switchLib(IGameModule *lib) {
     _display->stop();
     _graphLoader.release();
-    it++;
-    if (it == graphs.end())
-        it = graphs.begin();
-    _graphLoader = std::make_unique<DLLoader<IDisplayModule>>(*it);
+    itGraph++;
+    if (itGraph == graphs.end())
+        itGraph = graphs.begin();
+    _graphLoader = std::make_unique<DLLoader<IDisplayModule>>(*itGraph);
     _display.release();
     _display = std::unique_ptr<IDisplayModule>(_graphLoader->getInstance());
     _display->init(lib->getInfos());
+}
+
+void Core::switchGame(IGameModule *lib) {
+    _game.release();
+    _gameLoader.release();
+    itGame++;
+    if (itGame == games.end())
+        itGame = games.begin();
+    _gameLoader = std::make_unique<DLLoader<IGameModule>>(*itGame);
+    _game = std::unique_ptr<IGameModule>(_gameLoader->getInstance());
+    _game->startGame(_username);
 }
 
 void Core::mainloop() {
@@ -97,10 +114,12 @@ void Core::mainloop() {
             _display.release();
             _gameLoader.release();
             _game.release();
-            startMenu(*it);
+            startMenu(*itGraph);
         }
         if (event == "-")
             stop();
+        if (event == "n")
+            switchGame(_game.get());
         std::this_thread::sleep_for(std::chrono::milliseconds(64));
         _game->update(event);
     }

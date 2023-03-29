@@ -28,6 +28,7 @@ class Core {
         void startMenu(std::string lib);
         void mainloop();
         void switchLib(IGameModule *lib);
+        void switchGame(IGameModule *lib);
 
     protected:
     private:
@@ -36,7 +37,8 @@ class Core {
         std::unique_ptr<IGameModule> _game;
         std::vector<std::string> games;
         std::vector<std::string> graphs;
-        std::vector<std::string>::iterator it;
+        std::vector<std::string>::iterator itGraph;
+        std::vector<std::string>::iterator itGame;
         std::string _username;
         std::unique_ptr<DLLoader<IGameModule>> _gameLoader;
         std::unique_ptr<DLLoader<IDisplayModule>> _graphLoader;
