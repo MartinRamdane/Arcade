@@ -114,22 +114,22 @@ void GamePacman::resetGame() {
 bool GamePacman::checkCollision()
 {
     for (auto &info: infos) {
-        if (info.first.find("pinky") == 0 && !canKillGhost) {
+        if (info.first.find("pinky") == 0 && !isGhostScared["pinky"]) {
             if (info.second.x == infos["player"].x && info.second.y == infos["player"].y) {
                 return true;
             }
         }
-        if (info.first.find("inky") == 0 && !canKillGhost) {
+        if (info.first.find("inky") == 0 && !isGhostScared["inky"]) {
             if (info.second.x == infos["player"].x && info.second.y == infos["player"].y) {
                 return true;
             }
         }
-        if (info.first.find("blinky") == 0 && !canKillGhost) {
+        if (info.first.find("blinky") == 0 && !isGhostScared["blinky"]) {
             if (info.second.x == infos["player"].x && info.second.y == infos["player"].y) {
                 return true;
             }
         }
-        if (info.first.find("clyde") == 0 && !canKillGhost) {
+        if (info.first.find("clyde") == 0 && !isGhostScared["clyde"]) {
             if (info.second.x == infos["player"].x && info.second.y == infos["player"].y) {
                 return true;
             }
@@ -229,6 +229,10 @@ void GamePacman::update(std::string key)
             infos["blinky"].file = "./res/pacman/blinky_right.png";
             infos["inky"].file = "./res/pacman/inky_right.png";
             infos["pinky"].file = "./res/pacman/pinky_right.png";
+            isGhostScared["blinky"] = false;
+            isGhostScared["inky"] = false;
+            isGhostScared["pinky"] = false;
+            isGhostScared["clyde"] = false;
             canKillGhost = false;
         }
     }
