@@ -13,6 +13,8 @@ GamePacman::GamePacman()
     areaHeight = 20;
     gameStatus = IGameModule::GAME_STATUS::MENU;
     selectMenu = 1;
+    combo = 1;
+    elapsed_seconds = 0;
     int nbWalls = 1, nbFoods = 1, nbPower = 1, nbBarrer = 1;
     playerDir = UNDEFINED;
     std::ifstream file("./res/pacman/pacmanMap.txt");
@@ -27,7 +29,6 @@ GamePacman::GamePacman()
         file.close();
     }
 
-    // Utilisation des lignes
     for (auto ligne : gameMap) {
         for (auto c : ligne) {
             if (c == '#') {
@@ -87,6 +88,11 @@ void GamePacman::resetGame() {
             infos[info.first].text = ".";
             infos[info.first].file = "./res/pacman/pacman_food.png";
         }
+        if (info.first.find("power") == 0) {
+            infos[info.first].toUpdate = true;
+            infos[info.first].text = "●";
+            infos[info.first].file = "./res/pacman/pacman_Power.png";
+        }
     }
     infos["player"].x = std::get<0>(spawnPos["player"]);
     infos["player"].y = std::get<1>(spawnPos["player"]);
@@ -114,24 +120,88 @@ void GamePacman::resetGame() {
 bool GamePacman::checkCollision()
 {
     for (auto &info: infos) {
-        if (info.first.find("pinky") == 0 && !canKillGhost) {
+        if (info.first.find("pinky") == 0) {
             if (info.second.x == infos["player"].x && info.second.y == infos["player"].y) {
-                return true;
+                if (!isGhostScared["pinky"]) {
+                    return true;
+                } else {
+                    combo += 2;
+                    score = score + (100 * combo);
+                    infos["score"].toUpdate = true;
+                    infos["score"].text = std::to_string(score + combo);
+                    infos["pinky"].toUpdate = true;
+                    infos["pinky"].x = std::get<0>(spawnPos["pinky"]);
+                    infos["pinky"].y = std::get<1>(spawnPos["pinky"]);
+                    infos["pinky"].xSprite = std::get<0>(spawnPos["pinky"]);
+                    infos["pinky"].ySprite = std::get<1>(spawnPos["pinky"]);
+                    infos["pinky"].file = "./res/pacman/pinky_up.png";
+                    infos["pinky"].text = "A";
+                    isGhostScared["pinky"] = false;
+                    return false;
+                }
             }
         }
-        if (info.first.find("inky") == 0 && !canKillGhost) {
+        if (info.first.find("inky") == 0) {
             if (info.second.x == infos["player"].x && info.second.y == infos["player"].y) {
-                return true;
+                if (!isGhostScared["inky"]) {
+                    return true;
+                } else {
+                    combo += 2;
+                    score = score + (100 * combo);
+                    infos["score"].toUpdate = true;
+                    infos["score"].text = std::to_string(score + combo);
+                    infos["inky"].toUpdate = true;
+                    infos["inky"].x = std::get<0>(spawnPos["inky"]);
+                    infos["inky"].y = std::get<1>(spawnPos["inky"]);
+                    infos["inky"].xSprite = std::get<0>(spawnPos["inky"]);
+                    infos["inky"].ySprite = std::get<1>(spawnPos["inky"]);
+                    infos["inky"].file = "./res/pacman/inky_up.png";
+                    infos["inky"].text = "A";
+                    isGhostScared["inky"] = false;
+                    return false;
+                }
             }
         }
-        if (info.first.find("blinky") == 0 && !canKillGhost) {
+        if (info.first.find("blinky") == 0) {
             if (info.second.x == infos["player"].x && info.second.y == infos["player"].y) {
-                return true;
+                if (!isGhostScared["blinky"]) {
+                    return true;
+                } else {
+                    combo += 2;
+                    score = score + (100 * combo);
+                    infos["score"].toUpdate = true;
+                    infos["score"].text = std::to_string(score + combo);
+                    infos["blinky"].toUpdate = true;
+                    infos["blinky"].x = std::get<0>(spawnPos["blinky"]);
+                    infos["blinky"].y = std::get<1>(spawnPos["blinky"]);
+                    infos["blinky"].xSprite = std::get<0>(spawnPos["blinky"]);
+                    infos["blinky"].ySprite = std::get<1>(spawnPos["blinky"]);
+                    infos["blinky"].file = "./res/pacman/blinky_right.png";
+                    infos["blinky"].text = "A";
+                    isGhostScared["blinky"] = false;
+                    return false;
+                }
             }
         }
-        if (info.first.find("clyde") == 0 && !canKillGhost) {
+        if (info.first.find("clyde") == 0 ) {
             if (info.second.x == infos["player"].x && info.second.y == infos["player"].y) {
-                return true;
+                if (!isGhostScared["clyde"]) {
+                    return true;
+                } else {
+                    combo += 2;
+                    score = score + (100 * combo);
+                    infos["score"].toUpdate = true;
+                    infos["score"].text = std::to_string(score + combo);
+                    infos["clyde"].toUpdate = true;
+                    infos["clyde"].x = std::get<0>(spawnPos["clyde"]);
+                    infos["clyde"].y = std::get<1>(spawnPos["clyde"]);
+                    infos["clyde"].xSprite = std::get<0>(spawnPos["clyde"]);
+                    infos["clyde"].ySprite = std::get<1>(spawnPos["clyde"]);
+                    infos["clyde"].file = "./res/pacman/clyde_up.png";
+                    infos["clyde"].text = "A";
+                    isGhostScared["clyde"] = false;
+                    return false;
+                }
             }
         }
     }
@@ -245,6 +315,77 @@ void GamePacman::update(std::string key)
                 infos["score"].text = std::to_string(score);
                 break;
             }
+        }
+        if (info.first.find("power") == 0) {
+            if (info.second.x == infos["player"].x && info.second.y == infos["player"].y && info.second.text == "●") {
+                std::cout << "touch power" << std::endl;
+                infos[info.first].toUpdate = true;
+                infos["score"].toUpdate = true;
+                infos[info.first].text = infos["player"].text;
+                infos[info.first].file = "./res/pacman/pacman_food_empty.png";
+                score += 50;
+                infos["score"].text = std::to_string(score);
+                canKillGhost = true;
+                infos["clyde"].toUpdate = true;
+                infos["pinky"].toUpdate = true;
+                infos["inky"].toUpdate = true;
+                infos["blinky"].toUpdate = true;
+                infos["clyde"].file = "./res/pacman/ghost_scared.png";
+                infos["pinky"].file = "./res/pacman/ghost_scared.png";
+                infos["inky"].file = "./res/pacman/ghost_scared.png";
+                infos["blinky"].file = "./res/pacman/ghost_scared.png";
+                infos["clyde"].text = "S";
+                infos["pinky"].text = "S";
+                infos["inky"].text = "S";
+                infos["blinky"].text = "S";
+                isGhostScared["blinky"] = true;
+                isGhostScared["inky"] = true;
+                isGhostScared["pinky"] = true;
+                isGhostScared["clyde"] = true;
+                startClock = std::chrono::steady_clock::now();
+                break;
+            }
+        }
+    }
+    if (canKillGhost) {
+        auto current = std::chrono::steady_clock::now();
+        elapsed_seconds = std::chrono::duration_cast<std::chrono::seconds>(current - startClock).count();
+        if (elapsed_seconds >= 8) {
+            blinkGhostScared = !blinkGhostScared;
+            for (auto &ghost: isGhostScared) {
+                if (ghost.second) {
+                    if (blinkGhostScared) {
+                        infos[ghost.first].toUpdate = true;
+                        infos[ghost.first].file = "./res/pacman/ghost_waiting.png";
+                        infos[ghost.first].text = "A";
+                    } else {
+                        infos[ghost.first].toUpdate = true;
+                        infos[ghost.first].file = "./res/pacman/ghost_scared.png";
+                        infos[ghost.first].text = "S";
+                    }
+                }
+            }
+        }
+        if (elapsed_seconds >= 10) {
+            std::cout << "finish" << std::endl;
+            infos["clyde"].toUpdate = true;
+            infos["inky"].toUpdate = true;
+            infos["pinky"].toUpdate = true;
+            infos["blinky"].toUpdate = true;
+            infos["clyde"].file = "./res/pacman/clyde_right.png";
+            infos["blinky"].file = "./res/pacman/blinky_right.png";
+            infos["inky"].file = "./res/pacman/inky_right.png";
+            infos["pinky"].file = "./res/pacman/pinky_right.png";
+            infos["clyde"].text = "A";
+            infos["pinky"].text = "A";
+            infos["inky"].text = "A";
+            infos["blinky"].text = "A";
+            isGhostScared["blinky"] = false;
+            isGhostScared["inky"] = false;
+            isGhostScared["pinky"] = false;
+            isGhostScared["clyde"] = false;
+            canKillGhost = false;
+            combo = 1;
         }
     }
     if (foodScore == 470) {

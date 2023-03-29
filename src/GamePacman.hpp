@@ -56,6 +56,12 @@ class GamePacman: public AGameModule {
         bool canKillGhost;
         bool eatAnimation;
         int life = 2;
+        int elapsed_seconds;
+        std::chrono::steady_clock::time_point startClock;
+        int blinkGhostScared = false;
+        std::map<std::string, bool> isGhostScared;
+        std::map<std::string, DIRECTION> ghostsDir;
+        int combo;
 };
 
 #endif /* !GAME_PACMAN_INCLUDE */
