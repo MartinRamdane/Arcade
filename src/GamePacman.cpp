@@ -98,6 +98,17 @@ void GamePacman::resetGame() {
     infos["pinky"].y = std::get<1>(spawnPos["pinky"]);
     infos["clyde"].x = std::get<0>(spawnPos["clyde"]);
     infos["clyde"].y = std::get<1>(spawnPos["clyde"]);
+    // sprite
+    infos["player"].xSprite = std::get<0>(spawnPos["player"]);
+    infos["player"].ySprite = std::get<1>(spawnPos["player"]);
+    infos["blinky"].xSprite = std::get<0>(spawnPos["blinky"]);
+    infos["blinky"].ySprite = std::get<1>(spawnPos["blinky"]);
+    infos["inky"].xSprite = std::get<0>(spawnPos["inky"]);
+    infos["inky"].ySprite = std::get<1>(spawnPos["inky"]);
+    infos["pinky"].xSprite = std::get<0>(spawnPos["pinky"]);
+    infos["pinky"].ySprite = std::get<1>(spawnPos["pinky"]);
+    infos["clyde"].xSprite = std::get<0>(spawnPos["clyde"]);
+    infos["clyde"].ySprite = std::get<1>(spawnPos["clyde"]);
 }
 
 bool GamePacman::checkCollision()
