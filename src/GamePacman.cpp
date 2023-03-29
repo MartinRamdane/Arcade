@@ -56,11 +56,11 @@ GamePacman::GamePacman()
                 spawnPos["clyde"] = std::make_tuple(x, y);
             }
             if (c == '.') {
-                infos["food" + std::to_string(nbFoods)] = createEntity("./res/pacman/pacman_food.png", ".", "yellow", "black", x, y, ENTITY_TYPE::SPRITE, 0, 0, 40);
+                infos["a_food" + std::to_string(nbFoods)] = createEntity("./res/pacman/pacman_food.png", ".", "yellow", "black", x, y, ENTITY_TYPE::SPRITE, 0, 0, 40);
                 nbFoods++;
             }
             if (c == '*') {
-                infos["power" + std::to_string(nbPower)] = createEntity("./res/pacman/pacman_Power.png", "●", "yellow", "black", x, y, ENTITY_TYPE::SPRITE, 0, 0, 40);
+                infos["a_power" + std::to_string(nbPower)] = createEntity("./res/pacman/pacman_Power.png", "●", "yellow", "black", x, y, ENTITY_TYPE::SPRITE, 0, 0, 40);
                 nbPower++;
             }
             if (c == '-') {
@@ -83,12 +83,12 @@ GamePacman::~GamePacman()
 
 void GamePacman::resetGame() {
     for (auto &info: infos) {
-        if (info.first.find("food") == 0) {
+        if (info.first.find("a_food") == 0) {
             infos[info.first].toUpdate = true;
             infos[info.first].text = ".";
             infos[info.first].file = "./res/pacman/pacman_food.png";
         }
-        if (info.first.find("power") == 0) {
+        if (info.first.find("a_power") == 0) {
             infos[info.first].toUpdate = true;
             infos[info.first].text = "●";
             infos[info.first].file = "./res/pacman/pacman_Power.png";
@@ -122,7 +122,7 @@ bool GamePacman::checkCollision()
     for (auto &info: infos) {
         if (info.first.find("pinky") == 0) {
             if (info.second.x == infos["player"].x && info.second.y == infos["player"].y) {
-                if (!isGhostScared["pinky"]) {
+                if (isGhostScared["pinky"] == false) {
                     return true;
                 } else {
                     combo += 2;
@@ -143,7 +143,7 @@ bool GamePacman::checkCollision()
         }
         if (info.first.find("inky") == 0) {
             if (info.second.x == infos["player"].x && info.second.y == infos["player"].y) {
-                if (!isGhostScared["inky"]) {
+                if (isGhostScared["inky"] == false) {
                     return true;
                 } else {
                     combo += 2;
@@ -164,7 +164,7 @@ bool GamePacman::checkCollision()
         }
         if (info.first.find("blinky") == 0) {
             if (info.second.x == infos["player"].x && info.second.y == infos["player"].y) {
-                if (!isGhostScared["blinky"]) {
+                if (isGhostScared["blinky"] == false) {
                     return true;
                 } else {
                     combo += 2;
@@ -185,7 +185,7 @@ bool GamePacman::checkCollision()
         }
         if (info.first.find("clyde") == 0 ) {
             if (info.second.x == infos["player"].x && info.second.y == infos["player"].y) {
-                if (!isGhostScared["clyde"]) {
+                if (isGhostScared["clyde"] == false) {
                     return true;
                 } else {
                     combo += 2;
@@ -230,7 +230,7 @@ void GamePacman::ghostChased() {
         tempQueue.pop();
     }
 
-    if (isNextPositionValid && gameMap[nextY][nextX] != '#' && gameMap[nextY][nextX] != '-') {
+    if (isNextPositionValid && gameMap[nextY][nextX] != '#' && gameMap[nextY][nextX] != '-' && playerDir != UNDEFINED) {
         infos["blinky"].x = nextX;
         infos["blinky"].y = nextY;
         lastPositions.push(std::make_pair(nextX, nextY));
@@ -310,7 +310,7 @@ void GamePacman::update(std::string key)
     eatAnimation = !eatAnimation;
     infos["player"].toUpdate = true;
     for (auto &info: infos) {
-        if (info.first.find("food") == 0) {
+        if (info.first.find("a_food") == 0) {
             if (info.second.x == infos["player"].x && info.second.y == infos["player"].y && info.second.text == ".") {
                 infos[info.first].toUpdate = true;
                 infos["score"].toUpdate = true;
@@ -322,12 +322,12 @@ void GamePacman::update(std::string key)
                 break;
             }
         }
-        if (info.first.find("power") == 0) {
+        if (info.first.find("a_power") == 0) {
             if (info.second.x == infos["player"].x && info.second.y == infos["player"].y && info.second.text == "●") {
                 std::cout << "touch power" << std::endl;
                 infos[info.first].toUpdate = true;
                 infos["score"].toUpdate = true;
-                infos[info.first].text = infos["player"].text;
+                infos[info.first].text = " ";
                 infos[info.first].file = "./res/pacman/pacman_food_empty.png";
                 score += 50;
                 infos["score"].text = std::to_string(score);
