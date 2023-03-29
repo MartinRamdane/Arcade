@@ -13,6 +13,7 @@ GamePacman::GamePacman()
     areaHeight = 20;
     gameStatus = IGameModule::GAME_STATUS::MENU;
     selectMenu = 1;
+    elapsed_seconds = 0;
     int nbWalls = 1, nbFoods = 1, nbPower = 1, nbBarrer = 1;
     playerDir = UNDEFINED;
     std::ifstream file("./res/pacman/pacmanMap.txt");
@@ -27,7 +28,6 @@ GamePacman::GamePacman()
         file.close();
     }
 
-    // Utilisation des lignes
     for (auto ligne : gameMap) {
         for (auto c : ligne) {
             if (c == '#') {
@@ -163,6 +163,66 @@ void GamePacman::update(std::string key)
                 infos["score"].text = std::to_string(score);
                 break;
             }
+        }
+        if (info.first.find("power") == 0) {
+            if (info.second.x == infos["player"].x && info.second.y == infos["player"].y && info.second.text == "●") {
+                std::cout << "touch power" << std::endl;
+                infos[info.first].toUpdate = true;
+                infos["score"].toUpdate = true;
+                infos[info.first].text = " ";
+                infos[info.first].file = "./res/pacman/pacman_food_empty.png";
+                score += 50;
+                infos["score"].text = std::to_string(score);
+                canKillGhost = true;
+                infos["clyde"].toUpdate = true;
+                infos["pinky"].toUpdate = true;
+                infos["inky"].toUpdate = true;
+                infos["blinky"].toUpdate = true;
+                infos["clyde"].file = "./res/pacman/ghost_scared.png";
+                infos["pinky"].file = "./res/pacman/ghost_scared.png";
+                infos["inky"].file = "./res/pacman/ghost_scared.png";
+                infos["blinky"].file = "./res/pacman/ghost_scared.png";
+                infos["clyde"].text = "S";
+                infos["pinky"].text = "S";
+                infos["inky"].text = "S";
+                infos["blinky"].text = "S";
+                isGhostScared["blinky"] = true;
+                isGhostScared["inky"] = true;
+                isGhostScared["pinky"] = true;
+                isGhostScared["clyde"] = true;
+                startClock = std::chrono::steady_clock::now();
+                break;
+            }
+        }
+    }
+    if (canKillGhost) {
+        auto current = std::chrono::steady_clock::now();
+        elapsed_seconds = std::chrono::duration_cast<std::chrono::seconds>(current - startClock).count();
+        if (elapsed_seconds >= 8) {
+            blinkGhostScared = !blinkGhostScared;
+            for (auto &ghost: isGhostScared) {
+                if (ghost.second) {
+                    if (blinkGhostScared) {
+                        infos[ghost.first].toUpdate = true;
+                        infos[ghost.first].file = "./res/pacman/ghost_waiting.png";
+                    } else {
+                        infos[ghost.first].toUpdate = true;
+                        infos[ghost.first].file = "./res/pacman/ghost_scared.png";
+                    }
+                }
+            }
+        }
+        if (elapsed_seconds >= 10) {
+            std::cout << "finish" << std::endl;
+            infos["clyde"].toUpdate = true;
+            infos["inky"].toUpdate = true;
+            infos["pinky"].toUpdate = true;
+            infos["blinky"].toUpdate = true;
+            infos["clyde"].file = "./res/pacman/clyde_right.png";
+            infos["blinky"].file = "./res/pacman/blinky_right.png";
+            infos["inky"].file = "./res/pacman/inky_right.png";
+            infos["pinky"].file = "./res/pacman/pinky_right.png";
+            canKillGhost = false;
         }
     }
     if (foodScore == 470) {
