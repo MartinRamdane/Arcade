@@ -75,8 +75,8 @@ void GameSnake::initGame()
     infos.erase("gameTitle3");
     infos.erase("gameTitle4");
     infos.erase("gameTitle5");
-    infos["playerHead"] = createEntity(SNAKE_H_RIGHT, ">", "white", "green", (areaWidth / 2 + 2), (areaHeight / 2 + 1), ENTITY_TYPE::SPRITE_TEXT, 0, 0, 40);
-    infos["playerPart1"] = createEntity(SNAKE_H_BODY, "o", "white", "green", (areaWidth / 2 + 1), (areaHeight / 2 + 1), ENTITY_TYPE::SPRITE_TEXT, 0, 0, 40);
+    infos["playerHead"] = createEntity(SNAKE_H_RIGHT, ">", "white", "green", (areaWidth / 2 + 2), (areaHeight / 2 + 1), ENTITY_TYPE::SPRITE, 0, 0, 40);
+    infos["playerPart1"] = createEntity(SNAKE_H_BODY, "o", "white", "green", (areaWidth / 2 + 1), (areaHeight / 2 + 1), ENTITY_TYPE::SPRITE, 0, 0, 40);
     infos["playerPart1"].xSprite = infos["playerPart1"].x - 4;
     infos["playerPart2"] = createEntity(SNAKE_H_BODY, "o", "white", "green", (areaWidth / 2), (areaHeight / 2 + 1), ENTITY_TYPE::SPRITE, 0, 0, 40);
     infos["playerPart2"].xSprite = infos["playerPart2"].x - 1.5;
@@ -302,7 +302,7 @@ void GameSnake::updateGame(std::string key)
 
 void GameSnake::spawnMeal()
 {
-    int x = (rand() % areaWidth + MARGIN_LEFT - 4) + 1;
+    int x = (rand() % areaWidth + MARGIN_LEFT - 4) + 3;
     int y = (rand() % areaHeight + MARGIN_TOP - 3) + 3;
     for (int i = 1; i < playerPart; i++) {
         if ((x == infos["playerPart" + std::to_string(i)].x && y == infos["playerPart" + std::to_string(i)].y) || (x == infos["playerHead"].x && y == infos["playerHead"].y)) {
