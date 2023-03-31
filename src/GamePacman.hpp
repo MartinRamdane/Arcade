@@ -34,7 +34,7 @@ class GamePacman: public AGameModule {
         };
         GamePacman();
         ~GamePacman();
-        void startGame(std::string username){};
+        void startGame(std::string username);
         bool isGameOver() {return false;};
         void update(std::string key);
         void initGame(){};
@@ -47,7 +47,7 @@ class GamePacman: public AGameModule {
         bool checkCollision();
         void resetGame();
         void ghostChased();
-
+        void setHighScores();
     private:
         std::vector<std::vector<char>> gameMap;
         GamePacman::DIRECTION playerDir;
@@ -63,6 +63,7 @@ class GamePacman: public AGameModule {
         std::map<std::string, DIRECTION> ghostsDir;
         int combo;
         std::queue<std::pair<int, int>> lastPositions;
+        std::vector<std::pair<std::string, int>> scores;
 };
 
 #endif /* !GAME_PACMAN_INCLUDE */
