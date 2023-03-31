@@ -302,6 +302,33 @@ void GamePacman::ghostChased() {
     infos["blinky"].toUpdate = true;
 }
 
+void GamePacman::setHighScores() {
+    std::ifstream file(("./saves/pacman/" + this->username + ".save").c_str());
+    if (!file.good()) {
+        std::ofstream file(("./saves/pacman/" + this->username + ".save").c_str());
+        file << score;
+        file.close();
+    } else {
+        std::string line;
+        std::getline(file, line);
+        if (std::stoi(line) < score) {
+            std::ofstream file(("./saves/pacman/" + this->username + ".save").c_str());
+            file << score;
+            file.close();
+        }
+    }
+    for (const auto &entry:std::filesystem::directory_iterator("./saves/pacman/")) {
+        std::ifstream file(entry.path());
+        std::string line;
+        std::getline(file, line);
+        scores.push_back(std::make_pair(entry.path().filename().string().substr(0, entry.path().filename().string().length() - 5), std::stoi(line)));
+    }
+    std::sort(scores.begin(), scores.end(), [](const std::pair<std::string, int> &left, const std::pair<std::string, int> &right) {
+        return left.second > right.second;
+    });
+    // TO DO: Display high scores
+}
+
 void GamePacman::update(std::string key)
 {
     if (key == "r") {
@@ -317,6 +344,7 @@ void GamePacman::update(std::string key)
             resetGame();
             playerDir = UNDEFINED;
         } else {
+            setHighScores();
             exit(84);
         }
     }
@@ -464,6 +492,10 @@ void GamePacman::update(std::string key)
     movePlayer();
     if (playerDir != UNDEFINED)
         ghostChased();
+}
+
+void GamePacman::startGame(std::string username){
+    this->username = username;
 }
 
 void GamePacman::movePlayer()
