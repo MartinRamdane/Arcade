@@ -12,6 +12,10 @@
 #include <vector>
 #include <tuple>
 #include <memory>
+#include <iostream>
+#include <string>
+#include <fstream>
+#include <map>
 
 #define MARGIN_TOP 3
 #define MARGIN_LEFT 2

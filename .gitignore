@@ -5,3 +5,4 @@ arcade
 .DS_Store
 lib/*
 Makefile
+saves/*

@@ -134,6 +134,32 @@ void GameSnake::initLoose()
     infos["score"] = createEntity("", std::to_string(score), "white", "", (areaWidth / 2 - (std::to_string(score).length() / 2) + 1), (areaHeight / 2 + MARGIN_TOP -1) + 1, ENTITY_TYPE::TEXT, (areaWidth / 2 - std::to_string(score).length()), (areaHeight / 2 - 1 + MARGIN_TOP), 40);
     infos["retryButton"] = createEntity("./res/snake/snake_buttonHover.png", "Retry", "black", "white", (areaWidth / 2) - 1, (areaHeight / 2 + 2 + MARGIN_TOP), ENTITY_TYPE::SPRITE_TEXT, (areaWidth / 2), (areaHeight / 2 + 2 + MARGIN_TOP), 40);
     infos["quitButton"] = createEntity("./res/snake/snake_button.png", "Quit", "white", "", (areaWidth / 2), (areaHeight / 2 + 5 + MARGIN_TOP), ENTITY_TYPE::SPRITE_TEXT, (areaWidth / 2), (areaHeight / 2 + 5 + MARGIN_TOP), 40);
+
+    std::ifstream file(("./saves/snake/" + this->username + ".save").c_str());
+    if (!file.good()) {
+        std::ofstream file(("./saves/snake/" + this->username + ".save").c_str());
+        file << score;
+        file.close();
+    } else {
+        std::string line;
+        std::getline(file, line);
+        if (std::stoi(line) < score) {
+            std::ofstream file(("./saves/snake/" + this->username + ".save").c_str());
+            file << score;
+            file.close();
+        }
+    }
+    std::vector<std::pair<std::string, int>> scores;
+    for (const auto &entry:std::filesystem::directory_iterator("./saves/snake/")) {
+        std::ifstream file(entry.path());
+        std::string line;
+        std::getline(file, line);
+        scores.push_back(std::make_pair(entry.path().filename().string().substr(0, entry.path().filename().string().length() - 5), std::stoi(line)));
+    }
+    std::sort(scores.begin(), scores.end(), [](const std::pair<std::string, int> &left, const std::pair<std::string, int> &right) {
+        return left.second > right.second;
+    });
+    // TO DO: Display high scores
 }
 
 bool GameSnake::checkCollision()
