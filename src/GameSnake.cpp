@@ -75,13 +75,10 @@ void GameSnake::initGame()
     infos.erase("gameTitle3");
     infos.erase("gameTitle4");
     infos.erase("gameTitle5");
-    infos["playerHead"] = createEntity(SNAKE_H_RIGHT, ">", "white", "green", (areaWidth / 2 + 2), (areaHeight / 2 + 1), ENTITY_TYPE::SPRITE_TEXT, 0, 0, 40);
-    infos["playerPart1"] = createEntity(SNAKE_H_BODY, "o", "white", "green", (areaWidth / 2 + 1), (areaHeight / 2 + 1), ENTITY_TYPE::SPRITE_TEXT, 0, 0, 40);
-    infos["playerPart1"].xSprite = infos["playerPart1"].x - 4;
-    infos["playerPart2"] = createEntity(SNAKE_H_BODY, "o", "white", "green", (areaWidth / 2), (areaHeight / 2 + 1), ENTITY_TYPE::SPRITE, 0, 0, 40);
-    infos["playerPart2"].xSprite = infos["playerPart2"].x - 1.5;
-    infos["playerPart3"] = createEntity(SNAKE_H_BODY, "o", "white", "green", (areaWidth / 2 - 1), (areaHeight / 2 + 1), ENTITY_TYPE::SPRITE, 0, 0, 40);
-    infos["playerPart3"].xSprite = infos["playerPart3"].x - 1.5;
+    infos["playerHead"] = createEntity(RECT_H, ">", "white", "green", (areaWidth / 2 + 2), (areaHeight / 2 + 1), ENTITY_TYPE::SPRITE, 0, 0, 40);
+    infos["playerPart1"] = createEntity(RECT_H, "o", "white", "green", (areaWidth / 2 + 1), (areaHeight / 2 + 1), ENTITY_TYPE::SPRITE, 0, 0, 40);
+    infos["playerPart2"] = createEntity(RECT_H, "o", "white", "green", (areaWidth / 2), (areaHeight / 2 + 1), ENTITY_TYPE::SPRITE, 0, 0, 40);
+    infos["playerPart3"] = createEntity(RECT_H, "o", "white", "green", (areaWidth / 2 - 1), (areaHeight / 2 + 1), ENTITY_TYPE::SPRITE, 0, 0, 40);
     infos["showScoreLabel"] = createEntity("", "Score ", "white", "", MARGIN_LEFT, 1, ENTITY_TYPE::TEXT, 0, 0, 40);
     infos["showScore"] = createEntity("", std::to_string(score), "white", "", MARGIN_LEFT + 14, 1, ENTITY_TYPE::TEXT, MARGIN_LEFT + 14, 0, 40);
     playerDir = RIGHT;
@@ -256,43 +253,54 @@ void GameSnake::updateGame(std::string key)
         playerPart++;
     }
     if (key == "UP" && playerDir != UP && playerDir != DOWN) {
-        if (playerDir == RIGHT)
-            infos["playerHead"].x -= 1;
-        else
-            infos["playerHead"].x += 1;
         infos["playerHead"].y -= 1;
         infos["playerHead"].ySprite = infos["playerHead"].y;
         infos["playerHead"].xSprite = infos["playerHead"].x;
         infos["playerHead"].text = "⏶";
-        infos["playerHead"].file = "./res/snake/snakeHead_up.png";
+        infos["playerHead"].file = RECT_H;
+        if (playerDir == RIGHT) {
+            for (int i = 1; i < playerPart; i++) {
+                infos["playerPart" + std::to_string(i)].x += 1;
+                infos["playerPart" + std::to_string(i)].toUpdate = true;
+            }
+        } else if (playerDir == LEFT) {
+            for (int i = 1; i < playerPart; i++) {
+                infos["playerPart" + std::to_string(i)].x -= 1;
+                infos["playerPart" + std::to_string(i)].toUpdate = true;
+            }
+        }
         infos["playerHead"].toUpdate = true;
         oldDir = playerDir;
         playerDir = UP;
     } else if (key == "DOWN" && playerDir != DOWN && playerDir != UP) {
-        if (playerDir == RIGHT) {
-            // infos["playerHead"].xSprite = infos["playerHead"].x - 2.5;
-            infos["playerHead"].x -= 1;
-        } else {
-            // infos["playerHead"].xSprite = infos["playerHead"].x + 2.5;
-            infos["playerHead"].x += 1;
-        }
         infos["playerHead"].y += 1;
         infos["playerHead"].ySprite = infos["playerHead"].y;
         infos["playerHead"].xSprite = infos["playerHead"].x;
         infos["playerHead"].text = "⏷";
-        infos["playerHead"].file = "./res/snake/snakeHead_down.png";
+        infos["playerHead"].file = RECT_H;
+        if (playerDir == RIGHT) {
+            for (int i = 1; i < playerPart; i++) {
+                infos["playerPart" + std::to_string(i)].x += 1;
+                infos["playerPart" + std::to_string(i)].toUpdate = true;
+            }
+        } else if (playerDir == LEFT) {
+            for (int i = 1; i < playerPart; i++) {
+                infos["playerPart" + std::to_string(i)].x -= 1;
+                infos["playerPart" + std::to_string(i)].toUpdate = true;
+            }
+        }
         infos["playerHead"].toUpdate = true;
         oldDir = playerDir;
         playerDir = DOWN;
     } else if (key == "LEFT" && playerDir != LEFT && playerDir!= RIGHT) {
         infos["playerHead"].text = "⏴";
-        infos["playerHead"].file = "./res/snake/snakeHead_left.png";
+        infos["playerHead"].file = RECT_H;
         infos["playerHead"].toUpdate = true;
         oldDir = playerDir;
         playerDir = LEFT;
     } else if (key == "RIGHT" && playerDir != RIGHT && playerDir != LEFT) {
         infos["playerHead"].text = "⏵";
-        infos["playerHead"].file = "./res/snake/snakeHead_right.png";
+        infos["playerHead"].file = RECT_H;
         infos["playerHead"].toUpdate = true;
         oldDir = playerDir;
         playerDir = RIGHT;
@@ -344,13 +352,13 @@ void GameSnake::moveSnake()
     }
     for (int i = 1; i < playerPart; i++) {
         if (playerDir == UP || playerDir == DOWN) {
-            infos["playerPart" + std::to_string(i)].file = SNAKE_V_BODY;
+            infos["playerPart" + std::to_string(i)].file = RECT_V;
             if (infos["playerPart" + std::to_string(i)].xSprite != infos["playerHead"].xSprite)
-                infos["playerPart" + std::to_string(i)].file = SNAKE_H_BODY;
+                infos["playerPart" + std::to_string(i)].file = RECT_H;
         } if (playerDir == RIGHT || playerDir == LEFT) {
-            infos["playerPart" + std::to_string(i)].file = SNAKE_H_BODY;
+            infos["playerPart" + std::to_string(i)].file = RECT_H;
             if (infos["playerPart" + std::to_string(i)].ySprite != infos["playerHead"].ySprite)
-                infos["playerPart" + std::to_string(i)].file = SNAKE_V_BODY;
+                infos["playerPart" + std::to_string(i)].file = RECT_V;
         }
     }
     if (playerDir == UP) {

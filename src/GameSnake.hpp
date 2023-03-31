@@ -16,16 +16,28 @@
 #define MARGIN_TOP 3
 #define MARGIN_LEFT 2
 
-#define SNAKE_H_BODY "./res/snake/snakeBody_horizontal.png"
-#define SNAKE_V_BODY "./res/snake/snakeBody_vertical.png"
-#define SNAKE_A_LD "./res/snake/snakeBodyAngle_leftDown.png"
-#define SNAKE_A_LU "./res/snake/snakeBodyAngle_leftUp.png"
-#define SNAKE_A_RD "./res/snake/snakeBodyAngle_rightDown.png"
-#define SNAKE_A_RU "./res/snake/snakeBodyAngle_rightUp.png"
-#define SNAKE_H_UP "./res/snake/snakeHead_up.png"
-#define SNAKE_H_DOWN "./res/snake/snakeHead_down.png"
-#define SNAKE_H_LEFT "./res/snake/snakeHead_left.png"
-#define SNAKE_H_RIGHT "./res/snake/snakeHead_right.png"
+// #define SNAKE_H_BODY "./res/snake/snakeBody_horizontal.png"
+// #define SNAKE_V_BODY "./res/snake/snakeBody_vertical.png"
+// #define SNAKE_A_LD "./res/snake/snakeBodyAngle_leftDown.png"
+// #define SNAKE_A_LU "./res/snake/snakeBodyAngle_leftUp.png"
+// #define SNAKE_A_RD "./res/snake/snakeBodyAngle_rightDown.png"
+// #define SNAKE_A_RU "./res/snake/snakeBodyAngle_rightUp.png"
+// #define SNAKE_H_UP "./res/snake/snakeHead_up.png"
+// #define SNAKE_H_DOWN "./res/snake/snakeHead_down.png"
+// #define SNAKE_H_LEFT "./res/snake/snakeHead_left.png"
+// #define SNAKE_H_RIGHT "./res/snake/snakeHead_right.png"
+#define SNAKE_H_BODY "./res/snake/rect_sprite.png"
+#define SNAKE_V_BODY "./res/snake/rect_sprite.png"
+#define SNAKE_A_LD "./res/snake/rect_sprite.png"
+#define SNAKE_A_LU "./res/snake/rect_sprite.png"
+#define SNAKE_A_RD "./res/snake/rect_sprite.png"
+#define SNAKE_A_RU "./res/snake/rect_sprite.png"
+#define SNAKE_H_UP "./res/snake/rect_sprite.png"
+#define SNAKE_H_DOWN "./res/snake/rect_sprite.png"
+#define SNAKE_H_LEFT "./res/snake/rect_sprite.png"
+#define SNAKE_H_RIGHT "./res/snake/rect_sprite.png"
+#define RECT_H "./res/snake/rect_sprite_horizontal.png"
+#define RECT_V "./res/snake/rect_sprite_vertical.png"
 
 class GameSnake: public AGameModule {
     public:
@@ -57,6 +69,7 @@ class GameSnake: public AGameModule {
         bool hasMeal;
         DIRECTION playerDir;
         DIRECTION oldDir;
+        bool hasChangedDir;
 };
 
 #endif /* !HEADER_GAMESNAKE */
