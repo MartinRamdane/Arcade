@@ -5,4 +5,5 @@ arcade
 .DS_Store
 lib/*
 Makefile
-saves/*
+saves/pacman/*.save
+saves/snake/*.save
