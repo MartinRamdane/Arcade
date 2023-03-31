@@ -302,8 +302,8 @@ void GameSnake::updateGame(std::string key)
 
 void GameSnake::spawnMeal()
 {
-    int x = rand() % areaWidth + MARGIN_LEFT - 2;
-    int y = rand() % areaHeight + MARGIN_TOP;
+    int x = (rand() % areaWidth + MARGIN_LEFT - 4) + 1;
+    int y = (rand() % areaHeight + MARGIN_TOP - 3) + 3;
     for (int i = 1; i < playerPart; i++) {
         if ((x == infos["playerPart" + std::to_string(i)].x && y == infos["playerPart" + std::to_string(i)].y) || (x == infos["playerHead"].x && y == infos["playerHead"].y)) {
             spawnMeal();
