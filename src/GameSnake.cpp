@@ -75,6 +75,9 @@ void GameSnake::initGame()
     infos.erase("gameTitle3");
     infos.erase("gameTitle4");
     infos.erase("gameTitle5");
+    infos.erase("highsScoreText");
+    infos.erase("highScore_username");
+    infos.erase("highScore");
     infos["playerHead"] = createEntity(RECT_H, ">", "white", "green", (areaWidth / 2 + 2), (areaHeight / 2 + 1), ENTITY_TYPE::SPRITE, 0, 0, 40);
     infos["playerPart1"] = createEntity(RECT_H, "o", "white", "green", (areaWidth / 2 + 1), (areaHeight / 2 + 1), ENTITY_TYPE::SPRITE, 0, 0, 40);
     infos["playerPart2"] = createEntity(RECT_H, "o", "white", "green", (areaWidth / 2), (areaHeight / 2 + 1), ENTITY_TYPE::SPRITE, 0, 0, 40);
@@ -122,13 +125,13 @@ void GameSnake::initLoose()
     infos.erase("gameTitle5");
     infos.erase("showScoreLabel");
     infos.erase("showScore");
-    infos["looseTitle"] = createEntity("./res/snake/snake_loose.png", " ██████   ██████         ██ ", "green", "", (areaWidth / 2 - 12), (areaHeight / 2 - 7 + MARGIN_TOP), ENTITY_TYPE::SPRITE, (areaWidth / 2), (areaHeight / 2 - 4 + MARGIN_TOP), 40);
-    infos["looseTitle2"] = createEntity("", "██       ██           ██  ██", "green", "", (areaWidth / 2 - 12), (areaHeight / 2 - 6 + MARGIN_TOP), ENTITY_TYPE::NONE, 0, 0, 40);
-    infos["looseTitle3"] = createEntity("", "██   ███ ██   ███         ██", "green", "", (areaWidth / 2 - 12), (areaHeight / 2 - 5 + MARGIN_TOP), ENTITY_TYPE::NONE, 0, 0, 40);
-    infos["looseTitle4"] = createEntity("", "██    ██ ██    ██     ██  ██", "green", "", (areaWidth / 2 - 12), (areaHeight / 2 - 4 + MARGIN_TOP), ENTITY_TYPE::NONE, 0, 0, 40);
-    infos["looseTitle5"] = createEntity("", " ██████   ██████         ██ ", "green", "", (areaWidth / 2 - 12), (areaHeight / 2 - 3 + MARGIN_TOP), ENTITY_TYPE::NONE, 0, 0, 40);
-    infos["username"] = createEntity("", this->username, "white", "", (areaWidth / 2 - (this->username.length() / 2) + 1), (areaHeight / 2 - 2 + MARGIN_TOP) + 1, ENTITY_TYPE::TEXT, (areaWidth / 2 - username.length()), (areaHeight / 2 - 3 + MARGIN_TOP), 40);
-    infos["score"] = createEntity("", std::to_string(score), "white", "", (areaWidth / 2 - (std::to_string(score).length() / 2) + 1), (areaHeight / 2 + MARGIN_TOP -1) + 1, ENTITY_TYPE::TEXT, (areaWidth / 2 - std::to_string(score).length()), (areaHeight / 2 - 1 + MARGIN_TOP), 40);
+    infos["looseTitle"] = createEntity("./res/snake/snake_loose.png", " ██████   ██████         ██ ", "green", "", (areaWidth / 2 - 12), (areaHeight / 2 - 8 + MARGIN_TOP), ENTITY_TYPE::SPRITE, (areaWidth / 2), (areaHeight / 2 - 6 + MARGIN_TOP), 40);
+    infos["looseTitle2"] = createEntity("", "██       ██           ██  ██", "green", "", (areaWidth / 2 - 12), (areaHeight / 2 - 7 + MARGIN_TOP), ENTITY_TYPE::NONE, 0, 0, 40);
+    infos["looseTitle3"] = createEntity("", "██   ███ ██   ███         ██", "green", "", (areaWidth / 2 - 12), (areaHeight / 2 - 6 + MARGIN_TOP), ENTITY_TYPE::NONE, 0, 0, 40);
+    infos["looseTitle4"] = createEntity("", "██    ██ ██    ██     ██  ██", "green", "", (areaWidth / 2 - 12), (areaHeight / 2 - 5 + MARGIN_TOP), ENTITY_TYPE::NONE, 0, 0, 40);
+    infos["looseTitle5"] = createEntity("", " ██████   ██████         ██ ", "green", "", (areaWidth / 2 - 12), (areaHeight / 2 - 4 + MARGIN_TOP), ENTITY_TYPE::NONE, 0, 0, 40);
+    infos["username"] = createEntity("", this->username, "white", "", (areaWidth / 2 - (this->username.length() / 2) + 1), (areaHeight / 2 - 2 + MARGIN_TOP) + 1, ENTITY_TYPE::TEXT, (areaWidth / 2 - username.length() + 1), 0, 20);
+    infos["score"] = createEntity("", std::to_string(score), "white", "", (areaWidth / 2 - (std::to_string(score).length() / 2) + 1), (areaHeight / 2 + MARGIN_TOP - 1) + 1, ENTITY_TYPE::TEXT, (areaWidth / 2 - std::to_string(score).length()), 0, 20);
     infos["retryButton"] = createEntity("./res/snake/snake_buttonHover.png", "Retry", "black", "white", (areaWidth / 2) - 1, (areaHeight / 2 + 2 + MARGIN_TOP), ENTITY_TYPE::SPRITE_TEXT, (areaWidth / 2), (areaHeight / 2 + 2 + MARGIN_TOP), 40);
     infos["quitButton"] = createEntity("./res/snake/snake_button.png", "Quit", "white", "", (areaWidth / 2), (areaHeight / 2 + 5 + MARGIN_TOP), ENTITY_TYPE::SPRITE_TEXT, (areaWidth / 2), (areaHeight / 2 + 5 + MARGIN_TOP), 40);
 
@@ -157,6 +160,10 @@ void GameSnake::initLoose()
         return left.second > right.second;
     });
     // TO DO: Display high scores
+    infos["highsScoreText"] = createEntity("", "Highscore:", "white", "", (areaWidth / 2 - (10 / 2) + 1), (areaHeight / 2 - 3 + MARGIN_TOP - 1) + 1, ENTITY_TYPE::TEXT, (areaWidth / 2 - 6), 0, 20);
+    infos["highScore_username"] = createEntity("", scores[0].first, "white", "", (MARGIN_LEFT + 10), (areaHeight / 2 - 2 + MARGIN_TOP - 1 ) + 1, ENTITY_TYPE::TEXT, 0, 0, 20);
+    infos["highScore"] = createEntity("", std::to_string(scores[0].second), "white", "", (MARGIN_LEFT + 35), (areaHeight / 2 - 2 + MARGIN_TOP -1 ) + 1, ENTITY_TYPE::TEXT, 0, 0, 20);
+
 }
 
 bool GameSnake::checkCollision()
@@ -270,16 +277,16 @@ void GameSnake::updateGame(std::string key)
         gameStatus = IGameModule::GAME_STATUS::FINISHED;
         return;
     }
-    if (infos["playerHead"].x == infos["meal"].x && infos["playerHead"].y == infos["meal"].y) {
-        hasMeal = false;
-        score += 10;
-        infos.erase("meal");
-        spawnMeal();
-        infos["playerPart" + std::to_string(playerPart)] = createEntity("", "o", "white", "green", infos["playerPart" + std::to_string(playerPart - 1)].x, infos["playerPart" + std::to_string(playerPart - 1)].y, ENTITY_TYPE::SPRITE, 0, 0, 40);
-        playerPart++;
-    }
     if (key == "UP" && playerDir != UP && playerDir != DOWN) {
         infos["playerHead"].y -= 1;
+        if (infos["meal"].y == infos["playerHead"].y && infos["meal"].x == infos["playerHead"].x) {
+            hasMeal = false;
+            score += 10;
+            infos.erase("meal");
+            spawnMeal();
+            infos["playerPart" + std::to_string(playerPart)] = createEntity("", "o", "white", "green", infos["playerPart" + std::to_string(playerPart - 1)].x, infos["playerPart" + std::to_string(playerPart - 1)].y, ENTITY_TYPE::SPRITE, 0, 0, 40);
+            playerPart++;
+        }
         infos["playerHead"].ySprite = infos["playerHead"].y;
         infos["playerHead"].xSprite = infos["playerHead"].x;
         infos["playerHead"].text = "⏶";
@@ -300,6 +307,14 @@ void GameSnake::updateGame(std::string key)
         playerDir = UP;
     } else if (key == "DOWN" && playerDir != DOWN && playerDir != UP) {
         infos["playerHead"].y += 1;
+        if (infos["meal"].y == infos["playerHead"].y && infos["meal"].x == infos["playerHead"].x) {
+            hasMeal = false;
+            score += 10;
+            infos.erase("meal");
+            spawnMeal();
+            infos["playerPart" + std::to_string(playerPart)] = createEntity("", "o", "white", "green", infos["playerPart" + std::to_string(playerPart - 1)].x, infos["playerPart" + std::to_string(playerPart - 1)].y, ENTITY_TYPE::SPRITE, 0, 0, 40);
+            playerPart++;
+        }
         infos["playerHead"].ySprite = infos["playerHead"].y;
         infos["playerHead"].xSprite = infos["playerHead"].x;
         infos["playerHead"].text = "⏷";
@@ -332,16 +347,35 @@ void GameSnake::updateGame(std::string key)
         playerDir = RIGHT;
     }
     moveSnake();
+    if (infos["playerHead"].x == infos["meal"].x && infos["playerHead"].y == infos["meal"].y) {
+        hasMeal = false;
+        score += 10;
+        infos.erase("meal");
+        spawnMeal();
+        infos["playerPart" + std::to_string(playerPart)] = createEntity("", "o", "white", "green", infos["playerPart" + std::to_string(playerPart - 1)].x, infos["playerPart" + std::to_string(playerPart - 1)].y, ENTITY_TYPE::SPRITE, 0, 0, 40);
+        playerPart++;
+    }
 }
 
 void GameSnake::spawnMeal()
 {
-    int x = (rand() % areaWidth + MARGIN_LEFT - 4) + 3;
+    int x = (rand() % areaWidth + MARGIN_LEFT - 4) + 4;
+    if (x == 2)
+        x = 3;
+    if (x == 51)
+        x = 50;
     int y = (rand() % areaHeight + MARGIN_TOP - 3) + 3;
+    if (y < 4) {
+        y = 4;
+    }
     for (int i = 1; i < playerPart; i++) {
         if ((x == infos["playerPart" + std::to_string(i)].x && y == infos["playerPart" + std::to_string(i)].y) || (x == infos["playerHead"].x && y == infos["playerHead"].y)) {
-            spawnMeal();
-            return;
+            if ((x == infos["playerPart" + std::to_string(i)].xSprite && y == infos["playerPart" + std::to_string(i)].ySprite) || (x == infos["playerHead"].xSprite && y == infos["playerHead"].ySprite)) {
+                spawnMeal();
+                return;
+            }
+        spawnMeal();
+        return;
         }
     }
     infos.erase("showScore");
