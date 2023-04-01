@@ -15,6 +15,9 @@
 #include <iostream>
 #include <string>
 #include <fstream>
+#include <filesystem>
+#include <algorithm>
+#include <functional>
 #include <map>
 
 #define MARGIN_TOP 3

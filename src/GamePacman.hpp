@@ -15,10 +15,13 @@
 #include <fstream>
 #include <iostream>
 #include <string>
+#include <filesystem>
 #include <tuple>
 #include <memory>
 #include <math.h>
 #include <queue>
+#include <algorithm>
+#include <functional>
 
 #define MARGIN_TOP 3
 #define MARGIN_LEFT 2
