@@ -90,7 +90,7 @@ void Core::switchLib(IGameModule *lib) {
     _display->init(lib->getInfos());
 }
 
-void Core::switchGame(IGameModule *lib) {
+void Core::switchGame() {
     _game.release();
     _gameLoader.release();
     itGame++;
@@ -119,7 +119,7 @@ void Core::mainloop() {
         if (event == "-")
             stop();
         if (event == "n")
-            switchGame(_game.get());
+            switchGame();
         std::this_thread::sleep_for(std::chrono::milliseconds(64));
         _game->update(event);
     }

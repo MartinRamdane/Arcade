@@ -28,7 +28,7 @@ class Core {
         void startMenu(std::string lib);
         void mainloop();
         void switchLib(IGameModule *lib);
-        void switchGame(IGameModule *lib);
+        void switchGame();
 
     protected:
     private:
