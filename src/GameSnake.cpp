@@ -160,9 +160,9 @@ void GameSnake::initLoose()
         return left.second > right.second;
     });
     // TO DO: Display high scores
-    infos["highsScoreText"] = createEntity("", "Highscore:", "white", "", (areaWidth / 2 - (10 / 2) + 1), (areaHeight / 2 - 3 + MARGIN_TOP - 1) + 1, ENTITY_TYPE::TEXT, (areaWidth / 2 - 6), 0, 20);
-    infos["highScore_username"] = createEntity("", scores[0].first, "white", "", (MARGIN_LEFT + 10), (areaHeight / 2 - 2 + MARGIN_TOP - 1 ) + 1, ENTITY_TYPE::TEXT, 0, 0, 20);
-    infos["highScore"] = createEntity("", std::to_string(scores[0].second), "white", "", (MARGIN_LEFT + 35), (areaHeight / 2 - 2 + MARGIN_TOP -1 ) + 1, ENTITY_TYPE::TEXT, 0, 0, 20);
+    infos["highsScoreText"] = createEntity("", "Highscore:", "white", "", (areaWidth / 2 - (10 / 2) + 1) - 12, (areaHeight / 2 - 3 + MARGIN_TOP - 1) + 1, ENTITY_TYPE::TEXT, (areaWidth / 2 - 6), 0, 20);
+    infos["highScore_username"] = createEntity("", scores[0].first, "white", "", (areaWidth / 2 - (10 / 2) + 1) + 10, (areaHeight / 2 - 3 + MARGIN_TOP - 1) + 1, ENTITY_TYPE::TEXT, 0, 0, 20);
+    infos["highScore"] = createEntity("", std::to_string(scores[0].second), "white", "", (areaWidth / 2 - (10 / 2) + 1) + 20 + (int)std::to_string(scores[0].second).size(), (areaHeight / 2 - 3 + MARGIN_TOP - 1) + 1, ENTITY_TYPE::TEXT, 0, 0, 20);
 
 }
 

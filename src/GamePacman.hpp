@@ -49,7 +49,7 @@ class GamePacman: public AGameModule {
         void movePlayer();
         bool checkCollision();
         void resetGame();
-        void ghostChased();
+        void ghostChased(std::string ghost);
         void setHighScores();
     private:
         std::vector<std::vector<char>> gameMap;
@@ -65,8 +65,9 @@ class GamePacman: public AGameModule {
         std::map<std::string, bool> isGhostScared;
         std::map<std::string, DIRECTION> ghostsDir;
         int combo;
-        std::queue<std::pair<int, int>> lastPositions;
+        std::map<std::string, std::queue<std::pair<int, int>>> lastPositions;
         std::vector<std::pair<std::string, int>> scores;
+        int nbBarrer = 0;
 };
 
 #endif /* !GAME_PACMAN_INCLUDE */
