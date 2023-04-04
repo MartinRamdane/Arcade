@@ -14,6 +14,7 @@ GameSnake::GameSnake()
     gameStatus = IGameModule::GAME_STATUS::MENU;
     selectMenu = 1;
     hasMeal = true;
+    speed = 1;
     initArea();
     initMenu();
 }
@@ -422,19 +423,19 @@ void GameSnake::moveSnake()
         }
     }
     if (playerDir == UP) {
-        infos["playerHead"].y -= 1;
+        infos["playerHead"].y -= speed;
         infos["playerHead"].ySprite = infos["playerHead"].y;
     }
     if (playerDir == DOWN) {
-        infos["playerHead"].y += 1;
+        infos["playerHead"].y += speed;
         infos["playerHead"].ySprite = infos["playerHead"].y;
     }
     if (playerDir == LEFT) {
-        infos["playerHead"].x -= 1;
+        infos["playerHead"].x -= speed;
         infos["playerHead"].xSprite = infos["playerHead"].x;
     }
     if (playerDir == RIGHT) {
-        infos["playerHead"].x += 1;
+        infos["playerHead"].x += speed;
         infos["playerHead"].xSprite = infos["playerHead"].x;
     }
     infos["playerHead"].toUpdate = true;

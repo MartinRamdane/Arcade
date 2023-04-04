@@ -77,6 +77,7 @@ class GameSnake: public AGameModule {
         DIRECTION playerDir;
         DIRECTION oldDir;
         bool hasChangedDir;
+        int speed;
 };
 
 #endif /* !HEADER_GAMESNAKE */
