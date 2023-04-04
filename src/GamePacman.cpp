@@ -309,7 +309,6 @@ void GamePacman::ghostChased(std::string ghost, char ghostSym) {
                     }
                     tempQueue.pop();
                 }
-                
 
                 if (isNextPositionValid) {
                     infos[ghost].x = nextX;
@@ -539,6 +538,19 @@ void GamePacman::checkIfMoveToGhost(int x, int y, std::string ghostName, char gh
                 setHighScores();
                 exit(84);
             }
+        } else {
+            combo += 2;
+            score = score + (100 * combo);
+            infos["score"].toUpdate = true;
+            infos["score"].text = std::to_string(score + combo);
+            infos[ghostName].toUpdate = true;
+            infos[ghostName].x = std::get<0>(spawnPos[ghostName]);
+            infos[ghostName].y = std::get<1>(spawnPos[ghostName]);
+            infos[ghostName].xSprite = std::get<0>(spawnPos[ghostName]);
+            infos[ghostName].ySprite = std::get<1>(spawnPos[ghostName]);
+            infos[ghostName].file = "./res/pacman/" + ghostName + "_up.png";
+            infos[ghostName].text = "A";
+            isGhostScared[ghostName] = false;
         }
     }
 }
