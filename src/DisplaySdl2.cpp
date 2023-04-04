@@ -129,7 +129,7 @@ std::string DisplaySdl::getMouseEvent() {
         float x = event.button.x;
         float y = event.button.y;
         for (auto &sprite: sprites) {
-            if (x >= sprite.second.rect.x && x <= sprite.second.rect.x + sprite.second.rect.w && y >= sprite.second.rect.y && y <= sprite.second.rect.y + sprite.second.rect.h) {
+            if (x*2 >= sprite.second.rect.x - (sprite.second.rect.w/2) && x*2 <= sprite.second.rect.x + (sprite.second.rect.w/2) && y*2 >= sprite.second.rect.y - (sprite.second.rect.h/2) && y*2 <= sprite.second.rect.y + (sprite.second.rect.h/2)) {
                 return sprite.first;
             }
         }
