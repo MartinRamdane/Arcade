@@ -29,7 +29,7 @@ GamePacman::GamePacman()
         }
         file.close();
     }
-
+    gameMapOrigin = gameMap;
     for (auto ligne : gameMap) {
         for (auto c : ligne) {
             if (c == '#') {
@@ -130,6 +130,7 @@ void GamePacman::resetGame() {
     isGhostScared["clyde"] = false;
     canKillGhost = false;
     lastPositions.clear();
+    gameMap = gameMapOrigin;
 }
 
 bool GamePacman::checkCollision()
@@ -223,7 +224,21 @@ bool GamePacman::checkCollision()
     return false;
 }
 
-void GamePacman::ghostChased(std::string ghost) {
+void GamePacman::clearGameMapPos(char toClear) {
+    int x = 0; int y = 0;
+    for (auto line: gameMap) {
+        for (auto &c: line) {
+            if (c == toClear) {
+                gameMap[y][x] = ' ';
+            }
+            x++;
+        }
+        x = 0;
+        y++;
+    }
+}
+
+void GamePacman::ghostChased(std::string ghost, char ghostSym) {
     int dx = infos["player"].x - infos[ghost].x;
     int dy = infos["player"].y - infos[ghost].y;
     int nextX = infos[ghost].x;
@@ -245,7 +260,7 @@ void GamePacman::ghostChased(std::string ghost) {
         tempQueue.pop();
     }
 
-    if (isNextPositionValid && gameMap[nextY][nextX] != '#') {
+    if (isNextPositionValid && gameMap[nextY][nextX] != '#' && gameMap[nextY][nextX] != 'I' && gameMap[nextY][nextX] != 'R' && gameMap[nextY][nextX] != 'C') {
         infos[ghost].x = nextX;
         infos[ghost].y = nextY;
         lastPositions[ghost].push(std::make_pair(nextX, nextY));
@@ -253,24 +268,32 @@ void GamePacman::ghostChased(std::string ghost) {
             lastPositions[ghost].pop();
         }
     } else {
-        bool canMoveUp = gameMap[infos[ghost].y - 1][infos[ghost].x] != '#';
-        bool canMoveDown = gameMap[infos[ghost].y + 1][infos[ghost].x] != '#';
-        bool canMoveLeft = gameMap[infos[ghost].y][infos[ghost].x - 1] != '#';
-        bool canMoveRight = gameMap[infos[ghost].y][infos[ghost].x + 1] != '#';
-
+        bool canMoveUp = gameMap[infos[ghost].y - 1][infos[ghost].x] == '.' || gameMap[infos[ghost].y - 1][infos[ghost].x] == ' ';
+        bool canMoveDown = gameMap[infos[ghost].y + 1][infos[ghost].x] == '.' || gameMap[infos[ghost].y + 1][infos[ghost].x] == ' ';
+        bool canMoveLeft = gameMap[infos[ghost].y][infos[ghost].x - 1] == '.' || gameMap[infos[ghost].y][infos[ghost].x - 1] == ' ';
+        bool canMoveRight = gameMap[infos[ghost].y][infos[ghost].x + 1] == '.' || gameMap[infos[ghost].y][infos[ghost].x + 1] == ' ';
+        int nbPosValid = canMoveDown + canMoveLeft + canMoveRight + canMoveUp;
         if (canMoveUp || canMoveDown || canMoveLeft || canMoveRight) {
             while (true) {
                 int randDirection = rand() % 4;
                 if (randDirection == 0 && canMoveUp) {
+                    if (!isGhostScared[ghost])
+                        infos[ghost].file = "./res/pacman/" + ghost + "_up.png";
                     nextX = infos[ghost].x;
                     nextY = infos[ghost].y - 1;
                 } else if (randDirection == 1 && canMoveDown) {
+                    if (!isGhostScared[ghost])
+                        infos[ghost].file = "./res/pacman/" + ghost + "_down.png";
                     nextX = infos[ghost].x;
                     nextY = infos[ghost].y + 1;
                 } else if (randDirection == 2 && canMoveLeft) {
+                    if (!isGhostScared[ghost])
+                        infos[ghost].file = "./res/pacman/" + ghost + "_left.png";
                     nextX = infos[ghost].x - 1;
                     nextY = infos[ghost].y;
                 } else if (randDirection == 3 && canMoveRight) {
+                    if (!isGhostScared[ghost])
+                        infos[ghost].file = "./res/pacman/" + ghost + "_right.png";
                     nextX = infos[ghost].x + 1;
                     nextY = infos[ghost].y;
                 } else {
@@ -280,12 +303,13 @@ void GamePacman::ghostChased(std::string ghost) {
                 isNextPositionValid = true;
                 tempQueue = lastPositions[ghost];
                 while (!tempQueue.empty()) {
-                    if (tempQueue.front().first == nextX && tempQueue.front().second == nextY) {
+                    if ((tempQueue.front().first == nextX && tempQueue.front().second == nextY) && nbPosValid > 1) {
                         isNextPositionValid = false;
                         break;
                     }
                     tempQueue.pop();
                 }
+                
 
                 if (isNextPositionValid) {
                     infos[ghost].x = nextX;
@@ -299,6 +323,8 @@ void GamePacman::ghostChased(std::string ghost) {
             }
         }
     }
+    clearGameMapPos(ghostSym);
+    gameMap[infos[ghost].y][infos[ghost].x] = ghostSym;
     infos[ghost].xSprite = infos[ghost].x;
     infos[ghost].ySprite = infos[ghost].y;
     infos[ghost].toUpdate = true;
@@ -357,7 +383,6 @@ void GamePacman::update(std::string key)
         }
         if (info.first.find("a_power") == 0) {
             if (info.second.x == infos["player"].x && info.second.y == infos["player"].y && info.second.text == "●") {
-                std::cout << "touch power" << std::endl;
                 infos[info.first].toUpdate = true;
                 infos["score"].toUpdate = true;
                 infos[info.first].text = " ";
@@ -406,7 +431,6 @@ void GamePacman::update(std::string key)
             }
         }
         if (elapsed_seconds >= 10) {
-            std::cout << "finish" << std::endl;
             infos["clyde"].toUpdate = true;
             infos["inky"].toUpdate = true;
             infos["pinky"].toUpdate = true;
@@ -483,13 +507,10 @@ void GamePacman::update(std::string key)
     }
     movePlayer();
     if (playerDir != UNDEFINED) {
-        for (int i = nbBarrer; i > 0; i--) {
-            infos.erase("barrer" + std::to_string(i));
-        }
-        ghostChased("blinky");
-        ghostChased("inky");
-        ghostChased("pinky");
-        ghostChased("clyde");
+        ghostChased("blinky", 'B');
+        ghostChased("inky", 'I');
+        ghostChased("pinky", 'R');
+        ghostChased("clyde", 'C');
     }
     if (checkCollision()) {
         if (life > 0) {
@@ -507,28 +528,67 @@ void GamePacman::startGame(std::string username){
     this->username = username;
 }
 
+void GamePacman::checkIfMoveToGhost(int x, int y, std::string ghostName, char ghostSym) {
+    if (gameMap[y][x] == ghostSym) {
+        if (!isGhostScared[ghostName]) {
+            if (life > 0) {
+                life--;
+                resetGame();
+                playerDir = UNDEFINED;
+            } else {
+                setHighScores();
+                exit(84);
+            }
+        }
+    }
+}
+
 void GamePacman::movePlayer()
 {
     if (playerDir == RIGHT) {
+        checkIfMoveToGhost(infos["player"].x + 1, infos["player"].y, "blinky", 'B');
+        checkIfMoveToGhost(infos["player"].x + 1, infos["player"].y, "inky", 'I');
+        checkIfMoveToGhost(infos["player"].x + 1, infos["player"].y, "pinky", 'R');
+        checkIfMoveToGhost(infos["player"].x + 1, infos["player"].y, "clyde", 'C');
         if (gameMap[infos["player"].y][infos["player"].x + 1] != '#' && gameMap[infos["player"].y][infos["player"].x + 1] != '-') {
+            gameMap[infos["player"].y][infos["player"].x] = ' ';
+            gameMap[infos["player"].y][infos["player"].x + 1] = 'P';
             infos["player"].x++;
             infos["player"].xSprite = infos["player"].x;
         }
     }
     if (playerDir == LEFT) {
+        checkIfMoveToGhost(infos["player"].x - 1, infos["player"].y, "blinky", 'B');
+        checkIfMoveToGhost(infos["player"].x - 1, infos["player"].y, "inky", 'I');
+        checkIfMoveToGhost(infos["player"].x - 1, infos["player"].y, "pinky", 'R');
+        checkIfMoveToGhost(infos["player"].x - 1, infos["player"].y, "clyde", 'C');
         if (gameMap[infos["player"].y][infos["player"].x - 1] != '#' && gameMap[infos["player"].y][infos["player"].x - 1] != '-') {
+            gameMap[infos["player"].y][infos["player"].x] = ' ';
+            gameMap[infos["player"].y][infos["player"].x - 1] = 'P';
             infos["player"].x--;
             infos["player"].xSprite = infos["player"].x;
         }
     }
     if (playerDir == UP) {
+        checkIfMoveToGhost(infos["player"].x, infos["player"].y - 1, "blinky", 'B');
+        checkIfMoveToGhost(infos["player"].x, infos["player"].y - 1, "inky", 'I');
+        checkIfMoveToGhost(infos["player"].x, infos["player"].y - 1, "pinky", 'R');
+        checkIfMoveToGhost(infos["player"].x, infos["player"].y - 1, "clyde", 'C');
         if (gameMap[infos["player"].y - 1][infos["player"].x] != '#' && gameMap[infos["player"].y - 1][infos["player"].x] != '-') {
+            gameMap[infos["player"].y][infos["player"].x] = ' ';
+            gameMap[infos["player"].y - 1][infos["player"].x] = 'P';
             infos["player"].y--;
             infos["player"].ySprite = infos["player"].y;
         }
     }
     if (playerDir == DOWN) {
+        checkIfMoveToGhost(infos["player"].x, infos["player"].y + 1, "blinky", 'B');
+        checkIfMoveToGhost(infos["player"].x, infos["player"].y + 1, "inky", 'I');
+        checkIfMoveToGhost(infos["player"].x, infos["player"].y + 1, "pinky", 'R');
+        checkIfMoveToGhost(infos["player"].x, infos["player"].y + 1, "clyde", 'C');
         if (gameMap[infos["player"].y + 1][infos["player"].x] != '#' && gameMap[infos["player"].y + 1][infos["player"].x] != '-') {
+            gameMap[infos["player"].y][infos["player"].x] = ' ';
+            gameMap[infos["player"].y + 1][infos["player"].x] = 'P';
             infos["player"].y++;
             infos["player"].ySprite = infos["player"].y;
         }

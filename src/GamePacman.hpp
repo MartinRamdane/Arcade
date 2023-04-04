@@ -49,10 +49,13 @@ class GamePacman: public AGameModule {
         void movePlayer();
         bool checkCollision();
         void resetGame();
-        void ghostChased(std::string ghost);
+        void ghostChased(std::string ghost, char ghostSym);
         void setHighScores();
+        void clearGameMapPos(char toClear);
+        void checkIfMoveToGhost(int x, int y, std::string ghostName, char ghostSym);
     private:
         std::vector<std::vector<char>> gameMap;
+        std::vector<std::vector<char>> gameMapOrigin;
         GamePacman::DIRECTION playerDir;
         int foodScore;
         std::map<std::string, std::tuple<int, int>> spawnPos;
