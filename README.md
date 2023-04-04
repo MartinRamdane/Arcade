@@ -122,7 +122,7 @@ Return just the letter with ASCII value if possible.
 
 For special key:
 Use just the name of the key in capitalize like :
-```
+```C++
         case KEY_UP:
             return std::string("UP");
         case KEY_DOWN:
