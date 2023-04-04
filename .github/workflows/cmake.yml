@@ -19,6 +19,12 @@ jobs:
 
     steps:
     - uses: actions/checkout@v3
+    - name: Setup cmake
+      uses: jwlawson/actions-setup-cmake@v1.13
+      with:
+        cmake-version: '3.16.x'
+    - name: Use cmake
+      run: cmake --version
 
     - name: Configure CMake
       # Configure CMake in a 'build' subdirectory. `CMAKE_BUILD_TYPE` is only required if you are using a single-configuration generator such as make.
