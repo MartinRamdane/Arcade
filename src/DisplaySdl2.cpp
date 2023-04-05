@@ -85,12 +85,12 @@ void DisplaySdl::update(std::map<std::string, IGameModule::Entity> &entities) {
 void DisplaySdl::draw() {
     SDL_SetRenderDrawColor(renderer, 0, 0, 0, 255);
     SDL_RenderClear(renderer);
+    for (auto &sprite: sprites) {
+        SDL_RenderCopy(renderer, std::get<0>(textures[sprite.first]), NULL, &sprite.second.rect);
+    }
     for (auto &text: texts) {
         SDL_QueryTexture(text.second.texture, NULL, NULL, &text.second.rect.w, &text.second.rect.h);
         SDL_RenderCopy(renderer, text.second.texture, NULL, &text.second.rect);
-    }
-    for (auto &sprite: sprites) {
-        SDL_RenderCopy(renderer, std::get<0>(textures[sprite.first]), NULL, &sprite.second.rect);
     }
     SDL_RenderPresent(renderer);
 }

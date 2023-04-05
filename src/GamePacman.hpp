@@ -40,12 +40,12 @@ class GamePacman: public AGameModule {
         void startGame(std::string username);
         bool isGameOver() {return false;};
         void update(std::string key);
-        void initGame(){};
-        void initLoose(){};
-        void initMenu(){};
-        void updateGame(std::string key){};
-        void updateMenu(std::string key){};
-        void updateLoose(std::string key){};
+        void initGame();
+        void initLoose();
+        void initMenu();
+        void updateGame(std::string key);
+        void updateMenu(std::string key);
+        void updateLoose(std::string key);
         void movePlayer();
         bool checkCollision();
         void resetGame();
