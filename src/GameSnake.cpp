@@ -160,7 +160,6 @@ void GameSnake::initLoose()
     std::sort(scores.begin(), scores.end(), [](const std::pair<std::string, int> &left, const std::pair<std::string, int> &right) {
         return left.second > right.second;
     });
-    // TO DO: Display high scores
     infos["highScore_username"] = createEntity("", scores[0].first, "white", "", (areaWidth / 2 - (10 / 2) + 1), (areaHeight / 2 - 3 + MARGIN_TOP - 1) + 2, ENTITY_TYPE::TEXT, 0, 0, 30);
     infos["highScore"] = createEntity("", std::to_string(scores[0].second), "white", "", (areaWidth / 2 - (10 / 2) + 1) + 10 + (int)std::to_string(scores[0].second).size(), (areaHeight / 2 - 3 + MARGIN_TOP - 1) + 2, ENTITY_TYPE::TEXT, 0, 0, 30);
 

@@ -86,6 +86,12 @@ GamePacman::~GamePacman()
 
 void GamePacman::initMenu() {
     resetGame();
+    infos.erase("z_retryButton");
+    infos.erase("z_quitButton");
+    infos.erase("z_retryButton");
+    infos.erase("z_quitButton");
+    infos.erase("z_username");
+    infos.erase("z_yourScore");
     infos.erase("scoreText");
     infos.erase("score");
     infos.erase("blinky");
@@ -93,6 +99,13 @@ void GamePacman::initMenu() {
     infos.erase("pinky");
     infos.erase("clyde");
     infos.erase("player");
+    infos.erase("z_highScore_username");
+    infos.erase("Z_highScore");
+    infos.erase("z_best5");
+    infos.erase("z_best4");
+    infos.erase("z_best3");
+    infos.erase("z_best2");
+    infos.erase("z_best");
     infos["z_title5"] = createEntity("./res/pacman/title.png", "██████   █████   ██████ ███    ███  █████  ███    ██", "white", "", 1, 2, ENTITY_TYPE::SPRITE, 26, 6, 50);
     infos["z_title4"] = createEntity("", "██   ██ ██   ██ ██      ████  ████ ██   ██ ████   ██", "white", "", 1, 3, ENTITY_TYPE::NONE, 25, 5, 50);
     infos["z_title3"] = createEntity("", "██████  ███████ ██      ██ ████ ██ ███████ ██ ██  ██", "white", "", 1, 4, ENTITY_TYPE::NONE, 25, 5, 50);
@@ -118,6 +131,12 @@ void GamePacman::initGame() {
     infos.erase("z_best");
     infos.erase("z_retryButton");
     infos.erase("z_quitButton");
+    infos.erase("z_retryButton");
+    infos.erase("z_quitButton");
+    infos.erase("z_username");
+    infos.erase("z_yourScore");
+    infos.erase("z_highScore_username");
+    infos.erase("Z_highScore");
     int x = 0; int y = 0;
     int nbFoods = 1, nbPower = 1;
     for (auto ligne : gameMap) {
@@ -161,13 +180,41 @@ void GamePacman::initLoose() {
     infos.erase("pinky");
     infos.erase("clyde");
     infos.erase("player");
-    infos["z_best5"] = createEntity("./res/pacman/best.png", "██████  ███████ ███████ ████████", "white", "", 10, 2, ENTITY_TYPE::SPRITE, 26, 6, 50);
+    infos["z_best5"] = createEntity("./res/pacman/best.png", "██████  ███████ ███████ ████████", "white", "", 10, 2, ENTITY_TYPE::SPRITE, 26, 5, 50);
     infos["z_best4"] = createEntity("", "██   ██ ██      ██         ██", "white", "", 10, 3, ENTITY_TYPE::NONE, 25, 5, 50);
     infos["z_best3"] = createEntity("", "██████  █████   ███████    ██", "white", "", 10, 4, ENTITY_TYPE::NONE, 25, 5, 50);
     infos["z_best2"] = createEntity("", "██   ██ ██           ██    ██", "white", "", 10, 5, ENTITY_TYPE::NONE, 25, 5, 50);
     infos["z_best"] = createEntity("", "██████  ███████ ███████    ██", "white", "", 10, 6, ENTITY_TYPE::NONE, 25, 5, 50);
     infos["z_retryButton"] = createEntity("./res/snake/snake_buttonHover.png", "Retry", "black", "white", (areaWidth / 2) - 1, (areaHeight / 2 + 2 + MARGIN_TOP), ENTITY_TYPE::SPRITE_TEXT, (areaWidth / 2), (areaHeight / 2 + 2 + MARGIN_TOP), 40);
     infos["z_quitButton"] = createEntity("./res/snake/snake_button.png", "Quit", "white", "", (areaWidth / 2), (areaHeight / 2 + 5 + MARGIN_TOP), ENTITY_TYPE::SPRITE_TEXT, (areaWidth / 2), (areaHeight / 2 + 5 + MARGIN_TOP), 40);
+    infos["z_username"] = createEntity("", this->username, "white", "", (areaWidth / 2 - (this->username.length() / 2) - 2), (areaHeight / 2 - 2 + MARGIN_TOP) + 1, ENTITY_TYPE::TEXT, (areaWidth / 2 - username.length() + 1), 0, 30);
+    infos["z_yourScore"] = createEntity("", std::to_string(score), "white", "", infos["z_username"].x + 5 + this->username.length(), (areaHeight / 2 - 2 + MARGIN_TOP) + 1, ENTITY_TYPE::TEXT, 0, 0, 30);
+    std::ifstream file(("./saves/snake/" + this->username + ".save").c_str());
+    if (!file.good()) {
+        std::ofstream file(("./saves/snake/" + this->username + ".save").c_str());
+        file << score;
+        file.close();
+    } else {
+        std::string line;
+        std::getline(file, line);
+        if (std::stoi(line) < score) {
+            std::ofstream file(("./saves/snake/" + this->username + ".save").c_str());
+            file << score;
+            file.close();
+        }
+    }
+    std::vector<std::pair<std::string, int>> scores;
+    for (const auto &entry:std::filesystem::directory_iterator("./saves/snake/")) {
+        std::ifstream file(entry.path());
+        std::string line;
+        std::getline(file, line);
+        scores.push_back(std::make_pair(entry.path().filename().string().substr(0, entry.path().filename().string().length() - 5), std::stoi(line)));
+    }
+    std::sort(scores.begin(), scores.end(), [](const std::pair<std::string, int> &left, const std::pair<std::string, int> &right) {
+        return left.second > right.second;
+    });
+    infos["z_highScore_username"] = createEntity("", scores[0].first, "white", "", (areaWidth / 2 - (10 / 2) + 1), (areaHeight / 2 - 3 + MARGIN_TOP - 1) - 1, ENTITY_TYPE::TEXT, 0, 0, 30);
+    infos["z_highScore"] = createEntity("", std::to_string(scores[0].second), "white", "", (areaWidth / 2 - (10 / 2) + 1) + 10 + (int)std::to_string(scores[0].second).size(), (areaHeight / 2 - 3 + MARGIN_TOP - 1) - 1, ENTITY_TYPE::TEXT, 0, 0, 30);
 }
 
 void GamePacman::update(std::string key) {
