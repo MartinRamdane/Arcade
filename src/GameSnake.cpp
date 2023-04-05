@@ -126,13 +126,13 @@ void GameSnake::initLoose()
     infos.erase("gameTitle5");
     infos.erase("showScoreLabel");
     infos.erase("showScore");
-    infos["looseTitle"] = createEntity("./res/snake/snake_loose.png", " ██████   ██████         ██ ", "green", "", (areaWidth / 2 - 12), (areaHeight / 2 - 8 + MARGIN_TOP), ENTITY_TYPE::SPRITE, (areaWidth / 2), (areaHeight / 2 - 6 + MARGIN_TOP), 40);
+    infos["looseTitle"] = createEntity("./res/snake/snake_highscore.png", " ██████   ██████         ██ ", "green", "", (areaWidth / 2 - 12), (areaHeight / 2 - 8 + MARGIN_TOP), ENTITY_TYPE::SPRITE, (areaWidth / 2), (areaHeight / 2 - 6 + MARGIN_TOP), 40);
     infos["looseTitle2"] = createEntity("", "██       ██           ██  ██", "green", "", (areaWidth / 2 - 12), (areaHeight / 2 - 7 + MARGIN_TOP), ENTITY_TYPE::NONE, 0, 0, 40);
     infos["looseTitle3"] = createEntity("", "██   ███ ██   ███         ██", "green", "", (areaWidth / 2 - 12), (areaHeight / 2 - 6 + MARGIN_TOP), ENTITY_TYPE::NONE, 0, 0, 40);
     infos["looseTitle4"] = createEntity("", "██    ██ ██    ██     ██  ██", "green", "", (areaWidth / 2 - 12), (areaHeight / 2 - 5 + MARGIN_TOP), ENTITY_TYPE::NONE, 0, 0, 40);
     infos["looseTitle5"] = createEntity("", " ██████   ██████         ██ ", "green", "", (areaWidth / 2 - 12), (areaHeight / 2 - 4 + MARGIN_TOP), ENTITY_TYPE::NONE, 0, 0, 40);
-    infos["username"] = createEntity("", this->username, "white", "", (areaWidth / 2 - (this->username.length() / 2) + 1), (areaHeight / 2 - 2 + MARGIN_TOP) + 1, ENTITY_TYPE::TEXT, (areaWidth / 2 - username.length() + 1), 0, 20);
-    infos["score"] = createEntity("", std::to_string(score), "white", "", (areaWidth / 2 - (std::to_string(score).length() / 2) + 1), (areaHeight / 2 + MARGIN_TOP - 1) + 1, ENTITY_TYPE::TEXT, (areaWidth / 2 - std::to_string(score).length()), 0, 20);
+    infos["username"] = createEntity("", this->username, "white", "", (areaWidth / 2 - (this->username.length() / 2) - 2), (areaHeight / 2 - 2 + MARGIN_TOP) + 1, ENTITY_TYPE::TEXT, (areaWidth / 2 - username.length() + 1), 0, 30);
+    infos["score"] = createEntity("", std::to_string(score), "white", "", infos["username"].x + 5 + this->username.length(), (areaHeight / 2 - 2 + MARGIN_TOP) + 1, ENTITY_TYPE::TEXT, 0, 0, 30);
     infos["retryButton"] = createEntity("./res/snake/snake_buttonHover.png", "Retry", "black", "white", (areaWidth / 2) - 1, (areaHeight / 2 + 2 + MARGIN_TOP), ENTITY_TYPE::SPRITE_TEXT, (areaWidth / 2), (areaHeight / 2 + 2 + MARGIN_TOP), 40);
     infos["quitButton"] = createEntity("./res/snake/snake_button.png", "Quit", "white", "", (areaWidth / 2), (areaHeight / 2 + 5 + MARGIN_TOP), ENTITY_TYPE::SPRITE_TEXT, (areaWidth / 2), (areaHeight / 2 + 5 + MARGIN_TOP), 40);
 
@@ -161,9 +161,8 @@ void GameSnake::initLoose()
         return left.second > right.second;
     });
     // TO DO: Display high scores
-    infos["highsScoreText"] = createEntity("", "Highscore:", "white", "", (areaWidth / 2 - (10 / 2) + 1) - 12, (areaHeight / 2 - 3 + MARGIN_TOP - 1) + 1, ENTITY_TYPE::TEXT, (areaWidth / 2 - 6), 0, 20);
-    infos["highScore_username"] = createEntity("", scores[0].first, "white", "", (areaWidth / 2 - (10 / 2) + 1) + 10, (areaHeight / 2 - 3 + MARGIN_TOP - 1) + 1, ENTITY_TYPE::TEXT, 0, 0, 20);
-    infos["highScore"] = createEntity("", std::to_string(scores[0].second), "white", "", (areaWidth / 2 - (10 / 2) + 1) + 20 + (int)std::to_string(scores[0].second).size(), (areaHeight / 2 - 3 + MARGIN_TOP - 1) + 1, ENTITY_TYPE::TEXT, 0, 0, 20);
+    infos["highScore_username"] = createEntity("", scores[0].first, "white", "", (areaWidth / 2 - (10 / 2) + 1), (areaHeight / 2 - 3 + MARGIN_TOP - 1) + 2, ENTITY_TYPE::TEXT, 0, 0, 30);
+    infos["highScore"] = createEntity("", std::to_string(scores[0].second), "white", "", (areaWidth / 2 - (10 / 2) + 1) + 10 + (int)std::to_string(scores[0].second).size(), (areaHeight / 2 - 3 + MARGIN_TOP - 1) + 2, ENTITY_TYPE::TEXT, 0, 0, 30);
 
 }
 
