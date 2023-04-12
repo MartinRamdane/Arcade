@@ -106,6 +106,10 @@ void GamePacman::initMenu() {
     infos.erase("z_best3");
     infos.erase("z_best2");
     infos.erase("z_best");
+    infos.erase("z_username");
+    infos.erase("z_yourScore");
+    infos.erase("z_highScore_username");
+    infos.erase("z_highScore");
     infos["z_title5"] = createEntity("./res/pacman/title.png", "██████   █████   ██████ ███    ███  █████  ███    ██", "white", "", 1, 2, ENTITY_TYPE::SPRITE, 26, 6, 50);
     infos["z_title4"] = createEntity("", "██   ██ ██   ██ ██      ████  ████ ██   ██ ████   ██", "white", "", 1, 3, ENTITY_TYPE::NONE, 25, 5, 50);
     infos["z_title3"] = createEntity("", "██████  ███████ ██      ██ ████ ██ ███████ ██ ██  ██", "white", "", 1, 4, ENTITY_TYPE::NONE, 25, 5, 50);
@@ -138,7 +142,6 @@ void GamePacman::initGame() {
     infos.erase("z_highScore_username");
     infos.erase("Z_highScore");
     int x = 0; int y = 0;
-    int nbFoods = 1, nbPower = 1;
     for (auto ligne : gameMap) {
         for (auto c : ligne) {
             if (c == 'P') {
