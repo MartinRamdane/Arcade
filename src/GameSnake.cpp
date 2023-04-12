@@ -100,6 +100,9 @@ void GameSnake::initMenu()
     infos.erase("looseTitle3");
     infos.erase("looseTitle4");
     infos.erase("looseTitle5");
+    infos.erase("highsScoreText");
+    infos.erase("highScore_username");
+    infos.erase("highScore");
     infos["gameTitle"] = createEntity("./res/snake/snake_logo.png", "███████ ███    ██  █████  ██   ██ ███████", "green", "", (areaWidth / 2 - 19), (areaHeight / 2 - 7 + MARGIN_TOP), ENTITY_TYPE::SPRITE, (areaWidth / 2), (areaHeight / 2 - 3 + MARGIN_TOP), 40);
     infos["gameTitle2"] = createEntity("", "██      ████   ██ ██   ██ ██  ██  ██     ", "green", "", (areaWidth / 2 - 19), (areaHeight / 2 - 6 + MARGIN_TOP), ENTITY_TYPE::NONE, 0, 0, 40);
     infos["gameTitle3"] = createEntity("", "███████ ██ ██  ██ ███████ █████   █████  ", "green", "", (areaWidth / 2 - 19), (areaHeight / 2 - 5 + MARGIN_TOP), ENTITY_TYPE::NONE, 0, 0, 40);

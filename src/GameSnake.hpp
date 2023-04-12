@@ -69,7 +69,6 @@ class GameSnake: public AGameModule {
         bool hasMeal;
         DIRECTION playerDir;
         DIRECTION oldDir;
-        bool hasChangedDir;
         int speed;
 };
 
