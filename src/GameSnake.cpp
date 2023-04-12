@@ -79,7 +79,7 @@ void GameSnake::initGame()
     infos.erase("highsScoreText");
     infos.erase("highScore_username");
     infos.erase("highScore");
-    infos["playerHead"] = createEntity(RECT_H, ">", "white", "green", (areaWidth / 2 + 2), (areaHeight / 2 + 1), ENTITY_TYPE::SPRITE, 0, 0, 40);
+    infos["playerHead"] = createEntity(HEAD_RIGHT, ">", "white", "green", (areaWidth / 2 + 2), (areaHeight / 2 + 1), ENTITY_TYPE::SPRITE, 0, 0, 40);
     infos["playerPart1"] = createEntity(RECT_H, "o", "white", "green", (areaWidth / 2 + 1), (areaHeight / 2 + 1), ENTITY_TYPE::SPRITE, 0, 0, 40);
     infos["playerPart2"] = createEntity(RECT_H, "o", "white", "green", (areaWidth / 2), (areaHeight / 2 + 1), ENTITY_TYPE::SPRITE, 0, 0, 40);
     infos["playerPart3"] = createEntity(RECT_H, "o", "white", "green", (areaWidth / 2 - 1), (areaHeight / 2 + 1), ENTITY_TYPE::SPRITE, 0, 0, 40);
@@ -289,7 +289,7 @@ void GameSnake::updateGame(std::string key)
         infos["playerHead"].ySprite = infos["playerHead"].y;
         infos["playerHead"].xSprite = infos["playerHead"].x;
         infos["playerHead"].text = "⏶";
-        infos["playerHead"].file = RECT_H;
+        infos["playerHead"].file = HEAD_UP;
         if (playerDir == RIGHT) {
             for (int i = 1; i < playerPart; i++) {
                 infos["playerPart" + std::to_string(i)].x += 1;
@@ -317,7 +317,7 @@ void GameSnake::updateGame(std::string key)
         infos["playerHead"].ySprite = infos["playerHead"].y;
         infos["playerHead"].xSprite = infos["playerHead"].x;
         infos["playerHead"].text = "⏷";
-        infos["playerHead"].file = RECT_H;
+        infos["playerHead"].file = HEAD_DOWN;
         if (playerDir == RIGHT) {
             for (int i = 1; i < playerPart; i++) {
                 infos["playerPart" + std::to_string(i)].x += 1;
@@ -334,13 +334,13 @@ void GameSnake::updateGame(std::string key)
         playerDir = DOWN;
     } else if (key == "LEFT" && playerDir != LEFT && playerDir!= RIGHT) {
         infos["playerHead"].text = "⏴";
-        infos["playerHead"].file = RECT_H;
+        infos["playerHead"].file = HEAD_LEFT;
         infos["playerHead"].toUpdate = true;
         oldDir = playerDir;
         playerDir = LEFT;
     } else if (key == "RIGHT" && playerDir != RIGHT && playerDir != LEFT) {
         infos["playerHead"].text = "⏵";
-        infos["playerHead"].file = RECT_H;
+        infos["playerHead"].file = HEAD_RIGHT;
         infos["playerHead"].toUpdate = true;
         oldDir = playerDir;
         playerDir = RIGHT;
