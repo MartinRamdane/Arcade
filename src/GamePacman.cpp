@@ -194,14 +194,14 @@ void GamePacman::initLoose() {
     infos["z_yourScore"] = createEntity("", std::to_string(score), "white", "", infos["z_username"].x + 5 + this->username.length(), (areaHeight / 2 - 2 + MARGIN_TOP) + 1, ENTITY_TYPE::TEXT, 0, 0, 30);
     std::ifstream file(("./saves/snake/" + this->username + ".save").c_str());
     if (!file.good()) {
-        std::ofstream file(("./saves/snake/" + this->username + ".save").c_str());
+        std::ofstream file(("./saves/pacman/" + this->username + ".save").c_str());
         file << score;
         file.close();
     } else {
         std::string line;
         std::getline(file, line);
         if (std::stoi(line) < score) {
-            std::ofstream file(("./saves/snake/" + this->username + ".save").c_str());
+            std::ofstream file(("./saves/pacman/" + this->username + ".save").c_str());
             file << score;
             file.close();
         }
